@@ -1,258 +1,257 @@
 ---
 /**
- * Animated transformer decoder block.
- *
- * This is a teaching visual, not decoration: every block carries the real
- * name and the real tensor shape it produces, and the five stages walk the
- * residual stream from input tokens to a next-token distribution.
- *
- * Geometry: the block column is centred on x=270 inside a 640-wide viewBox,
- * leaving x>450 free for the attention matrix and output distribution so
- * neither overlaps the column.
- *
- * Scroll through the hero advances the stages. With prefers-reduced-motion
- * the diagram renders in its final state and does not animate.
+ * Animated, keyboard-accessible classic decoder-only Transformer sketch.
+ * The four token example, attention matrix, and next-token bars are illustrative.
+ * Details and walkthrough controls intentionally live in the full course, not the hero.
  */
-interface Props {
-  stages?: string[];
-}
-const { stages = ['Tokens', 'Embeddings', 'Attention', 'Feed forward', 'Next token'] } = Astro.props;
-
-const CX = 270;          // centre of the block column
+const CX = 270;
 const TOKENS = ['the', 'cat', 'sat', 'on'];
 const TOKEN_W = 38;
 const TOKEN_PITCH = 42;
 const tokenStart = CX - (TOKENS.length * TOKEN_PITCH - (TOKEN_PITCH - TOKEN_W)) / 2;
+const weights = [
+  [1, 0, 0, 0],
+  [0.62, 0.38, 0, 0],
+  [0.18, 0.37, 0.45, 0],
+  [0.12, 0.31, 0.39, 0.18]
+];
+const predicted = [
+  { token: 'the', p: 0.44 },
+  { token: 'a', p: 0.28 },
+  { token: 'my', p: 0.18 },
+  { token: 'other', p: 0.10 }
+];
 ---
 
-<figure class="tx" data-tx>
-  <svg class="tx-svg" viewBox="0 0 640 700" role="img" aria-labelledby="tx-title tx-desc">
-    <title id="tx-title">Transformer decoder block, stage by stage</title>
-    <desc id="tx-desc">Input tokens pass through token and positional embeddings, then a
-      transformer block made of multi-head attention and a feed-forward network with add and
-      norm around each, then a linear layer and softmax that produce a next-token distribution.</desc>
+<figure class="tx" data-tx aria-label="Animated Transformer decoder architecture">
+  <div class="tx-canvas">
+  <svg class="tx-svg" viewBox="0 0 640 700" role="group" aria-labelledby="tx-title tx-desc">
+    <title id="tx-title">Explore a classic Transformer decoder, layer by layer</title>
+    <desc id="tx-desc">Animated data flow with focusable Transformer blocks. The stream flows from input tokens at the bottom to next-token probabilities at the top.</desc>
 
     <defs>
-      <marker id="tx-arrow" viewBox="0 0 10 10" refX="8" refY="5"
-              markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <marker id="tx-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
         <path d="M0 1 L9 5 L0 9 z" fill="currentColor" />
       </marker>
     </defs>
 
-    <!-- residual stream: the line everything hangs off -->
-    <g class="tx-stream" color="#3a3a3a">
-      <line x1={CX} y1="30" x2={CX} y2="668" stroke="currentColor" stroke-width="1.5"
-            marker-end="url(#tx-arrow)" />
+    <g class="tx-stream" color="#3a3a3a" aria-hidden="true">
+      <line x1={CX} y1="668" x2={CX} y2="30" stroke="currentColor" stroke-width="1.5" marker-end="url(#tx-arrow)" />
       <circle class="tx-pulse" cx={CX} cy="668" r="3.5" fill="#ededed" />
     </g>
 
-    <!-- softmax -->
-    <g class="tx-block" data-stage="4">
-      <rect x={CX - 110} y="34" width="220" height="44" rx="6" />
+    <g class="tx-block tx-part" data-part="softmax" data-stage="4" tabindex="0" role="button" aria-label="Highlight softmax probabilities" aria-pressed="false">
+      <rect x={CX - 132} y="34" width="264" height="44" rx="6" />
       <text class="tx-label" x={CX} y="53" text-anchor="middle">Softmax</text>
       <text class="tx-shape" x={CX} y="69" text-anchor="middle">(seq_len, vocab)</text>
     </g>
 
-    <!-- output distribution -->
-    <g class="tx-bars" data-stage="4">
-      <text class="tx-side" x="466" y="20">NEXT TOKEN</text>
-      {['.86', '.42', '.18', '.07'].map((p, i) => (
-        <rect x="466" y={30 + i * 13} width="130" height="7" rx="2" style={`--p:${p}`} />
+    <g class="tx-bars tx-part" data-part="distribution" data-stage="4" tabindex="0" role="button" aria-label="Highlight example next-token probabilities" aria-pressed="false">
+      <text class="tx-side" x="466" y="20">NEXT TOKEN · TOY EXAMPLE</text>
+      {predicted.map(({ token, p }, i) => (
+        <g>
+          <text class="tx-small" x="466" y={37 + i * 15}>{token}</text>
+          <rect x="495" y={30 + i * 15} width="95" height="8" rx="2" style={`--p:${p}`} />
+          <text class="tx-small" x="598" y={37 + i * 15} text-anchor="end">{Math.round(p * 100)}%</text>
+        </g>
       ))}
     </g>
 
-    <!-- linear -->
-    <g class="tx-block" data-stage="4">
-      <rect x={CX - 110} y="118" width="220" height="44" rx="6" />
+    <g class="tx-block tx-part" data-part="linear" data-stage="4" tabindex="0" role="button" aria-label="Highlight vocabulary projection" aria-pressed="false">
+      <rect x={CX - 132} y="118" width="264" height="44" rx="6" />
       <text class="tx-label" x={CX} y="137" text-anchor="middle">Linear</text>
-      <text class="tx-shape" x={CX} y="153" text-anchor="middle">(seq_len, d_model)</text>
+      <text class="tx-shape" x={CX} y="153" text-anchor="middle">(seq_len, vocab) logits</text>
     </g>
 
-    <!-- transformer block boundary -->
-    <g class="tx-frame" data-stage="2">
-      <rect x={CX - 142} y="196" width="284" height="300" rx="10" />
-      <text class="tx-frame-label" x={CX - 130} y="216">TRANSFORMER BLOCK × N</text>
+    <g class="tx-frame tx-part" data-part="block" data-stage="2" tabindex="0" role="button" aria-label="Highlight the repeated Transformer block" aria-pressed="false">
+      <rect x={CX - 159} y="196" width="318" height="300" rx="10" />
+      <text class="tx-frame-label" x={CX - 145} y="216">TRANSFORMER BLOCK × N</text>
     </g>
 
-    <!-- feed forward -->
-    <g class="tx-block" data-stage="3">
-      <rect x={CX - 115} y="232" width="230" height="52" rx="6" />
-      <text class="tx-label" x={CX} y="253" text-anchor="middle">Feed Forward</text>
-      <text class="tx-shape" x={CX} y="271" text-anchor="middle">(seq_len, d_ff) · ReLU</text>
+    <g class="tx-block tx-part" data-part="norm-ffn" data-stage="3" tabindex="0" role="button" aria-label="Highlight feed-forward residual and normalization" aria-pressed="false">
+      <rect x={CX - 133} y="232" width="266" height="44" rx="6" />
+      <text class="tx-label" x={CX} y="251" text-anchor="middle">Add &amp; Norm</text>
+      <text class="tx-shape" x={CX} y="267" text-anchor="middle">after feed forward · (seq_len, d_model)</text>
     </g>
 
-    <!-- add & norm (post-FFN) -->
-    <g class="tx-block" data-stage="3">
-      <rect x={CX - 115} y="306" width="230" height="44" rx="6" />
-      <text class="tx-label" x={CX} y="325" text-anchor="middle">Add &amp; Norm</text>
-      <text class="tx-shape" x={CX} y="341" text-anchor="middle">residual + LayerNorm</text>
+    <g class="tx-block tx-part" data-part="ffn" data-stage="3" tabindex="0" role="button" aria-label="Highlight the feed-forward network" aria-pressed="false">
+      <rect x={CX - 133} y="300" width="266" height="52" rx="6" />
+      <text class="tx-label" x={CX} y="321" text-anchor="middle">Feed Forward</text>
+      <text class="tx-shape" x={CX} y="339" text-anchor="middle">d_model → d_ff → d_model</text>
     </g>
 
-    <!-- multi-head attention -->
-    <g class="tx-block" data-stage="2">
-      <rect x={CX - 115} y="362" width="230" height="62" rx="6" />
-      <text class="tx-label" x={CX} y="383" text-anchor="middle">Multi-Head Attention</text>
-      <text class="tx-shape" x={CX} y="399" text-anchor="middle">H heads · causal mask</text>
-      <text class="tx-shape" x={CX} y="415" text-anchor="middle">(seq_len, seq_len)</text>
+    <g class="tx-block tx-part" data-part="norm-attention" data-stage="2" tabindex="0" role="button" aria-label="Highlight attention residual and normalization" aria-pressed="false">
+      <rect x={CX - 133} y="362" width="266" height="44" rx="6" />
+      <text class="tx-label" x={CX} y="381" text-anchor="middle">Add &amp; Norm</text>
+      <text class="tx-shape" x={CX} y="397" text-anchor="middle">after attention · (seq_len, d_model)</text>
     </g>
 
-    <!-- attention matrix -->
-    <g class="tx-matrix" data-stage="2">
-      <text class="tx-side" x="466" y="366">ATTENTION</text>
-      {Array.from({ length: 16 }).map((_, i) => (
-        <rect x={466 + (i % 4) * 17} y={376 + Math.floor(i / 4) * 17}
-              width="14" height="14" rx="2"
-              style={`--w:${(0.2 + ((i * 7) % 10) / 13).toFixed(2)}`} />
-      ))}
+    <g class="tx-block tx-part" data-part="attention" data-stage="2" tabindex="0" role="button" aria-label="Highlight causal multi-head attention" aria-pressed="false">
+      <rect x={CX - 133} y="418" width="266" height="62" rx="6" />
+      <text class="tx-label" x={CX} y="439" text-anchor="middle">Multi-Head Attention</text>
+      <text class="tx-shape" x={CX} y="455" text-anchor="middle">H heads · causal mask</text>
+      <text class="tx-shape" x={CX} y="471" text-anchor="middle">weights per head: (seq_len, seq_len)</text>
     </g>
 
-    <!-- add & norm (post-attention) -->
-    <g class="tx-block" data-stage="2">
-      <rect x={CX - 115} y="438" width="230" height="44" rx="6" />
-      <text class="tx-label" x={CX} y="457" text-anchor="middle">Add &amp; Norm</text>
-      <text class="tx-shape" x={CX} y="473" text-anchor="middle">residual + LayerNorm</text>
+    <g class="tx-matrix tx-part" data-part="attention" data-stage="2" tabindex="0" role="button" aria-label="Highlight causal attention matrix" aria-pressed="false">
+      <text class="tx-side" x="466" y="409">CAUSAL ATTENTION</text>
+      {weights.flatMap((row, r) => row.map((weight, c) => (
+        <rect x={466 + c * 17} y={420 + r * 17} width="14" height="14" rx="2"
+              class={c > r ? 'is-masked' : ''} style={`--w:${weight}`}>
+          <title>{c > r ? `Position ${r + 1} cannot attend to future position ${c + 1}` : `Position ${r + 1} attends to position ${c + 1}: illustrative weight ${Math.round(weight * 100)}%`}</title>
+        </rect>
+      )))}
     </g>
 
-    <!-- residual bypass around attention -->
-    <path class="tx-bypass" data-stage="2" d={`M${CX - 128} 460 V 328`} fill="none" stroke-dasharray="3 5" />
+    <g class="tx-bypasses" data-stage="2" aria-hidden="true">
+      <path class="tx-bypass" d="M136 476 H123 V383 H136" fill="none" stroke-dasharray="3 5" />
+      <path class="tx-bypass" d="M136 350 H123 V253 H136" fill="none" stroke-dasharray="3 5" />
+    </g>
 
-    <!-- positional encoding -->
-    <g class="tx-block" data-stage="1">
-      <rect x={CX - 115} y="518" width="230" height="44" rx="6" />
+    <g class="tx-block tx-part" data-part="position" data-stage="1" tabindex="0" role="button" aria-label="Highlight position encodings" aria-pressed="false">
+      <rect x={CX - 133} y="518" width="266" height="44" rx="6" />
       <text class="tx-label" x={CX} y="537" text-anchor="middle">+ Positional Encoding</text>
-      <text class="tx-shape" x={CX} y="553" text-anchor="middle">sinusoidal · (seq_len, d_model)</text>
+      <text class="tx-shape" x={CX} y="553" text-anchor="middle">classic additive · (seq_len, d_model)</text>
     </g>
 
-    <!-- token embedding -->
-    <g class="tx-block" data-stage="1">
-      <rect x={CX - 115} y="582" width="230" height="44" rx="6" />
+    <g class="tx-block tx-part" data-part="embedding" data-stage="1" tabindex="0" role="button" aria-label="Highlight token embeddings" aria-pressed="false">
+      <rect x={CX - 133} y="582" width="266" height="44" rx="6" />
       <text class="tx-label" x={CX} y="601" text-anchor="middle">Token Embedding</text>
       <text class="tx-shape" x={CX} y="617" text-anchor="middle">lookup · (seq_len, d_model)</text>
     </g>
 
-    <!-- input tokens, centred on the stream -->
-    <g class="tx-tokens" data-stage="0">
-      {TOKENS.map((t, i) => (
+    <g class="tx-tokens tx-part" data-part="tokens" data-stage="0" tabindex="0" role="button" aria-label="Highlight input tokens" aria-pressed="true">
+      {TOKENS.map((token, i) => (
         <g class="tx-token" style={`--i:${i}`}>
           <rect x={tokenStart + i * TOKEN_PITCH} y="648" width={TOKEN_W} height="26" rx="4" />
-          <text class="tx-token-text" x={tokenStart + i * TOKEN_PITCH + TOKEN_W / 2}
-                y="665" text-anchor="middle">{t}</text>
+          <text class="tx-token-text" x={tokenStart + i * TOKEN_PITCH + TOKEN_W / 2} y="665" text-anchor="middle">{token}</text>
         </g>
       ))}
-      <text class="tx-side" x={CX} y="694" text-anchor="middle">seq_len = 4 · d_model = 512</text>
+      <text class="tx-side" x={CX} y="694" text-anchor="middle">ILLUSTRATIVE INPUT · 4 TOKENS · d_model = 512</text>
     </g>
   </svg>
-
-  <figcaption class="tx-caption">
-    <ol class="tx-stages">
-      {stages.map((label, i) => (
-        <li data-stage-label={i}><span>{String(i + 1).padStart(2, '0')}</span>{label}</li>
-      ))}
-    </ol>
-    <p class="tx-note">SCROLL TO FOLLOW THE RESIDUAL STREAM</p>
-  </figcaption>
+  </div>
 </figure>
 
 <style>
-  .tx { margin: 0; display: grid; justify-items: center; gap: 26px; }
-  .tx-svg { width: min(100%, 600px); height: auto; display: block; color: #4a4a4a; }
-
-  .tx-block rect, .tx-frame rect {
-    fill: #0a0a0a; stroke: #2b2b2b; stroke-width: 1;
-    transition: stroke .5s ease, fill .5s ease;
-  }
-  .tx-label { fill: #6a6a6a; font: 600 12px var(--sans); letter-spacing: -.01em; transition: fill .5s ease; }
-  .tx-shape { fill: #4e4e4e; font: 400 9.5px var(--sans); letter-spacing: .04em; transition: fill .5s ease; }
-  .tx-frame rect { fill: none; stroke: #242424; stroke-dasharray: 4 6; }
-  .tx-frame-label { fill: #4a4a4a; font: 700 9px var(--sans); letter-spacing: .16em; }
-  .tx-side { fill: #5a5a5a; font: 700 8.5px var(--sans); letter-spacing: .14em; }
-  .tx-bypass { stroke: #2f2f2f; }
-
-  .tx-cells rect, .tx-matrix rect { fill: #ededed; opacity: calc(var(--w) * .18); transition: opacity .5s ease; }
-  .tx-bars rect { fill: #d0d0d0; transform-origin: 466px 0; transform: scaleX(.05);
-                  transition: transform .6s cubic-bezier(.2,.7,.2,1); }
-
-  .tx-token rect { fill: #0d0d0d; stroke: #3a3a3a; }
-  .tx-token-text { fill: #8a8a8a; font: 500 10px var(--sans); transition: fill .4s ease; }
-
-  /* ---- stage activation ---- */
-  [data-stage].is-on rect { stroke: #d6d6d6; fill: #121212; }
-  [data-stage].is-on .tx-label { fill: #f2f2f2; }
-  [data-stage].is-on .tx-shape { fill: #9a9a9a; }
-  [data-stage].is-on .tx-frame-label { fill: #8f8f8f; }
-  .tx-matrix.is-on rect { opacity: var(--w); }
+  .tx { margin: 0; width: 100%; min-width: 0; color: #fff; }
+  .tx-canvas { width: 100%; min-width: 0; display: grid; place-items: center; }
+  .tx-svg { width: 100%; height: auto; display: block; color: #4a4a4a; }
+  .tx-part { cursor: pointer; outline: none; }
+  .tx-block > rect, .tx-frame > rect { fill: #0a0a0a; stroke: #2b2b2b; stroke-width: 1; transition: stroke .28s, fill .28s; }
+  .tx-label { fill: #b4b4b4; font: 600 15px var(--sans); letter-spacing: -.01em; transition: fill .28s; pointer-events: none; }
+  .tx-shape { fill: #969696; font: 400 11px var(--sans); letter-spacing: .01em; transition: fill .28s; pointer-events: none; }
+  .tx-frame > rect { fill: none; stroke: #343434; stroke-dasharray: 4 6; }
+  .tx-frame-label { fill: #a0a0a0; font: 700 10px var(--sans); letter-spacing: .13em; pointer-events: none; }
+  .tx-side { fill: #aeaeae; font: 700 9.2px var(--sans); letter-spacing: .06em; pointer-events: none; }
+  .tx-small { fill: #bcbcbc; font: 500 10px var(--sans); pointer-events: none; }
+  .tx-bypass { stroke: #525252; stroke-width: 1.2; }
+  .tx-matrix rect { fill: #ececec; opacity: calc(var(--w) * .2 + .06); transition: opacity .28s; }
+  .tx-matrix rect.is-masked { opacity: .05; stroke: #4b4b4b; stroke-width: .8; }
+  .tx-bars rect { fill: #c6c6c6; stroke: none; transform-origin: 495px 0; transform: scaleX(.05); transition: transform .45s cubic-bezier(.2,.7,.2,1); }
+  .tx-token rect { fill: #0d0d0d; stroke: #3a3a3a; transition: stroke .28s; }
+  .tx-token-text { fill: #c5c5c5; font: 500 12px var(--sans); pointer-events: none; }
+  .tx-block.is-on > rect { stroke: #858585; fill: #141414; }
+  .tx-block.is-on .tx-label { fill: #f1f1f1; }
+  .tx-block.is-on .tx-shape { fill: #a8a8a8; }
+  .tx-frame.is-on > rect { stroke: #5b5b5b; }
+  .tx-frame.is-on .tx-frame-label { fill: #a0a0a0; }
+  .tx-matrix.is-on rect:not(.is-masked) { opacity: calc(var(--w) * .84 + .16); }
   .tx-bars.is-on rect { transform: scaleX(var(--p)); }
-  .tx-tokens.is-on .tx-token { animation: tx-pop .45s cubic-bezier(.2,.7,.2,1) both;
-                               animation-delay: calc(var(--i) * 90ms); }
-  .tx-tokens.is-on .tx-token-text { fill: #ededed; }
   .tx-tokens.is-on .tx-token rect { stroke: #a8a8a8; }
-
-  @keyframes tx-pop { from { opacity: .25; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-
-  .tx-stream line { transition: stroke .5s ease; }
-  .tx[data-live] .tx-stream line { stroke: #5c5c5c; }
-  .tx-pulse { animation: tx-flow 4.2s linear infinite; }
-  @keyframes tx-flow {
-    from { transform: translateY(0); opacity: 0; }
-    12% { opacity: 1; } 88% { opacity: 1; }
-    to { transform: translateY(-638px); opacity: 0; }
+  .tx-tokens.is-on .tx-token-text { fill: #ededed; }
+  .tx-part.is-selected > rect, .tx-block.tx-part:hover > rect, .tx-part:focus-visible > rect { stroke: #f2f2f2; stroke-width: 1.8; fill: #1a1a1a; }
+  .tx-frame.is-selected > rect, .tx-frame:focus-visible > rect { fill: none; stroke: #d9d9d9; }
+  .tx-tokens.is-selected .tx-token rect, .tx-tokens:focus-visible .tx-token rect { stroke: #f2f2f2; }
+  .tx-matrix.is-selected rect:not(.is-masked), .tx-matrix:focus-visible rect:not(.is-masked) { stroke: #dfdfdf; stroke-width: .55; }
+  .tx-bars.is-selected rect, .tx-bars:focus-visible rect { fill: #f5f5f5; }
+  .tx-stream line { transition: stroke .3s; }
+  .tx[data-live] .tx-stream line { stroke: #8c8c8c; }
+  .tx-pulse { opacity: 0; }
+  .tx[data-live] .tx-pulse { animation: tx-flow 3.5s linear infinite; }
+  @keyframes tx-flow { from { transform: translateY(0); opacity: 0; } 12% { opacity: 1; } 88% { opacity: 1; } to { transform: translateY(-638px); opacity: 0; } }
+  /* Enlarge the actual SVG while preserving its 640:700 proportions.
+     Reserve the compact header and hero padding at desktop heights. */
+  .tx-svg { width: min(100%, 700px, calc(91.4286svh - 81px)); max-width: none; max-height: none; height: auto; }
+  @media (max-width: 980px) {
+    .tx-svg { width: min(100%, 640px); }
   }
-
-  .tx-caption { display: grid; gap: 10px; justify-items: center; }
-  .tx-stages { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px;
-               list-style: none; margin: 0; padding: 0; }
-  .tx-stages li {
-    display: inline-flex; align-items: center; gap: 7px;
-    padding: 6px 11px; border: 1px solid #262626; border-radius: 5px;
-    color: #6a6a6a; font: 500 10.5px var(--sans); letter-spacing: .04em;
-    transition: color .4s ease, border-color .4s ease, background .4s ease;
+  @media (max-width: 600px) {
+    .tx-svg { width: 100%; }
   }
-  .tx-stages li span { font: 700 9px var(--sans); letter-spacing: .1em; color: #4a4a4a; }
-  .tx-stages li.is-on { color: #f0f0f0; border-color: #6e6e6e; background: #101010; }
-  .tx-stages li.is-on span { color: #a5a5a5; }
-  .tx-note { margin: 0; color: #5a5a5a; font: 400 9px var(--sans); letter-spacing: .18em; }
-
   @media (prefers-reduced-motion: reduce) {
-    .tx-pulse, .tx-tokens.is-on .tx-token { animation: none; }
-    .tx-block rect, .tx-label, .tx-shape, .tx-matrix rect, .tx-bars rect { transition: none; }
+    .tx *, .tx *::before, .tx *::after { animation: none !important; transition: none !important; }
   }
 </style>
 
 <script>
-  const STAGES = 5;
-  const root = document.querySelector<HTMLElement>('[data-tx]');
-  if (root) {
-    const blocks = [...root.querySelectorAll<SVGGElement>('[data-stage]')];
-    const labels = [...document.querySelectorAll<HTMLElement>('[data-stage-label]')];
-    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let current = -1;
+  // Autoplay has no visible chrome: layer highlighting and moving data flow are
+  // the presentation. Visitors can still select any individual block directly.
+  const defaults = ['tokens', 'embedding', 'attention', 'ffn', 'distribution'];
+  document.querySelectorAll<HTMLElement>('[data-tx]').forEach(root => {
+    const parts = [...root.querySelectorAll<SVGGElement>('[data-part]')];
+    const diagramStages = [...root.querySelectorAll<SVGGElement>('[data-stage]')];
+    const steps = new Map(parts.map(part => [part.dataset.part, Number(part.dataset.stage)]));
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let selected = 'tokens';
+    let tour: ReturnType<typeof setInterval> | null = null;
 
-    const apply = (stage: number) => {
-      if (stage === current) return;
-      current = stage;
-      for (const el of blocks) el.classList.toggle('is-on', Number(el.dataset.stage) <= stage);
-      labels.forEach((el, i) => el.classList.toggle('is-on', i <= stage));
-    };
-
-    if (reduce) {
-      apply(STAGES - 1);
-      root.setAttribute('data-live', '');
-    } else {
-      const onScroll = () => {
-        const r = root.getBoundingClientRect();
-        // Drive the stages off the figure's own position, not the hero's:
-        // the hero is taller than the viewport, so keying off it would let
-        // the diagram scroll away before the sequence finished. Start as it
-        // rises into view, complete while most of it is still on screen.
-        const start = innerHeight * 0.62;
-        const span = Math.max(1, r.height * 0.9);
-        const p = Math.max(0, Math.min(1, (start - r.top) / span));
-        apply(Math.min(STAGES - 1, Math.floor(p * STAGES)));
-        root.toggleAttribute('data-live', r.bottom > innerHeight * 0.35 && r.top < innerHeight);
-      };
-      addEventListener('scroll', onScroll, { passive: true });
-      addEventListener('resize', onScroll, { passive: true });
-      onScroll();
+    function show(id: string) {
+      const stage = steps.get(id);
+      if (stage === undefined) return;
+      diagramStages.forEach(part => part.classList.toggle('is-on', Number(part.dataset.stage) <= stage));
+      parts.forEach(part => {
+        const active = part.dataset.part === id;
+        part.classList.toggle('is-selected', active);
+        part.setAttribute('aria-pressed', String(active));
+      });
     }
-  }
+
+    function scheduleTour() {
+      if (tour !== null) { clearInterval(tour); tour = null; }
+      const live = !reducedMotion && !document.hidden;
+      root.toggleAttribute('data-live', live);
+      if (!live) return;
+      tour = setInterval(() => {
+        const stage = steps.get(selected) ?? 0;
+        selected = defaults[(stage + 1) % defaults.length];
+        show(selected);
+      }, 4800);
+    }
+
+    function select(id: string) {
+      if (!steps.has(id)) return;
+      selected = id;
+      show(id);
+      scheduleTour();
+    }
+
+    parts.forEach(part => {
+      const id = part.dataset.part;
+      if (!id) return;
+      part.addEventListener('click', () => select(id));
+      part.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          select(id);
+        }
+      });
+      part.addEventListener('pointerenter', event => {
+        if (event.pointerType !== 'touch') show(id);
+      });
+      part.addEventListener('pointerleave', event => {
+        if (event.pointerType !== 'touch') show(selected);
+      });
+      part.addEventListener('focus', () => show(id));
+      part.addEventListener('blur', () => show(selected));
+    });
+
+    document.addEventListener('visibilitychange', scheduleTour);
+    window.addEventListener('pagehide', () => {
+      if (tour !== null) { clearInterval(tour); tour = null; }
+    });
+    window.addEventListener('pageshow', scheduleTour);
+    show(selected);
+    scheduleTour();
+  });
 </script>
