@@ -1,5 +1,6 @@
 ---
 import { courses, totalLessons } from '../lib/courses.js';
+import TransformerDiagram from '../components/TransformerDiagram.astro';
 import '../styles/landing.css';
 const featured = [courses[0], courses.find(c=>c.slug==='rag'), courses.find(c=>c.slug==='agents')];
 const symbols = ['⌘', '◎', '✳'];
@@ -55,6 +56,7 @@ const tracks = ['Foundations', 'Retrieval systems', 'Agentic systems'];
             <div class="hero-ctas"><a class="action-primary" href="/academy/">Start learning <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="action-text" href="#curriculum">Explore the curriculum <span aria-hidden="true">↗</span></a></div>
             <div class="hero-social-proof"><div class="proof-icon" aria-hidden="true"><span>✧</span></div><span>One place for the <b>theory, the code, and the why.</b></span></div>
           </div>
+          <TransformerDiagram />
         </div>
       </section>
 

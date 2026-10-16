@@ -1,0 +1,258 @@
+---
+/**
+ * Animated transformer decoder block.
+ *
+ * This is a teaching visual, not decoration: every block carries the real
+ * name and the real tensor shape it produces, and the five stages walk the
+ * residual stream from input tokens to a next-token distribution.
+ *
+ * Geometry: the block column is centred on x=270 inside a 640-wide viewBox,
+ * leaving x>450 free for the attention matrix and output distribution so
+ * neither overlaps the column.
+ *
+ * Scroll through the hero advances the stages. With prefers-reduced-motion
+ * the diagram renders in its final state and does not animate.
+ */
+interface Props {
+  stages?: string[];
+}
+const { stages = ['Tokens', 'Embeddings', 'Attention', 'Feed forward', 'Next token'] } = Astro.props;
+
+const CX = 270;          // centre of the block column
+const TOKENS = ['the', 'cat', 'sat', 'on'];
+const TOKEN_W = 38;
+const TOKEN_PITCH = 42;
+const tokenStart = CX - (TOKENS.length * TOKEN_PITCH - (TOKEN_PITCH - TOKEN_W)) / 2;
+---
+
+<figure class="tx" data-tx>
+  <svg class="tx-svg" viewBox="0 0 640 700" role="img" aria-labelledby="tx-title tx-desc">
+    <title id="tx-title">Transformer decoder block, stage by stage</title>
+    <desc id="tx-desc">Input tokens pass through token and positional embeddings, then a
+      transformer block made of multi-head attention and a feed-forward network with add and
+      norm around each, then a linear layer and softmax that produce a next-token distribution.</desc>
+
+    <defs>
+      <marker id="tx-arrow" viewBox="0 0 10 10" refX="8" refY="5"
+              markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M0 1 L9 5 L0 9 z" fill="currentColor" />
+      </marker>
+    </defs>
+
+    <!-- residual stream: the line everything hangs off -->
+    <g class="tx-stream" color="#3a3a3a">
+      <line x1={CX} y1="30" x2={CX} y2="668" stroke="currentColor" stroke-width="1.5"
+            marker-end="url(#tx-arrow)" />
+      <circle class="tx-pulse" cx={CX} cy="668" r="3.5" fill="#ededed" />
+    </g>
+
+    <!-- softmax -->
+    <g class="tx-block" data-stage="4">
+      <rect x={CX - 110} y="34" width="220" height="44" rx="6" />
+      <text class="tx-label" x={CX} y="53" text-anchor="middle">Softmax</text>
+      <text class="tx-shape" x={CX} y="69" text-anchor="middle">(seq_len, vocab)</text>
+    </g>
+
+    <!-- output distribution -->
+    <g class="tx-bars" data-stage="4">
+      <text class="tx-side" x="466" y="20">NEXT TOKEN</text>
+      {['.86', '.42', '.18', '.07'].map((p, i) => (
+        <rect x="466" y={30 + i * 13} width="130" height="7" rx="2" style={`--p:${p}`} />
+      ))}
+    </g>
+
+    <!-- linear -->
+    <g class="tx-block" data-stage="4">
+      <rect x={CX - 110} y="118" width="220" height="44" rx="6" />
+      <text class="tx-label" x={CX} y="137" text-anchor="middle">Linear</text>
+      <text class="tx-shape" x={CX} y="153" text-anchor="middle">(seq_len, d_model)</text>
+    </g>
+
+    <!-- transformer block boundary -->
+    <g class="tx-frame" data-stage="2">
+      <rect x={CX - 142} y="196" width="284" height="300" rx="10" />
+      <text class="tx-frame-label" x={CX - 130} y="216">TRANSFORMER BLOCK × N</text>
+    </g>
+
+    <!-- feed forward -->
+    <g class="tx-block" data-stage="3">
+      <rect x={CX - 115} y="232" width="230" height="52" rx="6" />
+      <text class="tx-label" x={CX} y="253" text-anchor="middle">Feed Forward</text>
+      <text class="tx-shape" x={CX} y="271" text-anchor="middle">(seq_len, d_ff) · ReLU</text>
+    </g>
+
+    <!-- add & norm (post-FFN) -->
+    <g class="tx-block" data-stage="3">
+      <rect x={CX - 115} y="306" width="230" height="44" rx="6" />
+      <text class="tx-label" x={CX} y="325" text-anchor="middle">Add &amp; Norm</text>
+      <text class="tx-shape" x={CX} y="341" text-anchor="middle">residual + LayerNorm</text>
+    </g>
+
+    <!-- multi-head attention -->
+    <g class="tx-block" data-stage="2">
+      <rect x={CX - 115} y="362" width="230" height="62" rx="6" />
+      <text class="tx-label" x={CX} y="383" text-anchor="middle">Multi-Head Attention</text>
+      <text class="tx-shape" x={CX} y="399" text-anchor="middle">H heads · causal mask</text>
+      <text class="tx-shape" x={CX} y="415" text-anchor="middle">(seq_len, seq_len)</text>
+    </g>
+
+    <!-- attention matrix -->
+    <g class="tx-matrix" data-stage="2">
+      <text class="tx-side" x="466" y="366">ATTENTION</text>
+      {Array.from({ length: 16 }).map((_, i) => (
+        <rect x={466 + (i % 4) * 17} y={376 + Math.floor(i / 4) * 17}
+              width="14" height="14" rx="2"
+              style={`--w:${(0.2 + ((i * 7) % 10) / 13).toFixed(2)}`} />
+      ))}
+    </g>
+
+    <!-- add & norm (post-attention) -->
+    <g class="tx-block" data-stage="2">
+      <rect x={CX - 115} y="438" width="230" height="44" rx="6" />
+      <text class="tx-label" x={CX} y="457" text-anchor="middle">Add &amp; Norm</text>
+      <text class="tx-shape" x={CX} y="473" text-anchor="middle">residual + LayerNorm</text>
+    </g>
+
+    <!-- residual bypass around attention -->
+    <path class="tx-bypass" data-stage="2" d={`M${CX - 128} 460 V 328`} fill="none" stroke-dasharray="3 5" />
+
+    <!-- positional encoding -->
+    <g class="tx-block" data-stage="1">
+      <rect x={CX - 115} y="518" width="230" height="44" rx="6" />
+      <text class="tx-label" x={CX} y="537" text-anchor="middle">+ Positional Encoding</text>
+      <text class="tx-shape" x={CX} y="553" text-anchor="middle">sinusoidal · (seq_len, d_model)</text>
+    </g>
+
+    <!-- token embedding -->
+    <g class="tx-block" data-stage="1">
+      <rect x={CX - 115} y="582" width="230" height="44" rx="6" />
+      <text class="tx-label" x={CX} y="601" text-anchor="middle">Token Embedding</text>
+      <text class="tx-shape" x={CX} y="617" text-anchor="middle">lookup · (seq_len, d_model)</text>
+    </g>
+
+    <!-- input tokens, centred on the stream -->
+    <g class="tx-tokens" data-stage="0">
+      {TOKENS.map((t, i) => (
+        <g class="tx-token" style={`--i:${i}`}>
+          <rect x={tokenStart + i * TOKEN_PITCH} y="648" width={TOKEN_W} height="26" rx="4" />
+          <text class="tx-token-text" x={tokenStart + i * TOKEN_PITCH + TOKEN_W / 2}
+                y="665" text-anchor="middle">{t}</text>
+        </g>
+      ))}
+      <text class="tx-side" x={CX} y="694" text-anchor="middle">seq_len = 4 · d_model = 512</text>
+    </g>
+  </svg>
+
+  <figcaption class="tx-caption">
+    <ol class="tx-stages">
+      {stages.map((label, i) => (
+        <li data-stage-label={i}><span>{String(i + 1).padStart(2, '0')}</span>{label}</li>
+      ))}
+    </ol>
+    <p class="tx-note">SCROLL TO FOLLOW THE RESIDUAL STREAM</p>
+  </figcaption>
+</figure>
+
+<style>
+  .tx { margin: 0; display: grid; justify-items: center; gap: 26px; }
+  .tx-svg { width: min(100%, 600px); height: auto; display: block; color: #4a4a4a; }
+
+  .tx-block rect, .tx-frame rect {
+    fill: #0a0a0a; stroke: #2b2b2b; stroke-width: 1;
+    transition: stroke .5s ease, fill .5s ease;
+  }
+  .tx-label { fill: #6a6a6a; font: 600 12px var(--sans); letter-spacing: -.01em; transition: fill .5s ease; }
+  .tx-shape { fill: #4e4e4e; font: 400 9.5px var(--sans); letter-spacing: .04em; transition: fill .5s ease; }
+  .tx-frame rect { fill: none; stroke: #242424; stroke-dasharray: 4 6; }
+  .tx-frame-label { fill: #4a4a4a; font: 700 9px var(--sans); letter-spacing: .16em; }
+  .tx-side { fill: #5a5a5a; font: 700 8.5px var(--sans); letter-spacing: .14em; }
+  .tx-bypass { stroke: #2f2f2f; }
+
+  .tx-cells rect, .tx-matrix rect { fill: #ededed; opacity: calc(var(--w) * .18); transition: opacity .5s ease; }
+  .tx-bars rect { fill: #d0d0d0; transform-origin: 466px 0; transform: scaleX(.05);
+                  transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+
+  .tx-token rect { fill: #0d0d0d; stroke: #3a3a3a; }
+  .tx-token-text { fill: #8a8a8a; font: 500 10px var(--sans); transition: fill .4s ease; }
+
+  /* ---- stage activation ---- */
+  [data-stage].is-on rect { stroke: #d6d6d6; fill: #121212; }
+  [data-stage].is-on .tx-label { fill: #f2f2f2; }
+  [data-stage].is-on .tx-shape { fill: #9a9a9a; }
+  [data-stage].is-on .tx-frame-label { fill: #8f8f8f; }
+  .tx-matrix.is-on rect { opacity: var(--w); }
+  .tx-bars.is-on rect { transform: scaleX(var(--p)); }
+  .tx-tokens.is-on .tx-token { animation: tx-pop .45s cubic-bezier(.2,.7,.2,1) both;
+                               animation-delay: calc(var(--i) * 90ms); }
+  .tx-tokens.is-on .tx-token-text { fill: #ededed; }
+  .tx-tokens.is-on .tx-token rect { stroke: #a8a8a8; }
+
+  @keyframes tx-pop { from { opacity: .25; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  .tx-stream line { transition: stroke .5s ease; }
+  .tx[data-live] .tx-stream line { stroke: #5c5c5c; }
+  .tx-pulse { animation: tx-flow 4.2s linear infinite; }
+  @keyframes tx-flow {
+    from { transform: translateY(0); opacity: 0; }
+    12% { opacity: 1; } 88% { opacity: 1; }
+    to { transform: translateY(-638px); opacity: 0; }
+  }
+
+  .tx-caption { display: grid; gap: 10px; justify-items: center; }
+  .tx-stages { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px;
+               list-style: none; margin: 0; padding: 0; }
+  .tx-stages li {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 6px 11px; border: 1px solid #262626; border-radius: 5px;
+    color: #6a6a6a; font: 500 10.5px var(--sans); letter-spacing: .04em;
+    transition: color .4s ease, border-color .4s ease, background .4s ease;
+  }
+  .tx-stages li span { font: 700 9px var(--sans); letter-spacing: .1em; color: #4a4a4a; }
+  .tx-stages li.is-on { color: #f0f0f0; border-color: #6e6e6e; background: #101010; }
+  .tx-stages li.is-on span { color: #a5a5a5; }
+  .tx-note { margin: 0; color: #5a5a5a; font: 400 9px var(--sans); letter-spacing: .18em; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tx-pulse, .tx-tokens.is-on .tx-token { animation: none; }
+    .tx-block rect, .tx-label, .tx-shape, .tx-matrix rect, .tx-bars rect { transition: none; }
+  }
+</style>
+
+<script>
+  const STAGES = 5;
+  const root = document.querySelector<HTMLElement>('[data-tx]');
+  if (root) {
+    const blocks = [...root.querySelectorAll<SVGGElement>('[data-stage]')];
+    const labels = [...document.querySelectorAll<HTMLElement>('[data-stage-label]')];
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let current = -1;
+
+    const apply = (stage: number) => {
+      if (stage === current) return;
+      current = stage;
+      for (const el of blocks) el.classList.toggle('is-on', Number(el.dataset.stage) <= stage);
+      labels.forEach((el, i) => el.classList.toggle('is-on', i <= stage));
+    };
+
+    if (reduce) {
+      apply(STAGES - 1);
+      root.setAttribute('data-live', '');
+    } else {
+      const onScroll = () => {
+        const r = root.getBoundingClientRect();
+        // Drive the stages off the figure's own position, not the hero's:
+        // the hero is taller than the viewport, so keying off it would let
+        // the diagram scroll away before the sequence finished. Start as it
+        // rises into view, complete while most of it is still on screen.
+        const start = innerHeight * 0.62;
+        const span = Math.max(1, r.height * 0.9);
+        const p = Math.max(0, Math.min(1, (start - r.top) / span));
+        apply(Math.min(STAGES - 1, Math.floor(p * STAGES)));
+        root.toggleAttribute('data-live', r.bottom > innerHeight * 0.35 && r.top < innerHeight);
+      };
+      addEventListener('scroll', onScroll, { passive: true });
+      addEventListener('resize', onScroll, { passive: true });
+      onScroll();
+    }
+  }
+</script>
