@@ -1,0 +1,71 @@
+/*
+ * Mentora design tokens — the single source of truth.
+ *
+ * Both stylesheets consume this file. Do NOT add a :root block to
+ * global.css or landing.css; add tokens here instead.
+ *
+ * Palette is monochrome by decision: pure black, white ink, grey support
+ * tones. Accent is carried by Instrument Serif italic in grey, not by hue.
+ */
+
+:root {
+  /* ---- Surfaces ---------------------------------------------------- */
+  --bg: #000000;
+  --surface: #0a0a0a;
+  --surface2: #0f0f0f;
+
+  /* ---- Ink --------------------------------------------------------- */
+  --text: #ffffff;
+  --white: #f4f4f4;
+  --stat: #d8d8d8;
+  --silver: #dedede;
+  --muted: #9a9a9a;
+  --subtle: #646464;
+
+  /* ---- Lines ------------------------------------------------------- */
+  --border: rgba(255, 255, 255, 0.16);
+  --border-soft: rgba(255, 255, 255, 0.12);
+  --border-light: rgba(255, 255, 255, 0.17);
+
+  /* ---- Type -------------------------------------------------------- */
+  --serif: 'Instrument Serif', Georgia, 'Times New Roman', Times, serif;
+  --sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* ---- Type scale -------------------------------------------------- */
+  --logo: 15.5px;
+  --logo-mark: 22px;
+  --nav: 14px;
+  --btn: 13.5px;
+  --badge: 12.5px;
+  --h1: 48px;
+  --lede: 15.5px;
+  --stat-size: 13.5px;
+
+  /* ---- Rhythm ------------------------------------------------------ */
+  --nav-h: 40px;
+  --btn-h: 40px;
+  --hero-btn-h: 42px;
+  --header-y: 22px;
+  --header-x: 40px;
+  --stats-x: 72px;
+  --stats-y: 36px;
+  --hero-gap: 85px;
+
+  /* ---- Measure ----------------------------------------------------- */
+  --copy-max: 860px;
+  --lede-max: 470px;
+
+  /* ---- Landing aliases ---------------------------------------------
+   * The landing stylesheet was written against a --land-* namespace with
+   * its own lilac palette. Rather than rewrite ~24KB of rules at once,
+   * those names are aliased here to the shared monochrome tokens. Delete
+   * an alias only once no rule references it.
+   */
+  --land-bg: var(--bg);
+  --land-ink: var(--text);
+  --land-muted: var(--muted);
+  --land-line: var(--border-soft);
+  --land-lilac: var(--muted);
+  --land-serif: var(--serif);
+  --land-sans: var(--sans);
+}

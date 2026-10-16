@@ -1,5 +1,6 @@
 ---
 import { courses, totalLessons } from '../lib/courses.js';
+import '../styles/tokens.css';
 import '../styles/landing.css';
 const featured = [courses[0], courses.find(c=>c.slug==='rag'), courses.find(c=>c.slug==='agents')];
 const symbols = ['⌘', '◎', '✳'];
@@ -10,17 +11,17 @@ const tracks = ['Foundations', 'Retrieval systems', 'Agentic systems'];
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#050608" />
+    <meta name="theme-color" content="#000000" />
     <meta name="description" content={`Mentora: ${totalLessons} in-depth AI engineering lessons, interactive visualizations, and a course-aware AI tutor. Learn LLMs, RAG, and agents from fundamentals to production.`} />
     <meta property="og:title" content="Mentora — Learn AI from the inside out" />
     <meta property="og:description" content="A deeper way to learn AI engineering. Guided courses, interactive labs, and a built-in AI tutor." />
     <link rel="icon" type="image/svg+xml" href="/mentora-icon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
     <title>Mentora — Learn AI from the inside out</title>
   </head>
-  <body class="landing" style="background:#050608;color:#f6f6fa">
+  <body class="landing" style="background:#000000;color:#ffffff">
     <a class="skip-to-content" href="#main">Skip to content</a>
     <div class="noise" aria-hidden="true"></div>
     <div class="ambient ambient--one" aria-hidden="true"></div>
@@ -29,7 +30,7 @@ const tracks = ['Foundations', 'Retrieval systems', 'Agentic systems'];
     <header class="landing-header" id="top">
       <div class="header-inner">
         <a href="/" class="brand" aria-label="Mentora home">
-          <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none"><path d="M7 25.5V10l11 12 11-12v15.5" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="29" cy="8" r="2" fill="#BAAFFA"/></svg></span>
+          <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none"><path d="M7 25.5V10l11 12 11-12v15.5" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="29" cy="8" r="2" fill="#b7b7b7"/></svg></span>
           <span>mentora<span class="brand-period">.</span></span>
         </a>
         <nav class="desktop-nav" aria-label="Main navigation">
@@ -62,25 +63,25 @@ const tracks = ['Foundations', 'Retrieval systems', 'Agentic systems'];
               <div class="art-small-label" aria-hidden="true">FIG. 01 / CONNECT THE CONCEPTS</div>
               <svg class="learning-map" viewBox="0 0 540 540" role="img" aria-label="Concentric animated learning map linking model internals, retrieval, and autonomous agents">
                 <defs>
-                  <radialGradient id="map-core"><stop offset="0%" stop-color="#b8b2ff" stop-opacity=".32"/><stop offset="62%" stop-color="#8878ff" stop-opacity=".11"/><stop offset="100%" stop-color="#8878ff" stop-opacity="0"/></radialGradient>
-                  <linearGradient id="line-grad" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e8e6ff" stop-opacity=".03"/><stop offset=".5" stop-color="#b6a9f6" stop-opacity=".65"/><stop offset="1" stop-color="#e8e6ff" stop-opacity=".04"/></linearGradient>
+                  <radialGradient id="map-core"><stop offset="0%" stop-color="#b9b9b9" stop-opacity=".32"/><stop offset="62%" stop-color="#858585" stop-opacity=".11"/><stop offset="100%" stop-color="#858585" stop-opacity="0"/></radialGradient>
+                  <linearGradient id="line-grad" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e8e8e8" stop-opacity=".03"/><stop offset=".5" stop-color="#b1b1b1" stop-opacity=".65"/><stop offset="1" stop-color="#e8e8e8" stop-opacity=".04"/></linearGradient>
                 </defs>
                 <circle cx="270" cy="266" r="211" fill="none" stroke="#ffffff" stroke-opacity=".06" stroke-width="1" stroke-dasharray="2 9"/>
-                <circle cx="270" cy="266" r="169" fill="none" stroke="#b9b4f4" stroke-opacity=".17" stroke-width="1"/>
-                <circle cx="270" cy="266" r="120" fill="none" stroke="#b9b4f4" stroke-opacity=".22" stroke-width="1" stroke-dasharray="4 8"/>
+                <circle cx="270" cy="266" r="169" fill="none" stroke="#bababa" stroke-opacity=".17" stroke-width="1"/>
+                <circle cx="270" cy="266" r="120" fill="none" stroke="#bababa" stroke-opacity=".22" stroke-width="1" stroke-dasharray="4 8"/>
                 <circle cx="270" cy="266" r="89" fill="url(#map-core)"/>
                 <g class="map-spin map-spin--slow">
                   <ellipse cx="270" cy="266" rx="215" ry="97" fill="none" stroke="url(#line-grad)" stroke-width="1.2" transform="rotate(-35 270 266)"/>
                   <ellipse cx="270" cy="266" rx="215" ry="97" fill="none" stroke="url(#line-grad)" stroke-width="1.2" transform="rotate(35 270 266)"/>
                 </g>
-                <g class="map-spin map-spin--reverse"><circle cx="270" cy="266" r="169" fill="none" stroke="#afa6ec" stroke-opacity=".24" stroke-width="1.5" stroke-dasharray="1 17" stroke-linecap="round"/></g>
+                <g class="map-spin map-spin--reverse"><circle cx="270" cy="266" r="169" fill="none" stroke="#adadad" stroke-opacity=".24" stroke-width="1.5" stroke-dasharray="1 17" stroke-linecap="round"/></g>
                 <g stroke="url(#line-grad)" stroke-width="1.4" fill="none"><path d="M270 266L145 150"/><path d="M270 266L422 198"/><path d="M270 266L363 397"/><path d="M145 150L422 198L363 397L145 150" stroke-dasharray="4 6" opacity=".6"/></g>
-                <circle cx="270" cy="266" r="60" fill="#0e0e18" stroke="#a49ae6" stroke-opacity=".78"/><circle cx="270" cy="266" r="53" fill="none" stroke="#d5cfff" stroke-opacity=".12" stroke-dasharray="3 7"/><circle cx="270" cy="266" r="68" fill="none" stroke="#b6a7ff" stroke-opacity=".12" class="center-pulse"/>
-                <path d="M248 284v-34l22 24 22-24v34" stroke="#eceaff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="292" cy="247" r="4.4" fill="#b9a9ff"/>
-                <g class="map-node"><circle cx="145" cy="150" r="21" fill="#0e1018" stroke="#c4bcfb" stroke-opacity=".7"/><circle cx="145" cy="150" r="7" fill="#c1b5ff"/><circle cx="145" cy="150" r="13" fill="none" stroke="#c1b5ff" stroke-opacity=".22"/></g>
-                <g class="map-node map-node--two"><circle cx="422" cy="198" r="21" fill="#0e1018" stroke="#b6d9f5" stroke-opacity=".72"/><rect x="416" y="192" width="12" height="12" rx="3" fill="#b7dffa" transform="rotate(45 422 198)"/></g>
-                <g class="map-node map-node--three"><circle cx="363" cy="397" r="21" fill="#0e1018" stroke="#dfc5f8" stroke-opacity=".72"/><path d="M356 398l6 6 10-13" stroke="#dfc5f8" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
-                <circle cx="270" cy="55" r="3.5" fill="#d4caff"/><circle cx="96" cy="266" r="2.5" fill="#a1b4e6"/><circle cx="444" cy="266" r="2.5" fill="#a1b4e6"/>
+                <circle cx="270" cy="266" r="60" fill="#0f0f0f" stroke="#a2a2a2" stroke-opacity=".78"/><circle cx="270" cy="266" r="53" fill="none" stroke="#d4d4d4" stroke-opacity=".12" stroke-dasharray="3 7"/><circle cx="270" cy="266" r="68" fill="none" stroke="#b1b1b1" stroke-opacity=".12" class="center-pulse"/>
+                <path d="M248 284v-34l22 24 22-24v34" stroke="#ececec" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="292" cy="247" r="4.4" fill="#b3b3b3"/>
+                <g class="map-node"><circle cx="145" cy="150" r="21" fill="#101010" stroke="#c2c2c2" stroke-opacity=".7"/><circle cx="145" cy="150" r="7" fill="#bdbdbd"/><circle cx="145" cy="150" r="13" fill="none" stroke="#bdbdbd" stroke-opacity=".22"/></g>
+                <g class="map-node map-node--two"><circle cx="422" cy="198" r="21" fill="#101010" stroke="#d4d4d4" stroke-opacity=".72"/><rect x="416" y="192" width="12" height="12" rx="3" fill="#d8d8d8" transform="rotate(45 422 198)"/></g>
+                <g class="map-node map-node--three"><circle cx="363" cy="397" r="21" fill="#101010" stroke="#cecece" stroke-opacity=".72"/><path d="M356 398l6 6 10-13" stroke="#cecece" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+                <circle cx="270" cy="55" r="3.5" fill="#d0d0d0"/><circle cx="96" cy="266" r="2.5" fill="#b4b4b4"/><circle cx="444" cy="266" r="2.5" fill="#b4b4b4"/>
               </svg>
               <div class="node-chip chip-llm"><span class="chip-bullet"></span> 01. LLMs</div>
               <div class="node-chip chip-rag"><span class="chip-bullet"></span> 02. RAG</div>
@@ -125,7 +126,7 @@ const tracks = ['Foundations', 'Retrieval systems', 'Agentic systems'];
       <section class="bottom-cta section-pad"><div class="landing-container"><div class="cta-inner" data-reveal><div class="cta-orbit" aria-hidden="true">✳</div><p class="section-label">YOUR NEXT CHAPTER STARTS HERE</p><h2>Don't just keep up.<br/><em>Understand what's next.</em></h2><p>Explore all 234 lessons. Learn the foundations, build the intuition, and make the engineering decisions that matter.</p><a href="/academy/" class="action-primary">Enter the academy <span aria-hidden="true">↗</span></a></div></div></section>
     </main>
 
-    <footer class="landing-footer"><div class="landing-container footer-inner"><a href="/" class="brand footer-brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none"><path d="M7 25.5V10l11 12 11-12v15.5" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="29" cy="8" r="2" fill="#BAAFFA"/></svg></span><span>mentora<span class="brand-period">.</span></span></a><span>LEARN DEEPLY. BUILD CONFIDENTLY.</span><div><a href="/academy/">ACADEMY ↗</a><a href="#top">BACK TO TOP ↑</a></div><small>© 2026 MENTORA</small></div></footer>
+    <footer class="landing-footer"><div class="landing-container footer-inner"><a href="/" class="brand footer-brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none"><path d="M7 25.5V10l11 12 11-12v15.5" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="29" cy="8" r="2" fill="#b7b7b7"/></svg></span><span>mentora<span class="brand-period">.</span></span></a><span>LEARN DEEPLY. BUILD CONFIDENTLY.</span><div><a href="/academy/">ACADEMY ↗</a><a href="#top">BACK TO TOP ↑</a></div><small>© 2026 MENTORA</small></div></footer>
     <script src="/landing.js" is:inline defer></script>
   </body>
 </html>
