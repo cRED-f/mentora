@@ -1,0 +1,23 @@
+---
+import Layout from '../../../layouts/AppLayout.astro';
+import { courses } from '../../../lib/courses.js';
+export function getStaticPaths() {
+  return courses.flatMap(course => course.lessons.map(lesson => ({params: { course: course.slug, lesson: String(lesson.id) }, props: { course, lesson }})));
+}
+const { course, lesson } = Astro.props;
+const index = course.lessons.findIndex(x => x.id === lesson.id);
+const previous = course.lessons[index - 1];
+const next = course.lessons[index + 1];
+---
+<Layout title={lesson.title} description={lesson.subtitle} activeCourse={course.slug} activeLesson={String(lesson.id)} eyebrow={`LESSON ${String(lesson.id).padStart(2,'0')}`}>
+  <div class="lesson-page content-container">
+    <nav class="breadcrumbs"><a href="/academy/">Academy</a><span>/</span><a href={`/course/${course.slug}/`}>{course.title}</a><span>/</span><strong>Lesson {String(lesson.id).padStart(2,'0')}</strong></nav>
+    <div class="lesson-intro"><div class="lesson-overline"><span class="metal-badge">{course.number} / {String(lesson.id).padStart(2,'0')}</span><span>{course.category.toUpperCase()} · {course.lessons.length} LESSONS</span></div><h1>{lesson.title}</h1><p>{lesson.subtitle}</p><div class="lesson-toolbar"><button class="mark-complete" type="button" data-progress-key={`${course.slug}:${lesson.id}`}><span class="complete-icon">○</span> Mark as complete</button><button type="button" class="ask-lesson">✧ &nbsp; Ask AI about this</button><a href={course.original+`#lesson-${lesson.id}`} target="_blank" rel="noopener">↗ &nbsp; Interactive course</a></div></div>
+    <div class="section-navigation"><span>IN THIS LESSON</span><div>{lesson.sections.map(sec => <a href={`#section-${sec.letter}`}><b>{sec.letter}</b><span>{sec.heading}</span></a>)}</div></div>
+    <div class="lesson-sections">
+      {lesson.sections.map(sec => <section id={`section-${sec.letter}`} class={`lesson-section segment-${sec.letter}`}><div class="segment-heading"><span class="segment-letter">{sec.letter}</span><div><span class="section-kicker">INTERVIEW FRAMEWORK · {sec.letter} / F</span><h2>{sec.heading}</h2></div></div><div class="lesson-prose" set:html={sec.html} /></section>)}
+    </div>
+    <div class="lesson-after"><div><span class="section-kicker">CLOSE THE LOOP</span><h3>Can you explain this <em>without notes?</em></h3><p>If you can explain the mechanism, alternatives, failure modes, and validation strategy aloud, you are ready for the interview.</p></div><button type="button" class="ghost-button lesson-test">✧ &nbsp; Test my understanding</button></div>
+    <div class="lesson-next-prev">{previous ? <a href={`/learn/${course.slug}/${previous.id}/`}><span>← PREVIOUS LESSON</span><strong>{previous.title}</strong></a> : <a href={`/course/${course.slug}/`}><span>← BACK TO COURSE</span><strong>All lessons</strong></a>}{next ? <a href={`/learn/${course.slug}/${next.id}/`} class="next"><span>NEXT LESSON →</span><strong>{next.title}</strong></a> : <a href="/academy/" class="next"><span>COURSE COMPLETE →</span><strong>Explore other courses</strong></a>}</div>
+  </div>
+</Layout>

@@ -1,0 +1,27 @@
+---
+import Layout from '../../layouts/AppLayout.astro';
+import { courses, totalLessons } from '../../lib/courses.js';
+const groups = ['Foundations','Architecture','Training','Applications','Production'];
+---
+<Layout title="The AI Engineering Field Guide" description="234 technical AI engineering interview lessons across LLMs, prompt engineering, RAG, and agentic systems.">
+  <div class="home-page content-container">
+    <div class="welcome-meta"><span class="metal-badge"><span>✧</span> COMPLETE AI ENGINEERING CURRICULUM</span><span class="edition">EDITION 2026 / v1.0</span></div>
+    <section class="hero-intro">
+      <p class="section-kicker">FROM FIRST PRINCIPLES TO PRODUCTION</p>
+      <h1>Master the systems<br/>behind <em>intelligent software.</em></h1>
+      <p class="hero-description">An in-depth, interview-focused field guide to the ideas, mathematics, architectures, and engineering decisions that actually power modern AI.</p>
+      <div class="hero-actions"><a class="solid-button" href="/course/llm-foundations/">Start learning <span>↗</span></a><button class="ghost-button search-open" type="button">Explore curriculum <span>⌕</span></button></div>
+    </section>
+    <div class="stats-strip"><div><span>01 / COURSES</span><strong>11</strong><small>complete learning paths</small></div><div><span>02 / LESSONS</span><strong>{totalLessons}</strong><small>deep-dive technical lessons</small></div><div><span>03 / FORMAT</span><strong>A–F</strong><small>technical interview method</small></div><div><span>04 / ASSISTANT</span><strong>24/7</strong><small>your own connected AI tutor*</small></div></div>
+    <div class="section-divider"><div><span class="section-kicker">THE CURRICULUM</span><h2>Built to connect <em>the dots.</em></h2></div><p>Each course progresses from intuition to mathematical mechanisms, systems trade-offs, and the questions asked in real engineering interviews.</p></div>
+    <div class="course-grid">
+      {courses.map((course, index) => <a href={`/course/${course.slug}/`} class="overview-card" style={`--card-index:${index}`}>
+        <div class="course-card-top"><span class="card-number">{course.number} / 11</span><span class="card-category">{course.category}</span></div>
+        <div class="course-card-symbol">{['◈','⌁','⟐','⌘','◉','◇','∿','⊞','¶','◎','✳'][index]}</div>
+        <h3>{course.title}</h3><p>{course.description}</p><div class="course-card-bottom"><span>{course.count} DETAILED LESSONS</span><span class="card-arrow">↗</span></div>
+      </a>)}
+    </div>
+    <section class="feature-banner"><div><span class="section-kicker">YOUR SECOND BRAIN, RIGHT HERE</span><h2>Learn it. Challenge it.<br/><em>Make it yours.</em></h2><p>Your AI tutor has access to the lesson you're reading. Ask for a rigorous explanation, a harder interview question, or a production post-mortem.</p><button type="button" class="ghost-button tutor-toggle">Meet your AI tutor <span>↗</span></button></div><div class="feature-diagram"><span class="diagram-token">YOUR QUESTION</span><span class="connector-line"></span><span class="diagram-core">✧</span><span class="connector-line"></span><span class="diagram-token">GROUNDED ANSWER</span><small>COURSE CONTEXT + 9ROUTER</small></div></section>
+    <footer class="main-footer"><span>MENTORA © 2026 · THE LEARNING STUDIO</span><span>*AI tutor requires your own 9router configuration.</span></footer>
+  </div>
+</Layout>

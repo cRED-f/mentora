@@ -1,0 +1,70 @@
+---
+import { courses, totalLessons } from '../lib/courses.js';
+import '../styles/global.css';
+const { title = 'Learn AI engineering', description = 'A practical interview preparation academy for AI engineers.', activeCourse = '', activeLesson = '', eyebrow = 'THE AI ENGINEERING FIELD GUIDE' } = Astro.props;
+const current = courses.find(c => c.slug === activeCourse);
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content={description} />
+  <link rel="icon" type="image/svg+xml" href="/mentora-icon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet" />
+  <title>{title} — Mentora</title>
+</head>
+<body style="background:#000;color:#fff" data-course={activeCourse} data-lesson={activeLesson}>
+  <div class="mobile-scrim" id="mobile-scrim"></div>
+  <div class="app-shell">
+    <aside class="left-sidebar" aria-label="Course navigation">
+      <a href="/" class="wordmark" aria-label="Mentora homepage">
+        <svg class="wordmark-icon" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M7 25.5V10l11 12 11-12v15.5" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="29" cy="8" r="2" fill="#BAAFFA"/></svg>
+        <span>mentora<span class="wordmark-suffix">.</span></span>
+      </a>
+      <div class="sidebar-overline">THE ENGINEERING LIBRARY</div>
+      <nav class="primary-links" aria-label="Main">
+        <a href="/academy/" class={activeCourse ? 'primary-link' : 'primary-link selected'}><span class="nav-symbol">⌑</span> Academy <span class="primary-tail">↗</span></a>
+        <a href="/" class="primary-link"><span class="nav-symbol">⌂</span> Mentora homepage <span class="primary-tail">↗</span></a>
+        <button type="button" class="primary-link search-open" aria-label="Search lessons"><span class="nav-symbol">⌕</span> Search library <kbd>⌘ K</kbd></button>
+      </nav>
+      <div class="nav-heading"><span>THE CURRICULUM</span><span>{courses.length} COURSES</span></div>
+      <nav class="course-list" aria-label="Course list">
+        {courses.map(course => <a href={`/course/${course.slug}/`} class:list={['course-link',activeCourse === course.slug && 'active']} aria-current={activeCourse === course.slug ? 'page' : undefined}>
+          <span class="course-num">{course.number}</span><span class="course-title">{course.title}</span><span class="course-count">{course.count}</span>
+        </a>)}
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-progress"><div class="sidebar-progress-top"><span>YOUR PROGRESS</span><span id="progress-count">0 / {totalLessons}</span></div><div class="track"><div id="global-progress" class="track-fill"></div></div><small>Progress saved locally on this device</small></div>
+        <a class="sidebar-archive" href={current?.original || '/modules/module_1_llm_fundamentals_interactive.html'} target="_blank" rel="noopener">↗ &nbsp; Open original interactive labs</a>
+      </div>
+    </aside>
+    <div class="main-panel">
+      <header class="topbar">
+        <button class="icon-button menu-toggle" type="button" aria-label="Open course navigation" aria-expanded="false">☰</button>
+        <div class="topbar-location"><span class="tiny-star">✦</span><span class="topbar-course">{current ? current.title : 'Mentora Academy'}</span><span class="topbar-separator">/</span><span class="topbar-muted">{eyebrow}</span></div>
+        <div class="topbar-actions"><span class="topbar-hint">BUILT FOR DEEP LEARNING</span><button type="button" class="icon-button search-open" aria-label="Search courses">⌕</button><button type="button" class="icon-button tutor-toggle" aria-label="Toggle AI tutor" aria-expanded="false">✧</button></div>
+      </header>
+      <main class="main-scroll" id="main-content"><slot /></main>
+    </div>
+    <aside class="tutor-panel" id="tutor-panel" aria-label="AI interview tutor">
+      <div class="tutor-header"><div class="tutor-logo">✧</div><div class="tutor-heading"><strong>AI interview tutor</strong><small>POWERED BY 9ROUTER</small></div><button class="tutor-close" type="button" aria-label="Close tutor">×</button></div>
+      <div class="tutor-status"><span id="tutor-dot" class="status-dot"></span><span id="tutor-status-text">Checking configuration</span><span class="tutor-context">{activeLesson ? 'LESSON-AWARE' : 'COURSE-AWARE'}</span></div>
+      <div class="tutor-thread" id="tutor-thread" role="log" aria-live="polite">
+        <div class="tutor-intro"><div class="intro-orbit"><span>✧</span></div><p class="intro-eyebrow">YOUR PERSONAL STUDY PARTNER</p><h2>Think deeper.<br/><em>Ask anything.</em></h2><p>Go beyond definitions. Explore mechanisms, challenge trade-offs, and prepare for technical interviews with context from the curriculum.</p></div>
+        <div class="suggestions" id="suggestions">
+          <button type="button" data-suggestion="Explain the core mechanism behind this lesson and where it fails in production."><span>01</span> Explain the mechanism <b>↗</b></button>
+          <button type="button" data-suggestion="Interview me on this topic with one difficult technical question, and don't give the answer yet."><span>02</span> Test my understanding <b>↗</b></button>
+          <button type="button" data-suggestion="Give me a realistic AI engineering production incident related to this lesson and ask how I would debug it."><span>03</span> Production scenario <b>↗</b></button>
+        </div>
+      </div>
+      <form class="tutor-form" id="tutor-form"><div class="composer"><textarea id="tutor-input" rows="2" aria-label="Ask the AI tutor" placeholder="Ask anything about this topic..." maxlength="2000"></textarea><div class="composer-bottom"><span>ENTER TO SEND · SHIFT + ENTER FOR LINE</span><div class="composer-controls"><button class="stop-button" type="button" id="stop-chat" hidden>Stop</button><button class="send-button" id="send-chat" type="submit" aria-label="Send message">↑</button></div></div></div><div class="tutor-footnote">Answers can be incorrect. Verify important details.</div></form>
+    </aside>
+  </div>
+  <div class="search-modal" id="search-modal" hidden role="dialog" aria-modal="true" aria-label="Search curriculum"><div class="search-dialog"><div class="search-box"><span>⌕</span><input id="search-input" placeholder="Search 234 lessons, topics, concepts..." aria-label="Search query" autocomplete="off"/><button class="search-dismiss" type="button">ESC</button></div><div class="search-results" id="search-results"></div><div class="search-footer">SEARCH ALL COURSES <span>↵ TO OPEN · ESC TO CLOSE</span></div></div></div>
+  <script src="/app.js" is:inline defer></script>
+</body>
+</html>

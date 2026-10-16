@@ -1,0 +1,17 @@
+---
+import Layout from '../../layouts/AppLayout.astro';
+import { courses } from '../../lib/courses.js';
+export function getStaticPaths() { return courses.map(course => ({ params: { slug: course.slug }, props: { course } })); }
+const { course } = Astro.props;
+---
+<Layout title={course.title} description={course.description} activeCourse={course.slug} eyebrow="COURSE OVERVIEW">
+  <div class="course-page content-container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/academy/">Academy</a><span>/</span><strong>Course {course.number}</strong></nav>
+    <div class="course-hero"><div class="course-overline"><span class="metal-badge">COURSE {course.number} OF 11</span><span>{course.category.toUpperCase()}</span></div><h1>{course.title}<em>.</em></h1><p>{course.description}</p><div class="course-hero-meta"><span>◉ {course.count} detailed lessons</span><span>✧ Interview-ready A–F format</span><span>↗ Interactive labs included</span></div><a class="solid-button" href={`/learn/${course.slug}/1/`}>Begin course <span>↗</span></a></div>
+    <div class="chapter-heading"><div><span class="section-kicker">LESSON INDEX</span><h2>Follow the <em>learning path.</em></h2></div><span>{course.count} lessons · 6 segments each</span></div>
+    <div class="lesson-index">
+      {course.lessons.map((lesson, idx) => <a href={`/learn/${course.slug}/${lesson.id}/`} class="lesson-index-row" data-progress-key={`${course.slug}:${lesson.id}`}><span class="lesson-index-num">{String(idx+1).padStart(2,'0')}</span><div><h3>{lesson.title}</h3><p>{lesson.subtitle}</p></div><span class="lesson-completion-indicator" aria-label="Not completed">○</span><span class="lesson-index-arrow">↗</span></a>)}
+    </div>
+    <div class="module-labs"><div class="module-labs-icon">⌁</div><div><span class="section-kicker">INTERACTIVE LEARNING</span><h3>Experiment with the original simulations.</h3><p>Every course’s original HTML workbook is preserved, including its animated diagrams and hands-on labs.</p></div><a href={course.original} target="_blank" rel="noopener" class="ghost-button">Open labs ↗</a></div>
+  </div>
+</Layout>
