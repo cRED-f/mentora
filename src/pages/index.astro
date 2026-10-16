@@ -49,80 +49,46 @@ const tracks = ['Foundations', 'Retrieval systems', 'Agentic systems'];
         <div class="hero-background-grid" aria-hidden="true"></div>
         <div class="landing-container hero-grid">
           <div class="hero-left">
-            <div class="hero-eyebrow motion-enter" style="--delay:.08s"><span class="live-spark">✳</span> THE AI ENGINEERING LEARNING SPACE <span class="eyebrow-rule"></span> EST. 2026</div>
-            <h1 id="hero-heading" class="motion-enter" style="--delay:.2s">Curiosity meets<br/><span class="headline-em">understanding.</span></h1>
-            <p class="hero-lede motion-enter" style="--delay:.36s">Don't just learn what AI can do. Understand <strong>how it works.</strong> Go from your first Transformer to building production-grade AI systems—with a mentor beside you.</p>
-            <div class="hero-ctas motion-enter" style="--delay:.5s"><a class="action-primary" href="/academy/">Start learning <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="action-text" href="#curriculum">Explore the curriculum <span aria-hidden="true">↗</span></a></div>
-            <div class="hero-social-proof motion-enter" style="--delay:.64s"><div class="proof-icon" aria-hidden="true"><span>✧</span></div><span>One place for the <b>theory, the code, and the why.</b></span></div>
-          </div>
-          <div class="hero-art motion-enter" style="--delay:.24s" aria-label="Animated learning visualization showing AI fundamentals, RAG, and agents connected to Mentora">
-            <div class="art-glow" aria-hidden="true"></div>
-            <div class="art-frame">
-              <div class="art-corner art-corner--tl"></div><div class="art-corner art-corner--tr"></div><div class="art-corner art-corner--bl"></div><div class="art-corner art-corner--br"></div>
-              <div class="art-small-label" aria-hidden="true">FIG. 01 / CONNECT THE CONCEPTS</div>
-              <svg class="learning-map" viewBox="0 0 540 540" role="img" aria-label="Concentric animated learning map linking model internals, retrieval, and autonomous agents">
-                <defs>
-                  <radialGradient id="map-core"><stop offset="0%" stop-color="#b9b9b9" stop-opacity=".32"/><stop offset="62%" stop-color="#858585" stop-opacity=".11"/><stop offset="100%" stop-color="#858585" stop-opacity="0"/></radialGradient>
-                  <linearGradient id="line-grad" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e8e8e8" stop-opacity=".03"/><stop offset=".5" stop-color="#b1b1b1" stop-opacity=".65"/><stop offset="1" stop-color="#e8e8e8" stop-opacity=".04"/></linearGradient>
-                </defs>
-                <circle cx="270" cy="266" r="211" fill="none" stroke="#ffffff" stroke-opacity=".06" stroke-width="1" stroke-dasharray="2 9"/>
-                <circle cx="270" cy="266" r="169" fill="none" stroke="#bababa" stroke-opacity=".17" stroke-width="1"/>
-                <circle cx="270" cy="266" r="120" fill="none" stroke="#bababa" stroke-opacity=".22" stroke-width="1" stroke-dasharray="4 8"/>
-                <circle cx="270" cy="266" r="89" fill="url(#map-core)"/>
-                <g class="map-spin map-spin--slow">
-                  <ellipse cx="270" cy="266" rx="215" ry="97" fill="none" stroke="url(#line-grad)" stroke-width="1.2" transform="rotate(-35 270 266)"/>
-                  <ellipse cx="270" cy="266" rx="215" ry="97" fill="none" stroke="url(#line-grad)" stroke-width="1.2" transform="rotate(35 270 266)"/>
-                </g>
-                <g class="map-spin map-spin--reverse"><circle cx="270" cy="266" r="169" fill="none" stroke="#adadad" stroke-opacity=".24" stroke-width="1.5" stroke-dasharray="1 17" stroke-linecap="round"/></g>
-                <g stroke="url(#line-grad)" stroke-width="1.4" fill="none"><path d="M270 266L145 150"/><path d="M270 266L422 198"/><path d="M270 266L363 397"/><path d="M145 150L422 198L363 397L145 150" stroke-dasharray="4 6" opacity=".6"/></g>
-                <circle cx="270" cy="266" r="60" fill="#0f0f0f" stroke="#a2a2a2" stroke-opacity=".78"/><circle cx="270" cy="266" r="53" fill="none" stroke="#d4d4d4" stroke-opacity=".12" stroke-dasharray="3 7"/><circle cx="270" cy="266" r="68" fill="none" stroke="#b1b1b1" stroke-opacity=".12" class="center-pulse"/>
-                <path d="M248 284v-34l22 24 22-24v34" stroke="#ececec" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="292" cy="247" r="4.4" fill="#b3b3b3"/>
-                <g class="map-node"><circle cx="145" cy="150" r="21" fill="#101010" stroke="#c2c2c2" stroke-opacity=".7"/><circle cx="145" cy="150" r="7" fill="#bdbdbd"/><circle cx="145" cy="150" r="13" fill="none" stroke="#bdbdbd" stroke-opacity=".22"/></g>
-                <g class="map-node map-node--two"><circle cx="422" cy="198" r="21" fill="#101010" stroke="#d4d4d4" stroke-opacity=".72"/><rect x="416" y="192" width="12" height="12" rx="3" fill="#d8d8d8" transform="rotate(45 422 198)"/></g>
-                <g class="map-node map-node--three"><circle cx="363" cy="397" r="21" fill="#101010" stroke="#cecece" stroke-opacity=".72"/><path d="M356 398l6 6 10-13" stroke="#cecece" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
-                <circle cx="270" cy="55" r="3.5" fill="#d0d0d0"/><circle cx="96" cy="266" r="2.5" fill="#b4b4b4"/><circle cx="444" cy="266" r="2.5" fill="#b4b4b4"/>
-              </svg>
-              <div class="node-chip chip-llm"><span class="chip-bullet"></span> 01. LLMs</div>
-              <div class="node-chip chip-rag"><span class="chip-bullet"></span> 02. RAG</div>
-              <div class="node-chip chip-agents"><span class="chip-bullet"></span> 03. AGENTS</div>
-              <div class="art-bottom"><span><span class="art-status-dot"></span> LEARNING SYSTEM ONLINE</span><span>01 / ∞</span></div>
-            </div>
+            <div class="hero-eyebrow"><span class="live-spark">✳</span> THE AI ENGINEERING LEARNING SPACE <span class="eyebrow-rule"></span> EST. 2026</div>
+            <h1 id="hero-heading">Curiosity meets<br/><span class="headline-em">understanding.</span></h1>
+            <p class="hero-lede">Don't just learn what AI can do. Understand <strong>how it works.</strong> Go from your first Transformer to building production-grade AI systems—with a mentor beside you.</p>
+            <div class="hero-ctas"><a class="action-primary" href="/academy/">Start learning <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="action-text" href="#curriculum">Explore the curriculum <span aria-hidden="true">↗</span></a></div>
+            <div class="hero-social-proof"><div class="proof-icon" aria-hidden="true"><span>✧</span></div><span>One place for the <b>theory, the code, and the why.</b></span></div>
           </div>
         </div>
-        <div class="scroll-cue landing-container"><span>SCROLL TO EXPLORE</span><span class="scroll-track" aria-hidden="true"><i></i></span><span>MENTORA / 2026</span></div>
       </section>
 
-      <section class="learning-metrics" aria-label="Learning library at a glance"><div class="landing-container metrics-inner"><div class="metric" data-reveal><b>11<span class="metric-glint">+</span></b><span>STRUCTURED COURSES</span></div><div class="metric" data-reveal><b>{totalLessons}</b><span>DETAILED LESSONS</span></div><div class="metric" data-reveal><b>1,404</b><span>INTERVIEW FRAMEWORK SECTIONS</span></div><div class="metric metric-last" data-reveal><b>24<span class="metric-glint">/7</span></b><span>AI STUDY COMPANION*</span></div></div></section>
+      <section class="learning-metrics" aria-label="Learning library at a glance"><div class="landing-container metrics-inner"><div class="metric"><b>11<span class="metric-glint">+</span></b><span>STRUCTURED COURSES</span></div><div class="metric"><b>{totalLessons}</b><span>DETAILED LESSONS</span></div><div class="metric"><b>1,404</b><span>INTERVIEW FRAMEWORK SECTIONS</span></div><div class="metric metric-last"><b>24<span class="metric-glint">/7</span></b><span>AI STUDY COMPANION*</span></div></div></section>
 
       <section id="curriculum" class="curriculum-section section-pad"><div class="landing-container">
-        <div class="section-topline" data-reveal><span class="section-label"><span class="purple-marker"></span> 01 / YOUR LEARNING PATH</span><span class="section-aside">A CURATED CURRICULUM, NOT ANOTHER TAB TO CLOSE</span></div>
-        <div class="section-heading" data-reveal><div><h2>Complex ideas.<br/><em>Clearly connected.</em></h2></div><p>Follow a course from the fundamentals to real production decisions. Every lesson is built for technical depth, not just quick definitions.</p></div>
+        <div class="section-topline"><span class="section-label"><span class="purple-marker"></span> 01 / YOUR LEARNING PATH</span><span class="section-aside">A CURATED CURRICULUM, NOT ANOTHER TAB TO CLOSE</span></div>
+        <div class="section-heading"><div><h2>Complex ideas.<br/><em>Clearly connected.</em></h2></div><p>Follow a course from the fundamentals to real production decisions. Every lesson is built for technical depth, not just quick definitions.</p></div>
         <div class="featured-grid">
-          {featured.map((course,i) => <a href={`/course/${course.slug}/`} class={`featured-card featured-card--${i+1}`} data-reveal style={`--reveal-delay:${i*110}ms`}>
+          {featured.map((course,i) => <a href={`/course/${course.slug}/`} class={`featured-card featured-card--${i+1}`} style={`--reveal-delay:${i*110}ms`}>
             <div class="featured-card-header"><span>{String(i+1).padStart(2,'0')} / {tracks[i]}</span><span aria-hidden="true" class="featured-arrow">↗</span></div>
             <div class="featured-icon" aria-hidden="true">{symbols[i]}</div>
             <div class="featured-card-content"><span class="featured-mini">{course.count} IN-DEPTH LESSONS</span><h3>{i===0?'Understand language models.':i===1?'Build retrieval that works.':'Engineer intelligent agents.'}</h3><p>{course.description}</p></div>
             <div class="featured-bottom"><span>EXPLORE COURSE</span><span>↗</span></div>
           </a>)}
         </div>
-        <a href="/academy/" class="all-courses-link" data-reveal><span>View all {courses.length} courses in the academy</span><span aria-hidden="true">↗</span></a>
+        <a href="/academy/" class="all-courses-link"><span>View all {courses.length} courses in the academy</span><span aria-hidden="true">↗</span></a>
       </div></section>
 
       <section id="method" class="method-section section-pad"><div class="landing-container">
-        <div class="section-topline" data-reveal><span class="section-label"><span class="purple-marker"></span> 02 / LEARN WITH DEPTH</span><span class="section-aside">BUILT FOR THE WAY ENGINEERS THINK</span></div>
-        <div class="method-grid"><div class="method-heading" data-reveal><h2>Knowledge should<br/><em>feel alive.</em></h2><p>Go beyond memorization. Visualize a mechanism, test an idea, and explain why an architecture works—or doesn't.</p><a class="inline-link" href="/academy/">Experience the learning studio <span aria-hidden="true">↗</span></a></div><div class="steps-list">
-          <div class="method-step" data-reveal><span class="step-index">01</span><div><span class="method-icon">◎</span><h3>Understand the why.</h3><p>Derivations, architecture internals, edge cases, and trade-offs written for real AI engineers.</p></div><span class="step-arrow">↗</span></div>
-          <div class="method-step" data-reveal><span class="step-index">02</span><div><span class="method-icon">⌘</span><h3>Experiment, don't guess.</h3><p>Animated diagrams and interactive labs turn abstract systems into something you can actually explore.</p></div><span class="step-arrow">↗</span></div>
-          <div class="method-step" data-reveal><span class="step-index">03</span><div><span class="method-icon">✧</span><h3>Think like an interviewer.</h3><p>Practice spoken answers, challenge assumptions, and debug realistic production failures.</p></div><span class="step-arrow">↗</span></div>
+        <div class="section-topline"><span class="section-label"><span class="purple-marker"></span> 02 / LEARN WITH DEPTH</span><span class="section-aside">BUILT FOR THE WAY ENGINEERS THINK</span></div>
+        <div class="method-grid"><div class="method-heading"><h2>Knowledge should<br/><em>feel alive.</em></h2><p>Go beyond memorization. Visualize a mechanism, test an idea, and explain why an architecture works—or doesn't.</p><a class="inline-link" href="/academy/">Experience the learning studio <span aria-hidden="true">↗</span></a></div><div class="steps-list">
+          <div class="method-step"><span class="step-index">01</span><div><span class="method-icon">◎</span><h3>Understand the why.</h3><p>Derivations, architecture internals, edge cases, and trade-offs written for real AI engineers.</p></div><span class="step-arrow">↗</span></div>
+          <div class="method-step"><span class="step-index">02</span><div><span class="method-icon">⌘</span><h3>Experiment, don't guess.</h3><p>Animated diagrams and interactive labs turn abstract systems into something you can actually explore.</p></div><span class="step-arrow">↗</span></div>
+          <div class="method-step"><span class="step-index">03</span><div><span class="method-icon">✧</span><h3>Think like an interviewer.</h3><p>Practice spoken answers, challenge assumptions, and debug realistic production failures.</p></div><span class="step-arrow">↗</span></div>
         </div></div>
       </div></section>
 
       <section id="ai-tutor" class="ai-section section-pad"><div class="landing-container"><div class="ai-showcase">
-        <div class="ai-copy" data-reveal><div class="section-label"><span class="purple-marker"></span> 03 / A MENTOR IN YOUR CORNER</div><h2>Questions welcome.<br/><em>Always.</em></h2><p>Every lesson comes with a context-aware AI tutor. Ask it to unpack the math, pressure-test your understanding, or run a senior engineering mock interview.</p><div class="ai-points"><span><i>✓</i> Lesson-aware explanations</span><span><i>✓</i> Technical interview practice</span><span><i>✓</i> Production scenario walkthroughs</span></div><a class="action-primary" href="/academy/">Meet your AI tutor <span aria-hidden="true">↗</span></a><small>*Connect your own 9router endpoint to enable live AI responses.</small></div>
-        <div class="tutor-demo" data-reveal style="--reveal-delay:120ms" aria-label="Preview of the Mentora AI tutor conversation"><div class="demo-top"><span class="demo-avatar">✳</span><div><strong>Mentora AI tutor</strong><span><i class="art-status-dot"></i> YOUR STUDY PARTNER</span></div><span class="demo-top-right">✧</span></div><div class="demo-thread"><div class="demo-user"><span>YOU</span><p>Why does KV caching speed up token generation?</p></div><div class="demo-assistant"><span>✧ MENTORA</span><p>Without a cache, every decoding step recomputes the keys and values for all previous tokens.</p><p><strong>KV caching</strong> stores those past representations, so the model only computes K and V for each new token. It trades memory for much less redundant computation.</p><div class="demo-source">↗ &nbsp; MODULE 6 · ATTENTION OPTIMIZATION</div></div></div><div class="demo-composer"><span>Ask a follow-up question…</span><span>↑</span></div></div>
+        <div class="ai-copy"><div class="section-label"><span class="purple-marker"></span> 03 / A MENTOR IN YOUR CORNER</div><h2>Questions welcome.<br/><em>Always.</em></h2><p>Every lesson comes with a context-aware AI tutor. Ask it to unpack the math, pressure-test your understanding, or run a senior engineering mock interview.</p><div class="ai-points"><span><i>✓</i> Lesson-aware explanations</span><span><i>✓</i> Technical interview practice</span><span><i>✓</i> Production scenario walkthroughs</span></div><a class="action-primary" href="/academy/">Meet your AI tutor <span aria-hidden="true">↗</span></a><small>*Connect your own 9router endpoint to enable live AI responses.</small></div>
+        <div class="tutor-demo" aria-label="Preview of the Mentora AI tutor conversation"><div class="demo-top"><span class="demo-avatar">✳</span><div><strong>Mentora AI tutor</strong><span><i class="art-status-dot"></i> YOUR STUDY PARTNER</span></div><span class="demo-top-right">✧</span></div><div class="demo-thread"><div class="demo-user"><span>YOU</span><p>Why does KV caching speed up token generation?</p></div><div class="demo-assistant"><span>✧ MENTORA</span><p>Without a cache, every decoding step recomputes the keys and values for all previous tokens.</p><p><strong>KV caching</strong> stores those past representations, so the model only computes K and V for each new token. It trades memory for much less redundant computation.</p><div class="demo-source">↗ &nbsp; MODULE 6 · ATTENTION OPTIMIZATION</div></div></div><div class="demo-composer"><span>Ask a follow-up question…</span><span>↑</span></div></div>
       </div></div></section>
 
-      <section class="bottom-cta section-pad"><div class="landing-container"><div class="cta-inner" data-reveal><div class="cta-orbit" aria-hidden="true">✳</div><p class="section-label">YOUR NEXT CHAPTER STARTS HERE</p><h2>Don't just keep up.<br/><em>Understand what's next.</em></h2><p>Explore all 234 lessons. Learn the foundations, build the intuition, and make the engineering decisions that matter.</p><a href="/academy/" class="action-primary">Enter the academy <span aria-hidden="true">↗</span></a></div></div></section>
+      <section class="bottom-cta section-pad"><div class="landing-container"><div class="cta-inner"><div class="cta-orbit" aria-hidden="true">✳</div><p class="section-label">YOUR NEXT CHAPTER STARTS HERE</p><h2>Don't just keep up.<br/><em>Understand what's next.</em></h2><p>Explore all 234 lessons. Learn the foundations, build the intuition, and make the engineering decisions that matter.</p><a href="/academy/" class="action-primary">Enter the academy <span aria-hidden="true">↗</span></a></div></div></section>
     </main>
 
     <footer class="landing-footer"><div class="landing-container footer-inner"><a href="/" class="brand footer-brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none"><path d="M7 25.5V10l11 12 11-12v15.5" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="29" cy="8" r="2" fill="#b7b7b7"/></svg></span><span>mentora<span class="brand-period">.</span></span></a><span>LEARN DEEPLY. BUILD CONFIDENTLY.</span><div><a href="/academy/">ACADEMY ↗</a><a href="#top">BACK TO TOP ↑</a></div><small>© 2026 MENTORA</small></div></footer>
