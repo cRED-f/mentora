@@ -13,8 +13,8 @@
     "test:site": "node --test tests/landing.test.mjs"
   },
   "dependencies": {
-    "astro": "6.4.8",
-    "@astrojs/node": "10.1.4"
+    "astro": "7.4.0",
+    "@astrojs/node": "11.1.8"
   },
   "engines": {
     "node": ">=22.12.0"
