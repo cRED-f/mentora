@@ -1,6 +1,5 @@
 ---
 import { courses, totalLessons } from '../lib/courses.js';
-import '../styles/tokens.css';
 import '../styles/global.css';
 const { title = 'Learn AI engineering', description = 'A practical interview preparation academy for AI engineers.', activeCourse = '', activeLesson = '', eyebrow = 'THE AI ENGINEERING FIELD GUIDE' } = Astro.props;
 const current = courses.find(c => c.slug === activeCourse);
@@ -15,7 +14,7 @@ const current = courses.find(c => c.slug === activeCourse);
   <link rel="icon" type="image/svg+xml" href="/mentora-icon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet" />
   <title>{title} — Mentora</title>
 </head>
 <body style="background:#000;color:#fff" data-course={activeCourse} data-lesson={activeLesson}>

@@ -1,3 +1,4 @@
+@import './tokens.css';
 /* Mentora landing page — intentionally isolated from the academy dashboard styles. */
 html,body{background:#000000!important;color:#ffffff}
 /* Tokens live in ./tokens.css — do not add a :root block here. */
