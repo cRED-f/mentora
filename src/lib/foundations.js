@@ -14,6 +14,7 @@ import { getGenerationGuide } from '../data/generation-path.js';
 import { getTrainingGuide } from '../data/training-path.js';
 import { getAdvancedGuide } from '../data/advanced-path.js';
 import { getInferenceGuide } from '../data/inference-path.js';
+import { getReliabilityGuide } from '../data/reliability-path.js';
 
 const GUIDES = {
   'llm-foundations': getFoundationGuide,
@@ -23,6 +24,7 @@ const GUIDES = {
   'training-alignment': getTrainingGuide,
   'advanced-transformers': getAdvancedGuide,
   'inference-infrastructure': getInferenceGuide,
+  'production-reliability': getReliabilityGuide,
 };
 
 /** Returns the foundations guide for a lesson, or undefined if the course has none. */
