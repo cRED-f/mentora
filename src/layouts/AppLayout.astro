@@ -83,6 +83,7 @@ const current = courses.find(c => c.slug === activeCourse);
     <aside class="tutor-panel" id="tutor-panel" aria-label="AI interview tutor">
       <div class="tutor-header"><div class="tutor-logo">✧</div><div class="tutor-heading"><strong>AI interview tutor</strong><small>POWERED BY 9ROUTER</small></div><button class="tutor-close" type="button" aria-label="Close tutor">×</button></div>
       <div class="tutor-status"><span id="tutor-dot" class="status-dot"></span><span id="tutor-status-text">Checking configuration</span><span class="tutor-context">{activeLesson ? 'LESSON-AWARE' : 'COURSE-AWARE'}</span></div>
+      <div class="tutor-mode" role="group" aria-label="AI tutoring mode"><button type="button" data-tutor-mode="teach" aria-pressed="true">Teach mode</button><button type="button" data-tutor-mode="mock" aria-pressed="false">Mock interview</button></div>
       <div class="tutor-thread" id="tutor-thread" role="log" aria-live="polite">
         <div class="tutor-intro"><div class="intro-orbit"><span>✧</span></div><p class="intro-eyebrow">YOUR PERSONAL STUDY PARTNER</p><h2>Think deeper.<br/><em>Ask anything.</em></h2><p>Go beyond definitions. Explore mechanisms, challenge trade-offs, and prepare for technical interviews with context from the curriculum.</p></div>
         <div class="suggestions" id="suggestions">

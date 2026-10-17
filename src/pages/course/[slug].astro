@@ -7,8 +7,8 @@ const { course } = Astro.props;
 <Layout title={course.title} description={course.description} activeCourse={course.slug} eyebrow="COURSE OVERVIEW">
   <div class="course-page content-container">
     <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/academy/">Academy</a><span>/</span><strong>Course {course.number}</strong></nav>
-    <div class="course-hero"><div class="course-overline"><span class="metal-badge">COURSE {course.number} OF 11</span><span>{course.category.toUpperCase()}</span></div><h1>{course.title}<em>.</em></h1><p>{course.description}</p><div class="course-hero-meta"><span>◉ {course.count} detailed lessons</span><span>✧ Interview-ready A–F format</span><span>{course.slug === 'llm-foundations' ? '↗ Six interactive labs included' : '↗ Native Mentora lesson pages'}</span></div><a class="solid-button" href={`/learn/${course.slug}/1/`}>Begin course <span>↗</span></a></div>
-    <div class="chapter-heading"><div><span class="section-kicker">LESSON INDEX</span><h2>Follow the <em>learning path.</em></h2></div><span>{course.count} lessons · 6 segments each</span></div>
+    <div class="course-hero"><div class="course-overline"><span class="metal-badge">COURSE {course.number} OF 11</span><span>{course.category.toUpperCase()}</span></div><h1>{course.title}<em>.</em></h1><p>{course.description}</p><div class="course-hero-meta"><span>◉ {course.count} detailed lessons</span><span>{course.slug === 'llm-foundations' ? '✧ Beginner → advanced → interview' : '✧ Interview-ready A–F format'}</span><span>{course.slug === 'llm-foundations' ? '↗ 10 diagrams · 80 syllabus questions · practical labs' : '↗ Native Mentora lesson pages'}</span></div><a class="solid-button" href={`/learn/${course.slug}/1/`}>Begin course <span>↗</span></a></div>
+    <div class="chapter-heading"><div><span class="section-kicker">LESSON INDEX</span><h2>Follow the <em>learning path.</em></h2></div><span>{course.slug === 'llm-foundations' ? '10 guided lessons · A–F interview sections' : `${course.count} lessons · 6 segments each`}</span></div>
     <div class="lesson-index">
       {course.lessons.map((lesson, idx) => <a href={`/learn/${course.slug}/${lesson.id}/`} class="lesson-index-row" data-progress-key={`${course.slug}:${lesson.id}`}><span class="lesson-index-num">{String(idx+1).padStart(2,'0')}</span><div><h3>{lesson.title}</h3><p>{lesson.subtitle}</p></div><span class="lesson-completion-indicator" aria-label="Not completed">○</span><span class="lesson-index-arrow">↗</span></a>)}
     </div>
@@ -26,16 +26,20 @@ const { course } = Astro.props;
       {course.capstone.rubric && <p class="capstone-rubric">{course.capstone.rubric}</p>}
     </section>}
     {course.slug === 'llm-foundations' && <section class="foundation-lab-index" aria-labelledby="lab-index-title">
-      <div class="chapter-heading"><div><span class="section-kicker">EXPERIMENT &amp; APPLY</span><h2 id="lab-index-title">Practice inside <em>Mentora.</em></h2></div><span>Six interactive mechanisms · one capstone</span></div>
+      <div class="chapter-heading"><div><span class="section-kicker">EXPERIMENT &amp; APPLY</span><h2 id="lab-index-title">Practice inside <em>Mentora.</em></h2></div><span>Ten interactive diagrams · six deep-dive labs · one capstone</span></div>
       <div class="foundation-lab-links">
         {[
           [1, 'Foundation model pipeline'],
+          [2, 'How AI engineering changed'],
+          [3, 'Training vs. generation'],
           [4, 'Next-token sampling'],
           [5, 'Autoregressive vs. masked'],
           [6, 'Transformer architecture'],
+          [7, 'RNNs vs. parallel attention'],
           [8, 'Request-to-response lifecycle'],
+          [9, 'Hosting and licensing choices'],
           [10, 'Model routing and capstone']
-        ].map(([lesson, label]) => <a href={`/learn/llm-foundations/${lesson}/`}><span>LESSON {String(lesson).padStart(2,'0')}</span><strong>{label}</strong><b aria-hidden="true">↗</b></a>)}
+        ].map(([lesson, label]) => <a href={`/learn/llm-foundations/${lesson}/`}><span>DIAGRAM {String(lesson).padStart(2,'0')}</span><strong>{label}</strong><b aria-hidden="true">↗</b></a>)}
       </div>
     </section>}
   </div>

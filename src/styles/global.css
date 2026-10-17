@@ -105,3 +105,9 @@ html,body{background:var(--bg,#000);color:var(--white,#fff);height:100%}html{scr
 .capstone-body strong,.capstone-body b{color:#f2f2f2;font-weight:570}
 .capstone-rubric{margin:20px 0 0;padding-top:16px;border-top:1px solid #222;color:#7d7d7d;font-size:11.5px;line-height:1.75;letter-spacing:.01em}
 @media(max-width:760px){.capstone-block{padding:20px;margin-top:40px}}
+
+/* Interview modes inherit the project's black / grey / white palette. */
+.tutor-mode{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:11px 14px;background:#080808;border-bottom:1px solid #292929}
+.tutor-mode button{padding:10px 6px;border:1px solid #383838;background:#121212;color:#999;border-radius:4px;font-size:10px;letter-spacing:.02em;cursor:pointer}
+.tutor-mode button:hover{border-color:#777;color:#eee}
+.tutor-mode button[aria-pressed=true]{background:#e5e5e5;color:#080808;border-color:#eee}

@@ -38,3 +38,128 @@ test('standalone modules are deleted and all navigation remains within Mentora',
     '../src/pages/learn/[course]/[lesson].astro'
   ]) assert.doesNotMatch(read(path), /\/modules\/|course\.original|Open original interactive labs/);
 });
+
+test('every Foundations topic teaches first principles, application, and interview reasoning', async () => {
+  const { foundationGuides, getFoundationGuide } = await import('../src/data/llm-foundations-path.js');
+  const keys = Object.keys(foundationGuides).map(Number).sort((a, b) => a - b);
+  assert.deepEqual(keys, Array.from({length: 10}, (_, i) => i + 1));
+  for (const id of keys) {
+    const guide = getFoundationGuide(id);
+    assert.ok(guide.question.length > 35, `lesson ${id}: motivating question`);
+    assert.ok(guide.plain.length > 140, `lesson ${id}: beginner explanation`);
+    assert.equal(guide.goals.length, 3, `lesson ${id}: outcomes`);
+    assert.equal(guide.concepts.length, 4, `lesson ${id}: key concepts`);
+    for (const [name, basic, deeper] of guide.concepts) {
+      assert.ok(name && basic.length > 30 && deeper.length > 105, `lesson ${id}: teach ${name} at two levels`);
+    }
+    assert.equal(guide.example.steps.length, 4, `lesson ${id}: worked example`);
+    assert.ok(guide.example.takeaway.length > 75, `lesson ${id}: takeaway`);
+    assert.ok(guide.views.length >= 2, `lesson ${id}: comparative interactive diagram`);
+    for (const view of guide.views) {
+      assert.equal(view.steps.length, 4, `lesson ${id}: four selectable stages`);
+      assert.ok(view.note.length > 30);
+      assert.ok(view.steps.every(([label, description]) => label.length >= 2 && description.length > 25));
+    }
+    assert.ok(guide.precision.length > 100 && guide.engineering.length > 100, `lesson ${id}: real-world tradeoff`);
+    assert.ok(guide.interview.endsWith('?'), `lesson ${id}: interview challenge`);
+    assert.equal(guide.checkpoint.options.length, 3, `lesson ${id}: question with 3 choices`);
+    assert.ok(Number.isInteger(guide.checkpoint.correct) && guide.checkpoint.correct >= 0 && guide.checkpoint.correct < 3);
+    assert.ok(guide.checkpoint.why.length > 50, `lesson ${id}: reasoned feedback`);
+  }
+});
+
+test('monochrome, interactive Foundation guides integrate into native lesson navigation', () => {
+  const page = read('../src/pages/learn/[course]/[lesson].astro');
+  const overview = read('../src/pages/course/[slug].astro');
+  const path = read('../src/components/FoundationLearningPath.astro');
+  const css = read('../src/styles/foundations-path.css');
+  const js = read('../public/foundations-path.js');
+  assert.match(page, /<FoundationLearningPath lessonId=\{lesson\.id\}/);
+  assert.match(page, /foundations-path\.js/);
+  for (const anchor of ['foundations-start', 'foundations-diagram', 'foundations-check']) {
+    assert.ok(page.includes(`#${anchor}`) && path.includes(`id="${anchor}"`));
+  }
+  for (const attribute of ['data-foundation-view-button', 'data-foundation-view', 'data-foundation-step', 'data-foundation-answer', 'data-foundation-feedback']) {
+    assert.ok(path.includes(attribute), `missing ${attribute} in component`);
+    assert.ok(js.includes(attribute), `missing ${attribute} in behavior`);
+  }
+  assert.match(path, /aria-pressed/);
+  assert.match(path, /aria-live="polite"/);
+  assert.match(css, /prefers-reduced-motion:reduce/);
+  assert.match(css, /focus-visible/);
+  const hues = css.match(/#[a-f0-9]{6}\b/gi) || [];
+  assert.ok(hues.every(color => color.slice(1,3) === color.slice(3,5) && color.slice(3,5) === color.slice(5,7)), 'palette must remain monochrome');
+  assert.doesNotMatch(path, /#[a-f0-9]{6}/i);
+  for (const feature of ['data-foundation-sampling', 'data-foundation-mask', 'data-foundation-kv', 'data-foundation-ask']) {
+    assert.ok(path.includes(feature), `${feature} markup missing`);
+    assert.ok(js.includes(feature), `${feature} behavior missing`);
+  }
+  assert.match(overview, /10 diagrams/);
+  assert.match(overview, /\[9, 'Hosting and licensing choices'\]/);
+});
+
+test('Mentora Tutor can retrieve beginner material as well as technical A–F sections', async () => {
+  const { composeMessages } = await import('../src/lib/chat.js');
+  const result = composeMessages({ course: 'llm-foundations', lesson: '3', message: 'explain training and inference simply', history: [] });
+  const prompt = result[0].content;
+  assert.match(prompt, /BEGINNER EXPLANATION:/);
+  assert.match(prompt, /KEY TERMS:/);
+  assert.match(prompt, /EXAMPLE:/);
+  assert.match(prompt, /INTERVIEW ANSWER:/);
+  assert.match(prompt, /simple words, examples, and intuition/);
+});
+
+test('lesson 10 renders model routing inside the capstone instead of a blank lab', () => {
+  const labs = read('../src/components/LLMFoundationsExercises.astro');
+  assert.match(labs, /\(id === 10 && mode === 'capstone'\)/);
+  assert.match(labs, /data-task-type/);
+  assert.match(labs, /data-capstone-review/);
+});
+
+test('all 80 supplied questions map to a lesson and preserve supplied reading references', async () => {
+  const { default: syllabus } = await import('../src/data/llm-fundamentals-syllabus.json', { with: { type: 'json' } });
+  assert.equal(syllabus.length, 80);
+  assert.deepEqual(syllabus.map(x=>x.id), Array.from({length:80},(_,i)=>i+1));
+  for (const entry of syllabus) {
+    assert.ok(entry.question.length >= 15);
+    assert.ok(Number.isInteger(entry.lesson) && entry.lesson>=1 && entry.lesson<=10);
+    for (const resource of entry.resources) {
+      assert.match(resource.url, /^https:\/\/|^http:\/\//);
+      assert.ok(resource.label);
+    }
+  }
+});
+
+test('ten original lessons are replaced by genuine six-part advanced engineering material', async () => {
+  const { createDeepSections, deepLessons } = await import('../src/data/llm-foundations-deep.js');
+  assert.equal(Object.keys(deepLessons).length, 10);
+  for (const lesson of courses.find(c=>c.slug==='llm-foundations').lessons) {
+    const deep = deepLessons[lesson.id];
+    assert.equal(deep.questions.length, 5, `lesson ${lesson.id}: five applied interview questions`);
+    assert.ok(deep.mechanism.length >= 3, `lesson ${lesson.id}: detailed mechanism`);
+    assert.ok(deep.equations.length >= 2, `lesson ${lesson.id}: math and assumptions`);
+    assert.equal(deep.pressure.length, 4);
+    assert.equal(deep.incident.length, 5);
+    assert.ok(deep.design.length > 140 && deep.performance.length > 130 && deep.failures.length > 130);
+    assert.ok(deep.spoken.length > 230);
+    assert.deepEqual(lesson.sections.map(x=>x.letter), ['A','B','C','D','E','F']);
+    assert.ok(lesson.sections[1].html.includes('Mathematics and assumptions'));
+    assert.ok(lesson.sections[4].html.includes('ILLUSTRATIVE INCIDENT'));
+    assert.ok(createDeepSections(lesson.id)[1].html.length > 1700);
+  }
+});
+
+test('Mentora Tutor enforces the teach/mock interaction contract', async () => {
+  const { composeMessages } = await import('../src/lib/chat.js');
+  const base = {course:'llm-foundations',lesson:'6',message:'Start',history:[]};
+  const teach = composeMessages({...base,mode:'teach'})[0].content;
+  const mock = composeMessages({...base,mode:'mock'})[0].content;
+  assert.match(teach,/A through F IN ORDER/);
+  assert.match(teach,/EXACTLY ONE hard technical interview question/);
+  assert.match(mock,/Give NO model answers/);
+  assert.match(mock,/ACTIVE MODE: MOCK INTERVIEW MODE/);
+  const page=read('../src/layouts/AppLayout.astro');
+  assert.match(page,/data-tutor-mode="teach"/);
+  assert.match(page,/data-tutor-mode="mock"/);
+  assert.match(read('../public/app.js'),/mode:tutorMode/);
+});

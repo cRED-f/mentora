@@ -5,6 +5,15 @@
   const currentCourse = document.body.dataset.course || '';
   const currentLesson = document.body.dataset.lesson || '';
   const tutor = $('#tutor-panel');
+  let tutorMode = 'teach';
+  $$('[data-tutor-mode]').forEach(button => button.addEventListener('click', () => {
+    const selected = button.dataset.tutorMode;
+    if (selected === tutorMode || inFlight) return;
+    tutorMode = selected;
+    history = [];
+    $$('[data-tutor-mode]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.tutorMode === tutorMode)));
+    message('assistant', tutorMode === 'mock' ? 'Mock interview selected. Ask to begin; I will pose one question at a time and evaluate only when you end the interview.' : 'Teach mode selected. Ask for a topic; I will explain the A–F engineering material and then ask one interview question.');
+  }));
   const scrim = $('#mobile-scrim');
   const left = $('.left-sidebar');
   const modal = $('#search-modal');
@@ -182,7 +191,7 @@
     let text = '';
     try {
       const response = await fetch('/api/chat/', { method:'POST', headers:{'Content-Type':'application/json'}, signal:controller.signal,
-        body:JSON.stringify({message:content,course:currentCourse,lesson:currentLesson,history}) });
+        body:JSON.stringify({message:content,course:currentCourse,lesson:currentLesson,history,mode:tutorMode}) });
       if (!response.ok) {
         let detail;
         try {detail=(await response.json()).error;}catch{detail=`HTTP ${response.status}`;}

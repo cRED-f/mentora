@@ -1,0 +1,85 @@
+---
+import { getFoundationGuide } from '../data/llm-foundations-path.js';
+import syllabus from '../data/llm-fundamentals-syllabus.json';
+import { deepLessons } from '../data/llm-foundations-deep.js';
+import '../styles/foundations-path.css';
+// `guide` lets any course supply its own foundations data; llm-foundations
+// keeps its historical default. `courseSlug` gates the lesson-keyed labs,
+// which would otherwise fire on a same-numbered lesson in another course.
+const { lessonId, courseSlug = 'llm-foundations', guide: suppliedGuide } = Astro.props;
+const guide = suppliedGuide ?? getFoundationGuide(lessonId);
+const isFoundations = courseSlug === 'llm-foundations';
+const related = isFoundations ? syllabus.filter(item => item.lesson === Number(lessonId)) : [];
+const deep = isFoundations ? deepLessons[Number(lessonId)] : undefined;
+---
+{guide && <div class="foundation-path" data-foundation-path data-lesson-id={lessonId}>
+  <section class="foundation-start" id="foundations-start" aria-labelledby="foundation-start-title">
+    <div class="foundation-eyebrow"><span class="foundation-pulse" aria-hidden="true"></span> START HERE · FROM FIRST PRINCIPLES TO THE JOB</div>
+    <h2 id="foundation-start-title">Understand it first. <em>Engineer it next.</em></h2>
+    <p class="foundation-lead-question">{guide.question}</p>
+    <p class="foundation-plain">{guide.plain}</p><div class="foundation-under-hood"><strong>WHAT IS ACTUALLY HAPPENING</strong><p>{deep?.mechanism[0] ?? guide.plain}</p></div>
+    <div class="foundation-goals"><span>AFTER THIS LESSON, YOU CAN</span><ul>{guide.goals.map(goal => <li><span aria-hidden="true">✓</span>{goal}</li>)}</ul></div>
+  </section>
+
+  <section class="foundation-concepts" aria-labelledby="foundation-concepts-title">
+    <div class="foundation-section-top"><span class="foundation-index">01 / UNDERSTAND</span><h3 id="foundation-concepts-title">Start simple. <em>Then go deep.</em></h3><p>Start with the simple explanation. Then read what it means when you build a real system.</p></div>
+    <div class="foundation-concept-grid">{guide.concepts.map(([name, simple, advanced], i) => <article class="foundation-concept" >
+      <span class="foundation-concept-count">0{i + 1}</span><h4>{name}</h4><p>{simple}</p><div class="foundation-depth"><strong>Go deeper</strong><p>{advanced}</p></div>
+    </article>)}</div>
+  </section>
+
+  <section class="foundation-diagram" id="foundations-diagram" aria-labelledby="foundation-diagram-title">
+    <div class="foundation-section-top"><span class="foundation-index">02 / INTERACTIVE MECHANISM</span><h3 id="foundation-diagram-title">Explore the <em>working mechanism.</em></h3><p>Change the view, then select a highlighted stage to see what happens there. These selectable views are schematic—not a trace from a real model.</p></div>
+    <div class="foundation-diagram-frame">
+      <div class="foundation-diagram-bar"><span class="foundation-diagram-label"><span class="foundation-diagram-dot" aria-hidden="true"></span> MECHANISM EXPLORER</span><span class="foundation-diagram-hint">SELECT A STEP TO INSPECT ↗</span></div>
+      <div class="foundation-view-switch" aria-label="Choose diagram view">{guide.views.map((view, i) => <button type="button" data-foundation-view-button={i} aria-pressed={i === 0} class:list={['foundation-view-button',i === 0 && 'is-active']}>{view.name}</button>)}</div>
+      {guide.views.map((view, i) => <div class="foundation-view" data-foundation-view={i} hidden={i !== 0}>
+        <p class="foundation-view-note">{view.note}</p>
+        <div class="foundation-nodes" role="group" aria-label={`${view.name} stages`}>{view.steps.map(([label, explanation], j) => <button type="button" data-foundation-step={j} data-explanation={explanation} aria-pressed={j === 0} class:list={['foundation-node', j === 0 && 'is-active']} >
+          <span class="foundation-node-number">{String(j + 1).padStart(2, '0')}</span><span class="foundation-node-title">{label}</span><span class="foundation-node-arrow" aria-hidden="true">↗</span>
+        </button>)}</div>
+        <div class="foundation-stage-details" aria-live="polite" aria-atomic="true"><span class="foundation-stage-kicker" data-foundation-stage-counter>STAGE 01 / {String(view.steps.length).padStart(2, '0')}</span><h4 data-foundation-stage-title>{view.steps[0][0]}</h4><p data-foundation-stage-explanation>{view.steps[0][1]}</p></div>
+      </div>)}
+      <p class="foundation-diagram-footnote">Illustration only · click or keyboard-activate each stage · arrows indicate a conceptual relationship, not necessarily a serial runtime operation.</p>
+    </div>
+  </section>
+
+  {isFoundations && Number(lessonId) === 4 && <section class="foundation-mechanism-lab" data-foundation-sampling aria-labelledby="sampling-title">
+    <div class="foundation-section-top"><span class="foundation-index">INTERACTIVE · DECODING</span><h3 id="sampling-title">Watch temperature <em>change probability.</em></h3><p>A toy distribution with fixed logits [2, 1, 0]. Move the slider: rankings stay the same, but probabilities change. This does not simulate a real model.</p></div>
+    <label for="foundation-temperature">Temperature <output data-temperature-value>1.0</output></label>
+    <input id="foundation-temperature" type="range" min="0.2" max="2" step="0.1" value="1" data-foundation-temperature />
+    <div class="foundation-probabilities">{['Option A · logit 2','Option B · logit 1','Option C · logit 0'].map((v,i) => <div class="foundation-probability"><span>{v}</span><div class="foundation-probability-track"><div class="foundation-probability-fill" data-foundation-probability={i}></div></div><output data-foundation-probability-label={i}></output></div>)}</div>
+  </section>}
+  {isFoundations && Number(lessonId) === 6 && <section class="foundation-mechanism-lab" data-foundation-mask aria-labelledby="mask-title">
+    <div class="foundation-section-top"><span class="foundation-index">INTERACTIVE · CAUSAL ATTENTION</span><h3 id="mask-title">Which tokens can <em>see which?</em></h3><p>Choose a query position. Filled squares are attention connections allowed by the causal mask. Future tokens are blocked.</p></div>
+    <div class="foundation-mask-queries" role="group" aria-label="Select query token">{Array.from({length:5},(_,i) => <button type="button" data-foundation-query={i} aria-pressed={i===2}>Token {i+1}</button>)}</div>
+    <div class="foundation-mask-matrix" role="img" aria-label="Five-by-five lower-triangular causal attention mask">{Array.from({length:5}, (_,r) => Array.from({length:5},(_,c)=><span class:list={['foundation-mask-cell', c<=r && 'is-allowed']} data-mask-row={r} data-mask-col={c}>{c<=r ? '●' : '×'}</span>))}</div>
+    <p class="foundation-mask-result" data-foundation-mask-result aria-live="polite">Token 3 can attend to tokens 1, 2, and 3; tokens 4 and 5 are blocked.</p>
+  </section>}
+  {isFoundations && Number(lessonId) === 8 && <section class="foundation-mechanism-lab" data-foundation-kv aria-labelledby="kv-title">
+    <div class="foundation-section-top"><span class="foundation-index">INTERACTIVE · KV CACHE ESTIMATOR</span><h3 id="kv-title">Watch memory <em>grow with context.</em></h3><p>Simplified FP16 estimate, excluding allocator overhead, prefix sharing and fragmentation. Change the number of active tokens or KV heads.</p></div>
+    <div class="foundation-kv-controls"><label>Tokens per request <input type="range" min="512" max="8192" step="512" value="2048" data-kv-length/><output data-kv-length-label>2,048</output></label><label>KV heads <select data-kv-heads><option value="8">8 · grouped queries</option><option value="32">32 · multi-head</option></select></label></div>
+    <div class="foundation-kv-output"><strong data-kv-result>256 MiB</strong><span>2 · batch × sequence × 32 layers × KV heads × 128 dimensions × 2 bytes</span></div>
+  </section>}
+
+  <section class="foundation-example" aria-labelledby="foundation-example-title"><div class="foundation-section-top"><span class="foundation-index">03 / WORK THROUGH IT</span><h3 id="foundation-example-title">{guide.example.title}</h3><p>Follow the example, explain the mechanism, and check the limits of the claim.</p></div>
+    <ol class="foundation-example-steps">{guide.example.steps.map((step, i) => <li><span>{String(i + 1).padStart(2, '0')}</span><p>{step}</p></li>)}</ol>
+    <div class="foundation-key-idea"><strong>THE IDEA TO REMEMBER</strong><p>{guide.example.takeaway}</p></div>
+  </section>
+
+  <section class="foundation-apply" aria-labelledby="foundation-apply-title"><div class="foundation-section-top"><span class="foundation-index">04 / CONNECT TO ENGINEERING</span><h3 id="foundation-apply-title">Build it. <em>Measure it. Defend it.</em></h3></div>
+    <div class="foundation-apply-grid"><div><span class="foundation-apply-icon" aria-hidden="true">◇</span><h4>Important distinction</h4><p>{guide.precision}</p></div><div><span class="foundation-apply-icon" aria-hidden="true">⌁</span><h4>Production mindset</h4><p>{guide.engineering}</p></div><div><span class="foundation-apply-icon" aria-hidden="true">↗</span><h4>Interview bridge</h4><p>{guide.interview}</p><a href="#section-A">Practice with A–F interview sections ↗</a></div></div>
+  </section>
+
+  <section class="foundation-check" id="foundations-check" aria-labelledby="foundation-check-title" data-foundation-check>
+    <div class="foundation-section-top"><span class="foundation-index">05 / CHECK YOUR UNDERSTANDING</span><h3 id="foundation-check-title">Can you apply <em>the idea?</em></h3><p>Choose one answer to see feedback immediately. Check the mechanism before reading the full technical sections.</p></div>
+    <p class="foundation-check-question">{guide.checkpoint.question}</p>
+    <div class="foundation-check-options" role="group" aria-label="Knowledge check answers">{guide.checkpoint.options.map((option, i) => <button type="button" data-foundation-answer={i} data-correct={i === guide.checkpoint.correct ? 'true' : 'false'} aria-pressed="false"><span>{String.fromCharCode(65 + i)}</span>{option}</button>)}</div>
+    <div class="foundation-check-feedback" data-foundation-feedback role="status" aria-live="polite" hidden><strong data-foundation-feedback-heading></strong><p>{guide.checkpoint.why}</p></div>
+  </section>
+  {related.length > 0 && <section class="foundation-syllabus" id="foundations-syllabus" aria-labelledby="foundations-syllabus-title">
+    <div class="foundation-section-top"><span class="foundation-index">06 / YOUR STUDY SYLLABUS</span><h3 id="foundations-syllabus-title">Related questions <em>from your roadmap.</em></h3><p>Questions and further-reading links are taken from the supplied LLM Fundamentals list. Links are external references, not verified explanations. The full A–F lesson below teaches this chapter's main mechanism.</p></div>
+    <div class="foundation-syllabus-list">{related.map((topic,i) => <details class="foundation-syllabus-topic"><summary><span>{String(i+1).padStart(2,'0')}</span><strong>{topic.question}</strong><span class="foundation-chevron" aria-hidden="true">+</span></summary><div class="foundation-syllabus-expanded"><button type="button" data-foundation-ask={topic.question}>Ask Mentora Tutor to teach this ↗</button>{topic.resources.length>0 && <div class="foundation-syllabus-sources"><span>SUPPLIED READING</span>{topic.resources.map(resource => <a href={resource.url} target="_blank" rel="noopener noreferrer">{resource.label} ↗</a>)}</div>}</div></details>)}</div>
+  </section>}
+  <div class="foundation-next-stage"><span>READY FOR THE NEXT LEVEL?</span><p>Continue into the deep A–F engineering interview guide below. Work through the questions, derivations, design trade-offs and production incidents—not just their summaries.</p><a href="#section-A">Jump to interview preparation ↓</a></div>
+</div>}

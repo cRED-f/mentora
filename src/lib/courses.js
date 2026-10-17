@@ -1,6 +1,10 @@
 import data from '../data/courses.json' with { type: 'json' };
+import { getFoundationGuide } from '../data/llm-foundations-path.js';
+import { createDeepSections } from '../data/llm-foundations-deep.js';
 
-export const courses = data;
+export const courses = data.map(course => course.slug !== 'llm-foundations' ? course : ({
+  ...course, lessons: course.lessons.map(lesson => ({...lesson, sections: createDeepSections(lesson.id) || lesson.sections}))
+}));
 export const totalLessons = courses.reduce((sum, course) => sum + course.lessons.length, 0);
 export function getCourse(slug) { return courses.find((course) => course.slug === slug); }
 export function getLesson(courseSlug, lessonId) {
@@ -19,7 +23,9 @@ export function retrieveLessons(query, currentCourse = '', currentId = '', maxRe
   const scored = [];
   for (const course of courses) for (const lesson of course.lessons) {
     const name = `${lesson.title} ${course.title}`.toLowerCase();
-    const content = `${lesson.subtitle} ${lesson.sections.find((s) => s.letter === 'B')?.text || ''}`.toLowerCase();
+    const beginner = course.slug === 'llm-foundations' ? getFoundationGuide(lesson.id) : null;
+    const beginnerText = beginner ? [beginner.plain, ...beginner.concepts.map(([term, simple]) => `${term}: ${simple}`)].join(' ') : '';
+    const content = `${lesson.subtitle} ${beginnerText} ${lesson.sections.find((s) => s.letter === 'B')?.text || ''}`.toLowerCase();
     let score = 0;
     for (const term of terms) {
       if (name.includes(term)) score += 6;

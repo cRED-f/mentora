@@ -1,0 +1,805 @@
+[
+  {
+    "question": "What are foundation models, and how have they changed AI engineering?",
+    "resources": [
+      {
+        "label": "AI Engineering Explained: LLM, RAG, MCP, Agent, Fine-Tuning, Quantization",
+        "url": "https://www.youtube.com/watch?v=lnfWvX66FUk"
+      }
+    ],
+    "id": 1,
+    "lesson": 1
+  },
+  {
+    "question": "What is a Large Language Model (LLM), and how does it work?",
+    "resources": [
+      {
+        "label": "AI Engineering Explained: LLM, RAG, MCP, Agent, Fine-Tuning, Quantization",
+        "url": "https://www.youtube.com/watch?v=lnfWvX66FUk"
+      }
+    ],
+    "id": 2,
+    "lesson": 1
+  },
+  {
+    "question": "Inside ChatGPT: What Happens After You Hit Enter?",
+    "resources": [
+      {
+        "label": "Inside ChatGPT: What Happens After You Hit Enter",
+        "url": "https://outcomeschool.substack.com/p/inside-chatgpt-what-happens-after"
+      }
+    ],
+    "id": 3,
+    "lesson": 8
+  },
+  {
+    "question": "What is the Transformer architecture and how does it work?",
+    "resources": [
+      {
+        "label": "Decoding Transformer Architecture",
+        "url": "https://outcomeschool.com/blog/decoding-transformer-architecture"
+      }
+    ],
+    "id": 4,
+    "lesson": 6
+  },
+  {
+    "question": "What are the key components of the Transformer architecture?",
+    "resources": [
+      {
+        "label": "Decoding Transformer Architecture",
+        "url": "https://outcomeschool.com/blog/decoding-transformer-architecture"
+      }
+    ],
+    "id": 5,
+    "lesson": 6
+  },
+  {
+    "question": "Walk me through what happens, step by step, in one forward pass of a decoder-only Transformer.",
+    "resources": [
+      {
+        "label": "Decoding Transformer Architecture",
+        "url": "https://outcomeschool.com/blog/decoding-transformer-architecture"
+      }
+    ],
+    "id": 6,
+    "lesson": 6
+  },
+  {
+    "question": "What is tokenization in LLMs?",
+    "resources": [
+      {
+        "label": "Tokenization in LLMs",
+        "url": "https://outcomeschool.com/blog/tokenization-in-llms"
+      },
+      {
+        "label": "Tokenization in Large Language Models (LLMs)",
+        "url": "https://www.youtube.com/watch?v=sK2s9I84EVI"
+      }
+    ],
+    "id": 7,
+    "lesson": 3
+  },
+  {
+    "question": "Explain BPE (Byte Pair Encoding).",
+    "resources": [
+      {
+        "label": "Byte Pair Encoding",
+        "url": "https://outcomeschool.com/blog/bpe-in-llms"
+      }
+    ],
+    "id": 8,
+    "lesson": 3
+  },
+  {
+    "question": "Explain WordPiece and SentencePiece.",
+    "resources": [],
+    "id": 9,
+    "lesson": 3
+  },
+  {
+    "question": "What is positional encoding, and why is it needed in Transformers?",
+    "resources": [
+      {
+        "label": "Positional Embeddings in LLMs",
+        "url": "https://outcomeschool.substack.com/p/positional-embeddings-in-llms"
+      }
+    ],
+    "id": 10,
+    "lesson": 6
+  },
+  {
+    "question": "What are embeddings?",
+    "resources": [
+      {
+        "label": "Embeddings in Machine Learning",
+        "url": "https://www.youtube.com/watch?v=LedXW6xl21s"
+      }
+    ],
+    "id": 11,
+    "lesson": 3
+  },
+  {
+    "question": "Explain the Query(Q), Key(K), and Value(V) in attention.",
+    "resources": [
+      {
+        "label": "Math behind Attention - Q, K, and V",
+        "url": "https://outcomeschool.com/blog/math-behind-attention-qkv"
+      }
+    ],
+    "id": 12,
+    "lesson": 6
+  },
+  {
+    "question": "What is self-attention, and how does it work in Transformers?",
+    "resources": [
+      {
+        "label": "Self Attention in Transformers",
+        "url": "https://outcomeschool.com/blog/self-attention-in-transformers"
+      }
+    ],
+    "id": 13,
+    "lesson": 6
+  },
+  {
+    "question": "What is Cross Attention in Transformers?",
+    "resources": [
+      {
+        "label": "Cross Attention in Transformers",
+        "url": "https://outcomeschool.com/blog/cross-attention-in-transformers"
+      }
+    ],
+    "id": 14,
+    "lesson": 6
+  },
+  {
+    "question": "Why do we scale the dot product attention by √dₖ in the Transformer architecture?",
+    "resources": [
+      {
+        "label": "Math behind √dₖ Scaling Factor in Attention",
+        "url": "https://outcomeschool.com/blog/scaling-dot-product-attention"
+      }
+    ],
+    "id": 15,
+    "lesson": 6
+  },
+  {
+    "question": "What is causal masking?",
+    "resources": [
+      {
+        "label": "Causal Masking in Attention",
+        "url": "https://outcomeschool.com/blog/causal-masking-in-attention"
+      }
+    ],
+    "id": 16,
+    "lesson": 6
+  },
+  {
+    "question": "What are multi-head attention mechanisms? Why use multiple attention heads?",
+    "resources": [
+      {
+        "label": "Multi-Head Attention in Transformers",
+        "url": "https://outcomeschool.com/blog/multi-head-attention-in-transformers"
+      }
+    ],
+    "id": 17,
+    "lesson": 6
+  },
+  {
+    "question": "What are Feed-Forward Networks in LLMs?",
+    "resources": [
+      {
+        "label": "Feed-Forward Networks in LLMs",
+        "url": "https://outcomeschool.com/blog/feed-forward-networks-in-llms"
+      }
+    ],
+    "id": 18,
+    "lesson": 3
+  },
+  {
+    "question": "What is Generative AI?",
+    "resources": [
+      {
+        "label": "What is Generative AI?",
+        "url": "https://outcomeschool.com/blog/what-is-generative-ai"
+      }
+    ],
+    "id": 19,
+    "lesson": 1
+  },
+  {
+    "question": "What is the context window in LLMs, and why does it matter?",
+    "resources": [
+      {
+        "label": "Context Window in LLMs",
+        "url": "https://www.linkedin.com/posts/amit-shekhar-iitbhu_the-context-window-is-the-llms-working-memory-activity-7437754426175672320-MH9c"
+      }
+    ],
+    "id": 20,
+    "lesson": 8
+  },
+  {
+    "question": "Why is the context window limited in LLMs?",
+    "resources": [
+      {
+        "label": "Why is the context window limited in LLMs?",
+        "url": "https://www.youtube.com/watch?v=CGIhxIaOg3M&lc"
+      }
+    ],
+    "id": 21,
+    "lesson": 8
+  },
+  {
+    "question": "What is temperature in the context of LLMs, and how does it affect output?",
+    "resources": [
+      {
+        "label": "How does Temperature control LLM output?",
+        "url": "https://outcomeschool.com/blog/how-does-temperature-control-llm-output"
+      }
+    ],
+    "id": 22,
+    "lesson": 4
+  },
+  {
+    "question": "Why is the first token slower than the rest in an LLM?",
+    "resources": [
+      {
+        "label": "The First-Token Latency Problem in LLMs",
+        "url": "https://www.youtube.com/watch?v=XD8DD4cEHu0"
+      }
+    ],
+    "id": 23,
+    "lesson": 8
+  },
+  {
+    "question": "Explain Top-p (nucleus) sampling and Top-k sampling. How do they differ?",
+    "resources": [
+      {
+        "label": "How do Top-k and Top-p Sampling work?",
+        "url": "https://outcomeschool.com/blog/how-do-top-k-and-top-p-sampling-work"
+      }
+    ],
+    "id": 24,
+    "lesson": 4
+  },
+  {
+    "question": "Compare greedy decoding, beam search, top-k, top-p, and temperature sampling. When does each fail?",
+    "resources": [
+      {
+        "label": "How do Top-k and Top-p Sampling work?",
+        "url": "https://outcomeschool.com/blog/how-do-top-k-and-top-p-sampling-work"
+      }
+    ],
+    "id": 25,
+    "lesson": 4
+  },
+  {
+    "question": "What are logits, and how are they used in text generation?",
+    "resources": [
+      {
+        "label": "Understanding Logits in Machine Learning",
+        "url": "https://x.com/amitiitbhu/status/1927927814923207146"
+      }
+    ],
+    "id": 26,
+    "lesson": 4
+  },
+  {
+    "question": "What are stop tokens in LLMs, and how does an LLM know when to stop generating?",
+    "resources": [
+      {
+        "label": "Stop Tokens in LLMs",
+        "url": "https://outcomeschool.com/blog/stop-tokens-in-llms"
+      }
+    ],
+    "id": 27,
+    "lesson": 4
+  },
+  {
+    "question": "What is the difference between a stop token and a stop sequence?",
+    "resources": [
+      {
+        "label": "Stop Tokens in LLMs",
+        "url": "https://outcomeschool.com/blog/stop-tokens-in-llms"
+      }
+    ],
+    "id": 28,
+    "lesson": 4
+  },
+  {
+    "question": "What are skip connections (residual connections) in Transformers?",
+    "resources": [
+      {
+        "label": "Skip connections (residual connections) in Transformers",
+        "url": "https://www.linkedin.com/posts/amit-shekhar-iitbhu_machinelearning-llm-deeplearning-share-7414239846707392512-pQdQ"
+      }
+    ],
+    "id": 29,
+    "lesson": 3
+  },
+  {
+    "question": "What is the difference between open-source and closed-source LLMs? When would you choose one over the other?",
+    "resources": [],
+    "id": 30,
+    "lesson": 9
+  },
+  {
+    "question": "What is the difference between encoder-only, decoder-only, and encoder-decoder Transformer architectures?",
+    "resources": [
+      {
+        "label": "Encoder vs Decoder in Transformers",
+        "url": "https://outcomeschool.com/blog/encoder-vs-decoder-in-transformers"
+      }
+    ],
+    "id": 31,
+    "lesson": 6
+  },
+  {
+    "question": "What is KV cache, and how does it speed up inference?",
+    "resources": [
+      {
+        "label": "What is KV Cache in LLMs?",
+        "url": "https://outcomeschool.com/blog/kv-cache-in-llms"
+      }
+    ],
+    "id": 32,
+    "lesson": 8
+  },
+  {
+    "question": "Estimate the KV cache memory needed to serve a large model. How does it constrain batch size and context length?",
+    "resources": [
+      {
+        "label": "KV Cache Compression",
+        "url": "https://outcomeschool.com/blog/kv-cache-compression"
+      }
+    ],
+    "id": 33,
+    "lesson": 8
+  },
+  {
+    "question": "KV Cache Compression",
+    "resources": [
+      {
+        "label": "KV Cache Compression",
+        "url": "https://outcomeschool.com/blog/kv-cache-compression"
+      }
+    ],
+    "id": 34,
+    "lesson": 8
+  },
+  {
+    "question": "What is model distillation, and how is it used with LLMs?",
+    "resources": [
+      {
+        "label": "How does Knowledge Distillation work?",
+        "url": "https://outcomeschool.com/blog/how-does-knowledge-distillation-work"
+      }
+    ],
+    "id": 35,
+    "lesson": 10
+  },
+  {
+    "question": "What is Mixture of Experts (MoE), and how does it work in models like Mixtral?",
+    "resources": [
+      {
+        "label": "Mixture of Experts Explained",
+        "url": "https://outcomeschool.com/blog/mixture-of-experts"
+      }
+    ],
+    "id": 36,
+    "lesson": 6
+  },
+  {
+    "question": "What is the difference between dense and sparse models?",
+    "resources": [
+      {
+        "label": "Mixture of Experts Explained",
+        "url": "https://outcomeschool.com/blog/mixture-of-experts"
+      }
+    ],
+    "id": 37,
+    "lesson": 6
+  },
+  {
+    "question": "How does DeepSeek-V4 work?",
+    "resources": [
+      {
+        "label": "DeepSeek-V4 Architecture Explained",
+        "url": "https://outcomeschool.com/blog/decoding-deepseek-v4"
+      }
+    ],
+    "id": 38,
+    "lesson": 6
+  },
+  {
+    "question": "What is Flash Attention?",
+    "resources": [
+      {
+        "label": "Decoding Flash Attention in LLMs",
+        "url": "https://outcomeschool.com/blog/decoding-flash-attention"
+      }
+    ],
+    "id": 39,
+    "lesson": 7
+  },
+  {
+    "question": "What is Cross-Entropy Loss?",
+    "resources": [
+      {
+        "label": "Math Behind Cross-Entropy Loss",
+        "url": "https://outcomeschool.com/blog/math-behind-cross-entropy-loss"
+      }
+    ],
+    "id": 40,
+    "lesson": 3
+  },
+  {
+    "question": "What is Grouped-Query Attention (GQA), and how does it differ from Multi-Head Attention (MHA)?",
+    "resources": [
+      {
+        "label": "Grouped Query Attention",
+        "url": "https://outcomeschool.com/blog/grouped-query-attention"
+      }
+    ],
+    "id": 41,
+    "lesson": 6
+  },
+  {
+    "question": "How does Sliding Window Attention work?",
+    "resources": [
+      {
+        "label": "How does Sliding Window Attention work?",
+        "url": "https://outcomeschool.com/blog/how-does-sliding-window-attention-work"
+      }
+    ],
+    "id": 42,
+    "lesson": 7
+  },
+  {
+    "question": "How do Attention Sinks work?",
+    "resources": [
+      {
+        "label": "How do Attention Sinks work?",
+        "url": "https://outcomeschool.com/blog/how-do-attention-sinks-work"
+      }
+    ],
+    "id": 43,
+    "lesson": 7
+  },
+  {
+    "question": "How does Rotary Position Embedding (RoPE) work, and why is it preferred over learned positional embeddings?",
+    "resources": [
+      {
+        "label": "Math Behind RoPE (Rotary Position Embedding)",
+        "url": "https://outcomeschool.com/blog/math-behind-rope-rotary-position-embedding"
+      }
+    ],
+    "id": 44,
+    "lesson": 6
+  },
+  {
+    "question": "Explain Layer Normalization",
+    "resources": [
+      {
+        "label": "Batch Normalization vs Layer Normalization",
+        "url": "https://outcomeschool.com/blog/batch-normalization-vs-layer-normalization"
+      }
+    ],
+    "id": 45,
+    "lesson": 6
+  },
+  {
+    "question": "Explain RMSNorm (Root Mean Square Layer Normalization)",
+    "resources": [
+      {
+        "label": "RMSNorm (Root Mean Square Layer Normalization)",
+        "url": "https://outcomeschool.com/blog/rmsnorm-root-mean-square-layer-normalization"
+      }
+    ],
+    "id": 46,
+    "lesson": 6
+  },
+  {
+    "question": "Why do modern Transformers use Pre-LayerNorm (Pre-Norm) instead of Post-LayerNorm?",
+    "resources": [
+      {
+        "label": "RMSNorm (Root Mean Square Layer Normalization)",
+        "url": "https://outcomeschool.com/blog/rmsnorm-root-mean-square-layer-normalization"
+      }
+    ],
+    "id": 47,
+    "lesson": 6
+  },
+  {
+    "question": "What are scaling laws (Chinchilla), and how do they guide model size vs training data decisions?",
+    "resources": [],
+    "id": 48,
+    "lesson": 2
+  },
+  {
+    "question": "Your LLM keeps ignoring your instructions. How do you make it follow structured output formats?",
+    "resources": [],
+    "id": 49,
+    "lesson": 2
+  },
+  {
+    "question": "Your LLM-powered tool hits the context window limit on long documents. How do you handle it?",
+    "resources": [],
+    "id": 50,
+    "lesson": 8
+  },
+  {
+    "question": "Your LLM does not admit when it does not know the answer. How do you make it say \"I don't know\"?",
+    "resources": [],
+    "id": 51,
+    "lesson": 2
+  },
+  {
+    "question": "Your LLM generates responses that are too verbose. How do you control response length?",
+    "resources": [],
+    "id": 52,
+    "lesson": 8
+  },
+  {
+    "question": "Your LLM memorized proprietary training data and leaks it in responses. How do you prevent this?",
+    "resources": [],
+    "id": 53,
+    "lesson": 2
+  },
+  {
+    "question": "Your LLM coding assistant generates outdated code using deprecated libraries. How do you fix it?",
+    "resources": [],
+    "id": 54,
+    "lesson": 2
+  },
+  {
+    "question": "Your tokenizer splits important domain terms into meaningless subword pieces. How do you fix it?",
+    "resources": [],
+    "id": 55,
+    "lesson": 3
+  },
+  {
+    "question": "Your Transformer's KV cache grows too large during long sequence generation. How do you manage memory?",
+    "resources": [
+      {
+        "label": "Paged Attention in LLMs",
+        "url": "https://outcomeschool.com/blog/paged-attention-in-llms"
+      }
+    ],
+    "id": 56,
+    "lesson": 8
+  },
+  {
+    "question": "Your Transformer runs out of memory on long documents due to quadratic self-attention. How do you scale it?",
+    "resources": [
+      {
+        "label": "How does Sliding Window Attention work?",
+        "url": "https://outcomeschool.com/blog/how-does-sliding-window-attention-work"
+      },
+      {
+        "label": "Decoding Flash Attention in LLMs",
+        "url": "https://outcomeschool.com/blog/decoding-flash-attention"
+      }
+    ],
+    "id": 57,
+    "lesson": 7
+  },
+  {
+    "question": "Your distilled student model fails on the complex reasoning that the teacher model handled. How do you close the gap?",
+    "resources": [],
+    "id": 58,
+    "lesson": 10
+  },
+  {
+    "question": "After RLHF alignment, your LLM became safer but lost capability on hard tasks. How do you manage the alignment tax?",
+    "resources": [],
+    "id": 59,
+    "lesson": 5
+  },
+  {
+    "question": "Your RLHF-trained LLM is gaming the reward model instead of being genuinely helpful. How do you fix reward hacking?",
+    "resources": [
+      {
+        "label": "Reinforcement Learning from Human Feedback (RLHF)",
+        "url": "https://outcomeschool.com/blog/reinforcement-learning-from-human-feedback-rlhf"
+      }
+    ],
+    "id": 60,
+    "lesson": 5
+  },
+  {
+    "question": "Your chatbot loses context after 10 turns in a conversation. How do you maintain a long conversation context?",
+    "resources": [
+      {
+        "label": "AI Agent Memory",
+        "url": "https://outcomeschool.com/blog/ai-agent-memory"
+      }
+    ],
+    "id": 61,
+    "lesson": 2
+  },
+  {
+    "question": "Your chatbot fails when users switch topics mid-conversation. How do you handle topic switches?",
+    "resources": [],
+    "id": 62,
+    "lesson": 2
+  },
+  {
+    "question": "Your QA system always generates an answer even when no answer exists in the context. How do you detect unanswerable questions?",
+    "resources": [],
+    "id": 63,
+    "lesson": 2
+  },
+  {
+    "question": "Your summarization system hallucinated facts not in the original article. How do you fix it?",
+    "resources": [],
+    "id": 64,
+    "lesson": 2
+  },
+  {
+    "question": "Your text generation repeats phrases in long outputs. How do you fix repetition?",
+    "resources": [],
+    "id": 65,
+    "lesson": 4
+  },
+  {
+    "question": "Transformers work on text, so can they also understand images?",
+    "resources": [
+      {
+        "label": "Decoding Vision Transformer (ViT)",
+        "url": "https://outcomeschool.com/blog/decoding-vision-transformer-vit"
+      }
+    ],
+    "id": 66,
+    "lesson": 1
+  },
+  {
+    "question": "Small Language Models (SLMs)",
+    "resources": [
+      {
+        "label": "Small Language Models (SLMs)",
+        "url": "https://outcomeschool.com/blog/small-language-models-slms"
+      }
+    ],
+    "id": 67,
+    "lesson": 10
+  },
+  {
+    "question": "Large Reasoning Models (LRMs)",
+    "resources": [
+      {
+        "label": "Large Reasoning Models (LRMs)",
+        "url": "https://outcomeschool.com/blog/large-reasoning-models"
+      }
+    ],
+    "id": 68,
+    "lesson": 10
+  },
+  {
+    "question": "Jev and System One Models",
+    "resources": [
+      {
+        "label": "Jev and System One Models Explained",
+        "url": "https://outcomeschool.com/blog/jev-and-system-one-models-explained"
+      }
+    ],
+    "id": 69,
+    "lesson": 10
+  },
+  {
+    "question": "What are Autoregressive Models?",
+    "resources": [
+      {
+        "label": "Autoregressive Models",
+        "url": "https://outcomeschool.com/blog/autoregressive-models"
+      }
+    ],
+    "id": 70,
+    "lesson": 4
+  },
+  {
+    "question": "Explain the difference between autoregressive and masked language modeling.",
+    "resources": [],
+    "id": 71,
+    "lesson": 5
+  },
+  {
+    "question": "Proximal Policy Optimization (PPO)",
+    "resources": [
+      {
+        "label": "Proximal Policy Optimization (PPO)",
+        "url": "https://outcomeschool.com/blog/proximal-policy-optimization-ppo"
+      }
+    ],
+    "id": 72,
+    "lesson": 5
+  },
+  {
+    "question": "Direct Preference Optimization (DPO)",
+    "resources": [
+      {
+        "label": "Direct Preference Optimization (DPO)",
+        "url": "https://outcomeschool.com/blog/direct-preference-optimization-dpo"
+      }
+    ],
+    "id": 73,
+    "lesson": 5
+  },
+  {
+    "question": "Group Relative Policy Optimization (GRPO)",
+    "resources": [
+      {
+        "label": "Group Relative Policy Optimization (GRPO)",
+        "url": "https://outcomeschool.com/blog/group-relative-policy-optimization-grpo"
+      }
+    ],
+    "id": 74,
+    "lesson": 5
+  },
+  {
+    "question": "Recursive Language Models (RLMs)",
+    "resources": [
+      {
+        "label": "Recursive Language Models (RLMs)",
+        "url": "https://outcomeschool.com/blog/recursive-language-models"
+      }
+    ],
+    "id": 75,
+    "lesson": 2
+  },
+  {
+    "question": "Continual Learning in LLMs",
+    "resources": [
+      {
+        "label": "Continual Learning in LLMs",
+        "url": "https://outcomeschool.com/blog/continual-learning-in-llms"
+      }
+    ],
+    "id": 76,
+    "lesson": 2
+  },
+  {
+    "question": "What is Recursive Self-Improvement (RSI)?",
+    "resources": [
+      {
+        "label": "What is Recursive Self-Improvement (RSI)?",
+        "url": "https://outcomeschool.com/blog/what-is-recursive-self-improvement-rsi"
+      }
+    ],
+    "id": 77,
+    "lesson": 2
+  },
+  {
+    "question": "How do Diffusion Language Models (DLMs) work?",
+    "resources": [
+      {
+        "label": "How do Diffusion Language Models (DLMs) work?",
+        "url": "https://outcomeschool.com/blog/how-do-diffusion-language-models-dlms-work"
+      }
+    ],
+    "id": 78,
+    "lesson": 5
+  },
+  {
+    "question": "How Does LLM Watermarking Work?",
+    "resources": [
+      {
+        "label": "How Does LLM Watermarking Work?",
+        "url": "https://outcomeschool.com/blog/how-does-llm-watermarking-work"
+      }
+    ],
+    "id": 79,
+    "lesson": 1
+  },
+  {
+    "question": "How do RNNs and Transformers differ?",
+    "resources": [
+      {
+        "label": "How do RNNs and Transformers differ?",
+        "url": "https://outcomeschool.com/blog/how-do-rnns-and-transformers-differ"
+      }
+    ],
+    "id": 80,
+    "lesson": 7
+  }
+]
