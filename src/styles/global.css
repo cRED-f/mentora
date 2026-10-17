@@ -111,3 +111,68 @@ html,body{background:var(--bg,#000);color:var(--white,#fff);height:100%}html{scr
 .tutor-mode button{padding:10px 6px;border:1px solid #383838;background:#121212;color:#999;border-radius:4px;font-size:10px;letter-spacing:.02em;cursor:pointer}
 .tutor-mode button:hover{border-color:#777;color:#eee}
 .tutor-mode button[aria-pressed=true]{background:#e5e5e5;color:#080808;border-color:#eee}
+
+/* Page-aware AI assistant — same neutral palette and scale as the Mentora shell. */
+.tutor-settings-toggle{display:grid;place-items:center;margin-left:auto;width:32px;height:32px;border:1px solid transparent;border-radius:6px;background:transparent;color:#999;cursor:pointer;transition:background .18s,border-color .18s,color .18s}
+.tutor-settings-toggle:hover,.tutor-settings-toggle.active{color:#fff;background:#171717;border-color:#383838}
+.tutor-header .tutor-close{margin-left:0}
+.tutor-settings[hidden],.tutor-settings #settings-custom-model[hidden]{display:none!important}
+.tutor-settings{border-bottom:1px solid #333;background:#0d0d0d;flex:none;padding:17px 18px 19px;max-height:min(74dvh,540px);overflow:auto;scrollbar-color:#333 transparent}
+.tutor-settings-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.tutor-settings-head strong{font-size:14px;font-weight:620;letter-spacing:-.025em;color:#eee}
+.tutor-settings-head span{font-size:9px;color:#777;letter-spacing:.14em}
+.tutor-settings>p{font-size:11px;line-height:1.65;color:#999;margin:9px 0 19px}
+.tutor-settings form{display:flex;flex-direction:column;gap:9px}
+.tutor-settings label{font-size:10px;letter-spacing:.04em;color:#d0d0d0;font-weight:560}
+.settings-secret{display:flex;align-items:center;background:#111;border:1px solid #373737;border-radius:6px;overflow:hidden}
+.settings-secret:focus-within{border-color:#aaa}
+.tutor-settings input,.tutor-settings select{min-width:0;width:100%;outline:0;background:#111;color:#eee;border:1px solid #373737;border-radius:6px;padding:11px;font-size:11px;font-family:inherit}
+.tutor-settings select{appearance:auto;cursor:pointer}
+.tutor-settings option{background:#151515;color:#eee}
+.settings-secret input{border:0;background:transparent;flex:1}
+.settings-secret button{flex:none;padding:10px;color:#aaa;background:none;border:0;font-size:10px;cursor:pointer}
+.settings-secret button:hover{color:#fff}
+.settings-help{font-size:9px;line-height:1.6;color:#818181;margin-bottom:9px}
+.settings-model-label{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.settings-model-label button{border:none;color:#bbb;background:transparent;font-size:10px;cursor:pointer;padding:5px 0}
+.settings-model-label button:hover{color:#fff}
+.settings-model-label button:disabled{opacity:.5;cursor:wait}
+.tutor-settings .settings-feedback{min-height:16px;margin:1px 0;color:#aaa;font-size:10px;line-height:1.5}
+.settings-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:5px}
+.settings-actions button{padding:10px 11px;border:1px solid #3a3a3a;color:#a5a5a5;border-radius:5px;background:#141414;font-size:10px;cursor:pointer}
+.settings-actions button:hover{border-color:#999;color:#fff}
+.settings-actions .settings-save{background:#ebebeb;color:#121212;border-color:#f6f6f6;font-weight:650}
+.settings-actions .settings-save:hover{background:#fff;color:#000}
+.tutor-status{gap:7px}
+#tutor-status-text{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:760px){.tutor-settings{padding:17px 18px}.tutor-settings-toggle{margin-left:auto}}
+.chat-message.from-assistant .chat-body{white-space:normal;line-height:1.75}
+.chat-body p{margin:0 0 11px}.chat-body p:last-child{margin-bottom:0}
+.chat-body .chat-heading{font-size:12px;line-height:1.5;font-weight:660;color:#f1f1f1;margin:15px 0 6px}
+.chat-body strong{color:#f7f7f7;font-weight:650}
+.chat-body em{color:#dedede}
+.chat-body ul,.chat-body ol{padding-left:19px;margin:7px 0 14px}
+.chat-body li{margin:4px 0;padding-left:2px}
+.chat-body code{font-size:.9em;color:#eee;background:#212121;border-radius:3px;padding:2px 4px}
+.chat-body pre{overflow-x:auto;white-space:pre;background:#090909;border:1px solid #333;border-radius:6px;margin:12px 0;padding:12px;font-size:11px;line-height:1.6}
+.chat-body pre code{background:none;padding:0;white-space:pre}
+.chat-body a{color:#ededed;text-decoration:underline;text-decoration-color:#888;text-underline-offset:3px}
+.chat-body hr{border:0;border-top:1px solid #383838;margin:13px 0}
+.chat-body table{display:block;max-width:100%;overflow-x:auto;border-collapse:collapse;margin:12px 0;font-size:10px}
+.chat-body td,.chat-body th{border:1px solid #393939;padding:7px;min-width:52px;text-align:left;white-space:normal}
+.chat-body th{color:#fff;background:#1d1d1d}
+
+
+/* Selected-text → Mentora: small contextual affordance, matching the grayscale UI. */
+.selection-ask[hidden],.tutor-selection[hidden]{display:none!important}
+.selection-ask{position:fixed;z-index:1100;display:flex;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:8px 12px;border:1px solid #575757;border-radius:6px;background:#ededed;color:#111;box-shadow:0 8px 24px #000a;font:600 11px/1.2 Inter,sans-serif;cursor:pointer;white-space:nowrap}
+.selection-ask:hover{background:#fff;border-color:#fff}
+.selection-ask:focus-visible,.tutor-selection button:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.tutor-selection{padding:11px 12px 12px;margin-bottom:10px;border:1px solid #424242;border-left:2px solid #d9d9d9;border-radius:5px;background:#111}
+.tutor-selection-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:5px}
+.tutor-selection-top span{color:#989898;font-size:9px;letter-spacing:.08em;font-weight:650}
+.tutor-selection-top button{border:0;color:#b2b2b2;background:none;font-size:17px;line-height:1;cursor:pointer;padding:2px 5px}
+.tutor-selection-top button:hover{color:#fff}
+.tutor-selection blockquote{margin:0;max-height:92px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;color:#dedede;font-size:11px;line-height:1.6}
+.chat-selection-quote{margin:3px 0 10px;border-left:2px solid #777;padding:7px 10px;color:#b0b0b0;background:#171717;font-size:11px;line-height:1.6;max-height:132px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+@media(prefers-reduced-motion:reduce){.selection-ask{transition:none}}

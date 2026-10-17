@@ -99,16 +99,12 @@ test('Important user-supplied resources are attached to the correct lesson',()=>
   assert.equal(getAgentsGuide(13).resources.length,3);
 });
 
-test('Tutor uses Agents course foundation grounding and the same senior interview training protocol',()=>{
-  const input={course:'agents',lesson:'43',message:'Explain agent budgets',history:[]};
-  const teach=composeMessages(input)[0].content;
-  assert.match(teach,/BEGINNER EXPLANATION:/);
-  assert.match(teach,/KEY TERMS:/);
-  assert.match(teach,/A five applied interviewer questions/);
-  assert.match(teach,/INTERACTIVE LOOP/);
-  assert.match(teach,/atomic reservations/);
-  const mock=composeMessages({...input,mode:'mock'})[0].content;
-  assert.match(mock,/MOCK INTERVIEW MODE/);
+test('Agents AI assistant uses the current lesson and no forced interview behavior',()=>{
+  const prompt=composeMessages({course:'agents',lesson:'43',message:'Explain agent budgets',history:[]})[0].content;
+  assert.match(prompt,/atomic reservations/i);
+  assert.match(prompt,/CURRENT PAGE:/);
+  assert.match(prompt,/Use the CURRENT PAGE CONTENT/);
+  assert.doesNotMatch(prompt,/MOCK INTERVIEW MODE/);
 });
 
 test('All prior courses and count are unchanged by the Agents update',()=>{

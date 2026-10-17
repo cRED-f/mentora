@@ -10,7 +10,7 @@
     "start": "node ./dist/server/entry.mjs",
     "check:content": "node scripts/check-content.mjs",
     "test:api": "node --test tests/chat.test.mjs",
-    "test:site": "node --test tests/landing.test.mjs tests/sidebar.test.mjs tests/foundations.test.mjs tests/prompt-engineering.test.mjs tests/rag.test.mjs tests/agents.test.mjs"
+    "test:site": "node --test tests/landing.test.mjs tests/sidebar.test.mjs tests/foundations.test.mjs tests/prompt-engineering.test.mjs tests/rag.test.mjs tests/agents.test.mjs tests/selection.test.mjs"
   },
   "dependencies": {
     "astro": "7.4.0",

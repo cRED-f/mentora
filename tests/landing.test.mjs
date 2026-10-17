@@ -76,7 +76,7 @@ test('Mentora rebranding preserves data and 9router backend', () => {
   const app = read('../public/app.js');
   assert.match(layout,/mentora/);
   assert.match(layout,/href="\/academy\/"/);
-  assert.match(gateway,/Mentora Tutor/);
+  assert.match(gateway,/Mentora AI/);
   assert.match(gateway,/NINEROUTER_API_KEY/);
   assert.match(app,/mentora-progress-v1/);
   assert.match(app,/modelcraft-progress-v1/); // deliberate migration from the previous edition

@@ -85,14 +85,11 @@ test('supplied optional reading links are preserved with the corresponding lesso
   }
 });
 
-test('Mentora Tutor uses Prompt Engineering foundations context and rigorous coach protocol', () => {
-  const prompt = composeMessages({course:'prompt-engineering',lesson:'9',message:'Explain prompt injection from basics',history:[]})[0].content;
-  assert.match(prompt,/BEGINNER EXPLANATION:/);
-  assert.match(prompt,/KEY TERMS:/);
-  assert.match(prompt,/EXAMPLE:/);
-  assert.match(prompt,/A five applied interviewer questions/);
-  assert.match(prompt,/INTERACTIVE LOOP/);
-  assert.match(prompt,/PROMPT INJECTION|Prompt Injection|Prompt injection|prompt injection/);
-  const interview = composeMessages({course:'prompt-engineering',lesson:'9',message:'Mock interview',mode:'mock',history:[]})[0].content;
-  assert.match(interview,/MOCK INTERVIEW MODE/);
+test('Mentora AI grounds simple explanations in the active Prompt Engineering page', () => {
+  const system = composeMessages({course:'prompt-engineering',lesson:'9',message:'Explain prompt injection from basics',history:[]})[0].content;
+  assert.match(system,/Prompt injection/i);
+  assert.match(system,/CURRENT PAGE:/);
+  assert.match(system,/Use the CURRENT PAGE CONTENT/);
+  assert.match(system,/Do not silently borrow material from other lessons/);
+  assert.doesNotMatch(system,/ACTIVE MODE: MOCK INTERVIEW MODE/);
 });

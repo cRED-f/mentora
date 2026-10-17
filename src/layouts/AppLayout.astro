@@ -80,21 +80,40 @@ const current = courses.find(c => c.slug === activeCourse);
       </header>
       <main class="main-scroll" id="main-content"><slot /></main>
     </div>
-    <aside class="tutor-panel" id="tutor-panel" aria-label="AI interview tutor">
-      <div class="tutor-header"><div class="tutor-logo">✧</div><div class="tutor-heading"><strong>AI interview tutor</strong><small>POWERED BY 9ROUTER</small></div><button class="tutor-close" type="button" aria-label="Close tutor">×</button></div>
-      <div class="tutor-status"><span id="tutor-dot" class="status-dot"></span><span id="tutor-status-text">Checking configuration</span><span class="tutor-context">{activeLesson ? 'LESSON-AWARE' : 'COURSE-AWARE'}</span></div>
-      <div class="tutor-mode" role="group" aria-label="AI tutoring mode"><button type="button" data-tutor-mode="teach" aria-pressed="true">Teach mode</button><button type="button" data-tutor-mode="mock" aria-pressed="false">Mock interview</button></div>
+    <aside class="tutor-panel" id="tutor-panel" aria-label="Mentora AI chatbot">
+      <div class="tutor-header"><div class="tutor-logo">✧</div><div class="tutor-heading"><strong>Mentora AI</strong><small>PAGE-AWARE ASSISTANT · 9ROUTER</small></div><button class="tutor-settings-toggle" id="tutor-settings-toggle" type="button" aria-label="AI settings" title="AI settings" aria-controls="tutor-settings" aria-expanded="false"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M12 3.2 14 4l2-.5 1.7 1.7-.5 2L18 9l2.1.8v2.4L18 13l-.8 1.8.5 2-1.7 1.7-2-.5-2 .8-2-.8-2 .5-1.7-1.7.5-2L6 13l-2.1-.8V9.8L6 9l.8-1.8-.5-2L8 3.5l2 .5 2-.8Z"/><circle cx="12" cy="11" r="3"/></svg></button><button class="tutor-close" type="button" aria-label="Close tutor">×</button></div>
+      <div class="tutor-status"><span id="tutor-dot" class="status-dot"></span><span id="tutor-status-text">Set up 9Router in Settings</span><span class="tutor-context">{activeLesson ? 'LESSON-AWARE' : 'COURSE-AWARE'}</span></div>
+      <section id="tutor-settings" class="tutor-settings" aria-label="9Router settings" hidden>
+        <div class="tutor-settings-head"><strong>AI settings</strong><span>9ROUTER</span></div>
+        <p>Connect your 9Router account and choose the model that answers questions about this page.</p>
+        <form id="tutor-settings-form" autocomplete="off">
+          <label for="settings-api-key">API key</label>
+          <div class="settings-secret"><input id="settings-api-key" type="password" autocomplete="off" placeholder="Paste your 9Router key" spellcheck="false"/><button type="button" id="settings-reveal" aria-label="Show API key" aria-pressed="false">Show</button></div>
+          <span class="settings-help">Kept in this tab only. Sent to the Mentora server for 9Router requests. A server key, if configured, is used when blank.</span>
+          <div class="settings-model-label"><label for="settings-model">Model</label><button id="settings-refresh-models" type="button">↻ Load models</button></div>
+          <select id="settings-model" aria-label="9Router model"><option value="">Choose a model</option><option value="__custom__">Enter a model ID…</option></select>
+          <input id="settings-custom-model" type="text" maxlength="160" spellcheck="false" placeholder="e.g. provider/model-name" aria-label="Custom 9Router model ID" hidden />
+          <p class="settings-feedback" id="settings-feedback" role="status" aria-live="polite"></p>
+          <div class="settings-actions"><button type="button" id="settings-clear">Clear tab key</button><button class="settings-save" type="submit">Save settings</button></div>
+        </form>
+      </section>
       <div class="tutor-thread" id="tutor-thread" role="log" aria-live="polite">
-        <div class="tutor-intro"><div class="intro-orbit"><span>✧</span></div><p class="intro-eyebrow">YOUR PERSONAL STUDY PARTNER</p><h2>Think deeper.<br/><em>Ask anything.</em></h2><p>Go beyond definitions. Explore mechanisms, challenge trade-offs, and prepare for technical interviews with context from the curriculum.</p></div>
+        <div class="tutor-intro"><div class="intro-orbit"><span>✧</span></div><p class="intro-eyebrow">YOUR PERSONAL STUDY PARTNER</p><h2>Think deeper.<br/><em>Ask anything.</em></h2><p>Confused by a concept? Ask a question and get an explanation grounded in the page you’re reading.</p></div>
         <div class="suggestions" id="suggestions">
-          <button type="button" data-suggestion="Explain the core mechanism behind this lesson and where it fails in production."><span>01</span> Explain the mechanism <b>↗</b></button>
-          <button type="button" data-suggestion="Interview me on this topic with one difficult technical question, and don't give the answer yet."><span>02</span> Test my understanding <b>↗</b></button>
-          <button type="button" data-suggestion="Give me a realistic AI engineering production incident related to this lesson and ask how I would debug it."><span>03</span> Production scenario <b>↗</b></button>
+          <button type="button" data-suggestion="Explain the main concept on this page in simple words with an example."><span>01</span> Explain simply <b>↗</b></button>
+          <button type="button" data-suggestion="Explain this topic step by step, including why it works."><span>02</span> Walk me through it <b>↗</b></button>
+          <button type="button" data-suggestion="Give me a real-world example of the concept explained on this page."><span>03</span> Real-world example <b>↗</b></button>
         </div>
       </div>
-      <form class="tutor-form" id="tutor-form"><div class="composer"><textarea id="tutor-input" rows="2" aria-label="Ask the AI tutor" placeholder="Ask anything about this topic..." maxlength="2000"></textarea><div class="composer-bottom"><span>ENTER TO SEND · SHIFT + ENTER FOR LINE</span><div class="composer-controls"><button class="stop-button" type="button" id="stop-chat" hidden>Stop</button><button class="send-button" id="send-chat" type="submit" aria-label="Send message">↑</button></div></div></div><div class="tutor-footnote">Answers can be incorrect. Verify important details.</div></form>
+      <form class="tutor-form" id="tutor-form">
+        <div class="tutor-selection" id="tutor-selection" hidden>
+          <div class="tutor-selection-top"><span>SELECTED FROM THIS PAGE</span><button type="button" id="tutor-selection-clear" aria-label="Remove selected text" title="Remove selection">×</button></div>
+          <blockquote id="tutor-selection-text"></blockquote>
+        </div>
+        <div class="composer"><textarea id="tutor-input" rows="2" aria-label="Ask the AI tutor" placeholder="What would you like clarified?" maxlength="2000"></textarea><div class="composer-bottom"><span>ENTER TO SEND · SHIFT + ENTER FOR LINE</span><div class="composer-controls"><button class="stop-button" type="button" id="stop-chat" hidden>Stop</button><button class="send-button" id="send-chat" type="submit" aria-label="Send message">↑</button></div></div></div><div class="tutor-footnote">Answers can be incorrect. Verify important details.</div></form>
     </aside>
   </div>
+  <button id="selection-ask" class="selection-ask" type="button" aria-label="Ask Mentora about selected text" hidden><span aria-hidden="true">✧</span> Ask Mentora <span aria-hidden="true">↗</span></button>
   <div class="search-modal" id="search-modal" hidden role="dialog" aria-modal="true" aria-label="Search curriculum"><div class="search-dialog"><div class="search-box"><span>⌕</span><input id="search-input" placeholder="Search 234 lessons, topics, concepts..." aria-label="Search query" autocomplete="off"/><button class="search-dismiss" type="button">ESC</button></div><div class="search-results" id="search-results"></div><div class="search-footer">SEARCH ALL COURSES <span>↵ TO OPEN · ESC TO CLOSE</span></div></div></div>
   <script src="/app.js" is:inline defer></script>
 </body>

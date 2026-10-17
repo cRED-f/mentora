@@ -100,12 +100,10 @@ test('all linked user supplied RAG resources appear on their relevant lessons',(
   assert.equal(foundationsGuideFor('rag',13).resources.length,2);
 });
 
-test('RAG Tutor grounds its teach and mock protocol in the newly authored first principles',()=>{
-  const input={course:'rag',lesson:'35',message:'Explain RAG tenant permissions from basics',history:[]};
-  const teach=composeMessages(input)[0].content;
-  assert.match(teach,/BEGINNER EXPLANATION:/);assert.match(teach,/KEY TERMS:/);
-  assert.match(teach,/A five applied interviewer questions/);
-  assert.match(teach,/INTERACTIVE LOOP/);assert.match(teach,/permitted documents/);
-  const mock=composeMessages({...input,mode:'mock'})[0].content;
-  assert.match(mock,/MOCK INTERVIEW MODE/);
+test('RAG AI assistant includes the active lesson rather than a mock interview protocol',()=>{
+  const text=composeMessages({course:'rag',lesson:'35',message:'Explain RAG tenant permissions',history:[]})[0].content;
+  assert.match(text,/permitted documents/i);
+  assert.match(text,/CURRENT PAGE:/);
+  assert.match(text,/Mentora AI/);
+  assert.doesNotMatch(text,/MOCK INTERVIEW MODE/);
 });

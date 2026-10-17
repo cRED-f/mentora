@@ -98,15 +98,15 @@ test('monochrome, interactive Foundation guides integrate into native lesson nav
   assert.match(overview, /\[9, 'Hosting and licensing choices'\]/);
 });
 
-test('Mentora Tutor can retrieve beginner material as well as technical A–F sections', async () => {
+test('Page-aware Mentora AI includes first-principles lesson text and technical A–F context', async () => {
   const { composeMessages } = await import('../src/lib/chat.js');
-  const result = composeMessages({ course: 'llm-foundations', lesson: '3', message: 'explain training and inference simply', history: [] });
-  const prompt = result[0].content;
-  assert.match(prompt, /BEGINNER EXPLANATION:/);
-  assert.match(prompt, /KEY TERMS:/);
-  assert.match(prompt, /EXAMPLE:/);
-  assert.match(prompt, /INTERVIEW ANSWER:/);
-  assert.match(prompt, /simple words, examples, and intuition/);
+  const messages = composeMessages({ course: 'llm-foundations', lesson: '3', message: 'explain training and inference simply', history: [] });
+  const prompt = messages[0].content;
+  assert.match(prompt, /CURRENT PAGE:/);
+  assert.match(prompt, /How LLMs learn patterns and generate language/);
+  assert.match(prompt, /not an interviewer/);
+  assert.match(prompt, /A\. /);
+  assert.match(prompt, /B\. /);
 });
 
 test('lesson 10 renders model routing inside the capstone instead of a blank lab', () => {
@@ -149,17 +149,15 @@ test('ten original lessons are replaced by genuine six-part advanced engineering
   }
 });
 
-test('Mentora Tutor enforces the teach/mock interaction contract', async () => {
+test('Mentora AI is a single chatbot with page context and no fixed tutoring modes', async () => {
   const { composeMessages } = await import('../src/lib/chat.js');
-  const base = {course:'llm-foundations',lesson:'6',message:'Start',history:[]};
-  const teach = composeMessages({...base,mode:'teach'})[0].content;
-  const mock = composeMessages({...base,mode:'mock'})[0].content;
-  assert.match(teach,/A through F IN ORDER/);
-  assert.match(teach,/EXACTLY ONE hard technical interview question/);
-  assert.match(mock,/Give NO model answers/);
-  assert.match(mock,/ACTIVE MODE: MOCK INTERVIEW MODE/);
-  const page=read('../src/layouts/AppLayout.astro');
-  assert.match(page,/data-tutor-mode="teach"/);
-  assert.match(page,/data-tutor-mode="mock"/);
-  assert.match(read('../public/app.js'),/mode:tutorMode/);
+  const context = composeMessages({course:'llm-foundations',lesson:'6',message:'Help me understand attention',pageText:'Attention uses query and key vectors.'})[0].content;
+  assert.match(context,/Attention uses query and key vectors/);
+  assert.match(context,/You are Mentora AI/);
+  assert.match(context,/do not force an A–F format/);
+  assert.doesNotMatch(context,/MOCK INTERVIEW MODE/);
+  const layout=read('../src/layouts/AppLayout.astro');
+  assert.match(layout,/id="tutor-settings-toggle"/);
+  assert.doesNotMatch(layout,/data-tutor-mode/);
+  assert.match(read('../public/app.js'),/pageText:/);
 });
