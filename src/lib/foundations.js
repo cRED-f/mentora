@@ -12,6 +12,7 @@ import { getTokenizationGuide } from '../data/tokenization-path.js';
 import { getTransformerGuide } from '../data/transformer-path.js';
 import { getGenerationGuide } from '../data/generation-path.js';
 import { getTrainingGuide } from '../data/training-path.js';
+import { getAdvancedGuide } from '../data/advanced-path.js';
 
 const GUIDES = {
   'llm-foundations': getFoundationGuide,
@@ -19,6 +20,7 @@ const GUIDES = {
   'transformer-architecture': getTransformerGuide,
   'decoding-context': getGenerationGuide,
   'training-alignment': getTrainingGuide,
+  'advanced-transformers': getAdvancedGuide,
 };
 
 /** Returns the foundations guide for a lesson, or undefined if the course has none. */
