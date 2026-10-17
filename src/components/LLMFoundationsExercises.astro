@@ -1,0 +1,95 @@
+---
+// These exercises replace the self-contained Module 01 workbook, using Mentora's
+// existing lesson routes, navigation, completion state, and interview tutor.
+const { lessonId, mode = 'lab' } = Astro.props;
+const id = Number(lessonId);
+const hasLab = [1, 4, 5, 6, 7, 8, 10].includes(id);
+---
+{hasLab && mode === 'lab' && (
+  <section class="mentora-lab" aria-label="Interactive learning exercise" data-foundations-exercise={id}>
+    <div class="mentora-lab-heading">
+      <span class="section-kicker">MENTORA INTERACTIVE LAB · {String(id).padStart(2, '0')}</span>
+      {id === 1 && <><h2>What is learned vs. what is engineered?</h2><p>Trace the boundary from broad training data to an evaluated application. Select a stage to inspect its responsibility.</p></>}
+      {id === 4 && <><h2>Next token, one step at a time</h2><p>Change a toy distribution with temperature, then choose a greedy or sampled continuation. These probabilities are illustrative, not actual LLM outputs.</p></>}
+      {id === 5 && <><h2>Autoregressive vs. masked modeling</h2><p>Compare the context visible to the model at one prediction slot.</p></>}
+      {id === 6 && <><h2>Three Transformer families</h2><p>Select an architecture to see its attention directions and input/output contract.</p></>}
+      {id === 7 && <><h2>Serial recurrence vs. parallel prefill</h2><p>Compare sequence dependencies during training. Causal attention does not require serial computation across input positions during prefill.</p></>}
+      {id === 8 && <><h2>What happens after pressing Enter?</h2><p>Follow a generic chat system's request-to-response pipeline. This does not describe verified private ChatGPT internals.</p></>}
+      {id === 10 && mode === 'capstone' && <><h2>Choose a model by task constraints</h2><p>Explore an explicit teaching rule for engineering decisions, not benchmark results or universal model recommendations.</p></>}
+    </div>
+    {id === 1 && <>
+      <div class="mentora-lab-flow" data-flow-steps>
+        {['Broad data', 'Pretraining', 'Model weights', 'Adapt + context', 'App + evaluation'].map((label, index) => (
+          <button type="button" data-flow-step={index} class:list={['mentora-lab-choice', index === 0 && 'selected']} aria-pressed={index === 0}>{label}</button>
+        ))}
+      </div>
+      <div class="mentora-lab-explanation" data-flow-description aria-live="polite"><strong>Data selection</strong><p>Broad data determines coverage, gaps, contamination, licensing constraints, and bias before optimization starts.</p></div>
+    </>}
+    {id === 4 && <>
+      <div class="mentora-lab-tokens" data-generated aria-live="polite">The engineer deployed</div>
+      <div class="mentora-lab-controls">
+        <label for="mentora-temperature">Temperature <output for="mentora-temperature" data-temp-label>1.0</output></label>
+        <input id="mentora-temperature" data-temperature type="range" min="0.2" max="2" value="1" step="0.1" />
+      </div>
+      <div data-probabilities class="mentora-lab-probabilities" aria-label="Illustrative token probabilities"></div>
+      <div class="mentora-lab-actions"><button type="button" data-greedy>Append greedy token</button><button type="button" data-sample class="primary">Sample token</button><button type="button" data-reset>Reset</button></div>
+      <p class="mentora-lab-note" data-generation-note>Teaching example. Temperature changes sampling concentration, not factual accuracy.</p>
+    </>}
+    {id === 5 && <>
+      <div class="mentora-lab-actions"><button type="button" data-objective="ar" class="selected">Autoregressive</button><button type="button" data-objective="mlm">Masked language model</button></div>
+      <div data-context-tokens class="mentora-lab-tokens"></div>
+      <div data-context-description class="mentora-lab-explanation" aria-live="polite"></div>
+    </>}
+    {id === 6 && <>
+      <div class="mentora-arch-grid">
+        {['Encoder-only', 'Decoder-only', 'Encoder-decoder'].map((name, index) => (
+          <button type="button" class:list={['mentora-arch-choice', index === 0 && 'selected']} data-architecture={index} aria-pressed={index === 0}>
+            <span class="mentora-arch-mini">{index === 0 ? '↔' : index === 1 ? '→' : '↔ / →'}</span>
+            <strong>{name}</strong>
+            <small>{index === 0 ? 'Bidirectional source' : index === 1 ? 'Causal prefix' : 'Source → target'}</small>
+          </button>
+        ))}
+      </div>
+      <div data-architecture-description class="mentora-lab-explanation" aria-live="polite"></div>
+    </>}
+    {id === 7 && <div class="mentora-recurrence">
+      <div><h3>RNN · serial hidden-state chain</h3><div class="mentora-recurrence-nodes"><span>h₁</span><span>→</span><span>h₂</span><span>→</span><span>h₃</span><span>→</span><span>h₄</span></div><p>Each hₜ depends on hₜ₋₁, creating a serial dependency between positions.</p></div>
+      <div><h3>Transformer · parallel prefill</h3><div class="mentora-recurrence-nodes"><span>x₁</span><span>x₂</span><span>x₃</span><span>x₄</span></div><p>Causal masking blocks future attention while training-position matrix operations run in parallel.</p></div>
+    </div>}
+    {id === 8 && <>
+      <div data-pipeline class="mentora-lab-pipeline" aria-label="Request pipeline stages"></div>
+      <div data-pipeline-description class="mentora-lab-explanation" aria-live="polite"></div>
+      <div class="mentora-lab-actions"><button type="button" data-stage-previous>← Previous</button><button type="button" data-stage-next class="primary">Next stage →</button><button type="button" data-stage-play aria-pressed="false">▶ Auto-play</button></div>
+    </>}
+    {id === 10 && mode === 'capstone' && <>
+      <div class="mentora-router-fields">
+        <label>Task type<select data-task-type><option value="classification">Classification / tagging</option><option value="generation">Open-ended grounded writing</option><option value="reasoning">Multi-step reasoning / planning</option></select></label>
+        <label>Max tolerated latency <output data-latency-label>3 / 5</output><input type="range" min="1" max="5" value="3" data-latency /></label>
+        <label>Privacy / local requirement <output data-privacy-label>None</output><input type="range" min="0" max="2" value="0" data-privacy /></label>
+        <label>Cost pressure <output data-budget-label>3 / 5</output><input type="range" min="1" max="5" value="3" data-budget /></label>
+      </div>
+      <div class="mentora-lab-explanation" aria-live="polite"><span class="section-kicker">ILLUSTRATIVE FIRST CHOICE</span><h3 data-router-choice></h3><p data-router-why></p></div>
+    </>}
+  </section>
+)}
+{id === 10 && mode === 'capstone' && <>
+  <section class="mentora-capstone" aria-labelledby="foundation-capstone-title">
+    <span class="section-kicker">MENTORA CAPSTONE · SENIOR INTERVIEWER · 12–15 MINUTES</span>
+    <h2 id="foundation-capstone-title">Design under pressure.</h2>
+    <p>You are building an enterprise document platform with three tasks: <strong>(a)</strong> classify incoming documents into 12 labels, <strong>(b)</strong> summarize 50-page reports with citations, and <strong>(c)</strong> answer complex multi-document questions. Traffic is bursty, data cannot leave the company's approved infrastructure, and leadership demands low p95 latency.</p>
+    <p><strong>Question:</strong> Would you use one decoder-only LLM, multiple specialized models, or an encoder-decoder hybrid? Walk through the architecture, training objective alignment, inference data flow, caching, capacity bottlenecks, quality measurements, and what fails first under load. State assumptions explicitly and defend trade-offs.</p>
+    <label for="mentora-capstone-answer">Your proposed architecture</label>
+    <textarea id="mentora-capstone-answer" data-capstone-answer rows="7" maxlength="1400" placeholder="Outline your interview answer. Your draft stays in this browser until you choose to send it to the tutor."></textarea>
+    <div class="mentora-lab-actions"><button type="button" data-capstone-review class="primary">Review with Mentora tutor ↗</button><button type="button" data-capstone-clear>Clear draft</button></div>
+    <p class="mentora-lab-note" data-capstone-status role="status">Review criteria: correctness, depth, completeness, clarity, and engineering judgment. No solution key is shown.</p>
+  </section>
+  <section class="mentora-sources"><h2>References &amp; scope</h2><p>The ten topics follow the <em>AI Engineering Interview Questions and Answers</em> LLM Fundamentals question bank. The explanations, labs, diagrams, and scenarios are teaching material, not quoted source answers.</p><ul>
+    <li><a href="https://crfm.stanford.edu/report.html" target="_blank" rel="noopener noreferrer">Stanford CRFM — On the Opportunities and Risks of Foundation Models</a></li>
+    <li><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener noreferrer">Vaswani et al. — Attention Is All You Need</a></li>
+    <li><a href="https://arxiv.org/abs/1810.04805" target="_blank" rel="noopener noreferrer">Devlin et al. — BERT</a></li>
+    <li><a href="https://arxiv.org/abs/1910.10683" target="_blank" rel="noopener noreferrer">Raffel et al. — T5</a></li>
+    <li><a href="https://mlanthology.org/tmlr/2025/ke2025tmlr-survey/" target="_blank" rel="noopener noreferrer">Ke et al. — A Survey of Frontiers in LLM Reasoning</a></li>
+    <li><a href="https://outcomeschool.com/blog/decoding-transformer-architecture" target="_blank" rel="noopener noreferrer">Outcome School — Decoding Transformer Architecture</a></li>
+    <li><a href="https://outcomeschool.substack.com/p/inside-chatgpt-what-happens-after" target="_blank" rel="noopener noreferrer">Outcome School — Inside ChatGPT: What Happens After You Hit Enter?</a></li>
+  </ul><p>Pipeline visuals are generic architecture illustrations, not claims about proprietary internals. Toy distributions are not measured model performance.</p></section>
+</>}

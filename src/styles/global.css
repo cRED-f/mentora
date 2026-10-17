@@ -18,3 +18,90 @@ html,body{background:var(--bg,#000);color:var(--white,#fff);height:100%}html{scr
 /* Keep all three application rails inside the viewport even when lesson content is tall. */
 .app-shell{grid-template-rows:minmax(0,1fr)}
 .left-sidebar,.main-panel,.tutor-panel{min-height:0}
+
+/* Hierarchical curriculum navigation. The course list is the single source of
+   truth for nested lessons; no hardcoded links or duplicate content. */
+.course-group{min-width:0}
+.course-toggle{cursor:pointer;list-style:none;align-items:center;user-select:none}
+.course-toggle::-webkit-details-marker{display:none}
+.course-toggle::marker{content:''}
+.course-toggle:focus-visible{outline:2px solid #c7c7c7;outline-offset:2px}
+.course-group[open]>.course-toggle{color:#eaeaea}
+.course-chevron{width:14px;height:14px;flex:none;color:#666;transition:transform .18s ease,color .18s ease}
+.course-group[open]>.course-toggle .course-chevron{transform:rotate(180deg);color:#ddd}
+.course-group[open]>.course-toggle .course-count{color:#aaa}
+.course-sublist{margin:0 0 9px 22px;padding:3px 0 3px 9px;border-left:1px solid #252525;display:grid;gap:1px}
+.course-overview-link{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;margin-bottom:2px;border-radius:4px;color:#777;font-size:10px;letter-spacing:.01em}
+.course-overview-link:hover,.course-overview-link.active{color:#f0f0f0;background:#151515}
+.course-overview-link span{color:#777}
+.lesson-link{display:flex;align-items:baseline;gap:8px;min-width:0;padding:8px 8px 8px 9px;border:1px solid transparent;border-radius:5px;color:#888;font-size:11px;line-height:1.4;transition:background .18s ease,color .18s ease}
+.lesson-link:hover{color:#f2f2f2;background:#111}
+.lesson-link.active{color:#fff;background:#1a1a1a;border-color:#313131}
+.lesson-nav-num{flex:none;min-width:18px;font-size:9px;font-variant-numeric:tabular-nums;color:#666}
+.lesson-link.active .lesson-nav-num{color:#ddd}
+.lesson-nav-title{flex:1;min-width:0;overflow-wrap:anywhere}
+.lesson-completion-indicator{flex:none;align-self:center;color:#474747;font-size:12px;line-height:1}
+.lesson-link.is-done .lesson-completion-indicator{color:#bdbdbd}
+@media(prefers-reduced-motion:reduce){.course-chevron,.lesson-link{transition:none}}
+
+/* LLM Foundations exercises, adapted from the source course into native Mentora lessons. */
+.mentora-lab,.mentora-capstone,.mentora-sources{margin:36px 0 55px;padding:clamp(19px,3.2vw,31px);background:#0b0b0b;border:1px solid #303030;border-radius:9px;min-width:0}
+.mentora-lab-heading{margin-bottom:25px}
+.mentora-lab-heading h2,.mentora-capstone h2{font-size:clamp(24px,3vw,33px);font-weight:540;letter-spacing:-.055em;line-height:1.2;margin:10px 0 9px}
+.mentora-lab-heading p,.mentora-capstone p,.mentora-sources p{max-width:760px;color:#a2a2a2;line-height:1.75;font-size:12px;margin:9px 0}
+.mentora-lab-flow{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:21px}
+.mentora-lab-choice,.mentora-lab-actions button,.mentora-lab-pipeline button,.mentora-arch-choice{background:#141414;border:1px solid #353535;color:#a7a7a7;border-radius:6px;padding:10px 13px;font-size:11px;line-height:1.5;text-align:left;transition:background .16s ease,border-color .16s ease,color .16s ease}
+.mentora-lab-choice::after{content:'→';margin-left:9px;color:#777}.mentora-lab-choice:last-child::after{content:'';margin:0}
+.mentora-lab-choice:hover,.mentora-lab-actions button:hover,.mentora-lab-pipeline button:hover,.mentora-arch-choice:hover{background:#242424;border-color:#656565;color:#fff}
+.mentora-lab-choice.selected,.mentora-lab-actions button.selected,.mentora-lab-pipeline button.selected,.mentora-arch-choice.selected{background:#252525;border-color:#c0c0c0;color:#fff}
+.mentora-lab-explanation{background:#121212;border:1px solid #303030;border-left:2px solid #b7b7b7;border-radius:5px;padding:18px 20px;font-size:12px;line-height:1.75;color:#acacac}
+.mentora-lab-explanation strong{color:#fff;font-size:13px;font-weight:620}.mentora-lab-explanation p{margin:7px 0 0;max-width:740px}
+.mentora-lab-controls{margin:20px 0}.mentora-lab-controls label{display:flex;justify-content:space-between;color:#bcbcbc;font-size:12px;margin-bottom:10px}
+.mentora-lab input[type="range"],.mentora-router-fields input[type="range"]{width:100%;accent-color:#ccc;cursor:pointer}
+.mentora-lab-tokens{display:flex;align-items:center;flex-wrap:wrap;gap:6px;min-height:56px;padding:15px;border:1px solid #2f2f2f;border-radius:6px;background:#151515;color:#e8e8e8;margin:16px 0 19px;font-size:13px}
+.mentora-token{display:inline-flex;align-items:center;padding:5px 9px;background:#242424;border:1px solid #505050;border-radius:4px;font-size:12px}
+.mentora-token.generated{color:#fff;background:#343434}.mentora-token.masked{background:#777;color:#0b0b0b;font-weight:720}.mentora-token.muted{opacity:.35}
+.mentora-lab-probabilities{display:grid;gap:13px;margin:18px 0 23px}
+.mentora-prob-row{display:grid;grid-template-columns:minmax(110px,180px) 1fr 47px;align-items:center;gap:13px;font-size:11px;color:#bdbdbd}
+.mentora-prob-row b{font-weight:560;color:#eee;font-variant-numeric:tabular-nums;text-align:right}
+.mentora-prob-rail{height:9px;border-radius:3px;background:#292929;overflow:hidden}.mentora-prob-fill{background:linear-gradient(90deg,#666,#dedede);height:100%;border-radius:3px;transition:width .18s ease}
+.mentora-lab-actions{display:flex;flex-wrap:wrap;gap:9px;margin:20px 0 6px}.mentora-lab-actions button{padding:10px 15px;text-align:center}
+.mentora-lab-actions button.primary{background:#ddd;border-color:#ddd;color:#111;font-weight:650}.mentora-lab-actions button.primary:hover{background:#fff;border-color:#fff}
+.mentora-lab-note{font-size:11px!important;color:#8c8c8c!important;line-height:1.6!important;margin-top:14px!important}
+.mentora-arch-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin-bottom:17px}
+.mentora-arch-choice{display:flex;flex-direction:column;align-items:start;gap:9px;padding:19px;min-height:165px}
+.mentora-arch-mini{font-size:29px;color:#c8c8c8;font-weight:400;line-height:1.3}.mentora-arch-choice strong{color:#eee;font-size:13px;font-weight:600}.mentora-arch-choice small{color:#929292;font-size:10px}
+.mentora-recurrence{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.mentora-recurrence>div{min-width:0;background:#141414;border:1px solid #323232;padding:18px;border-radius:6px}
+.mentora-recurrence h3{font-size:12px;font-weight:640;color:#ededed}.mentora-recurrence-nodes{display:flex;align-items:center;justify-content:space-between;gap:5px;margin:20px 0}
+.mentora-recurrence-nodes span{padding:7px 8px;color:#dedede;font-size:12px;border:1px solid #484848;border-radius:4px}.mentora-recurrence-nodes span:nth-child(even){border:0;color:#888}
+.mentora-recurrence p{color:#999;font-size:11px;line-height:1.7}
+.mentora-lab-pipeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:7px;margin:16px 0 17px}.mentora-lab-pipeline button{min-height:52px}
+.mentora-router-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin:0 0 26px}
+.mentora-router-fields label{display:flex;flex-direction:column;gap:11px;font-size:11px;font-weight:600;color:#bcbcbc}
+.mentora-router-fields label output{font-weight:400;color:#eee}
+.mentora-router-fields select{min-width:0;width:100%;padding:10px 13px;font-size:12px;color:#eee;background:#191919;border:1px solid #484848;border-radius:5px}
+.mentora-router-fields input{min-width:0}
+.mentora-lab-explanation h3{font-weight:570;font-size:20px;color:#fff;margin:12px 0 6px}
+.mentora-capstone{background:linear-gradient(135deg,#191919,#090909);border-color:#494949}
+.mentora-capstone strong{color:#ededed}.mentora-capstone label{display:block;font-size:11px;color:#bbb;letter-spacing:.03em;margin:20px 0 10px}
+.mentora-capstone textarea{width:100%;min-height:170px;border:1px solid #484848;border-radius:5px;padding:15px;background:#090909;color:#fff;font-size:13px;line-height:1.7;resize:vertical}
+.mentora-capstone textarea:focus-visible,.mentora-lab button:focus-visible,.mentora-capstone button:focus-visible,.mentora-router-fields select:focus-visible{outline:2px solid #ddd;outline-offset:3px}
+.mentora-sources h2{font-size:19px;letter-spacing:-.025em;font-weight:570;margin-bottom:15px}
+.mentora-sources ul{padding:0 0 0 20px;margin:15px 0}.mentora-sources li{color:#999;font-size:11px;margin:8px 0}.mentora-sources li a{text-decoration:underline;text-decoration-color:#555;text-underline-offset:3px}.mentora-sources li a:hover{color:#fff}
+.foundation-lab-index{margin:40px 0 80px}.foundation-lab-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.foundation-lab-links>a{border:1px solid #292929;background:#0b0b0b;border-radius:7px;padding:18px 22px;display:grid;grid-template-columns:1fr auto;gap:6px;transition:border-color .15s ease,background .15s ease}
+.foundation-lab-links>a:hover{background:#171717;border-color:#727272}.foundation-lab-links>a span{font-size:9px;letter-spacing:.12em;color:#888;grid-column:1/-1}.foundation-lab-links>a strong{font-size:13px;font-weight:570;line-height:1.4}.foundation-lab-links>a b{color:#888;font-size:15px;font-weight:400}
+@media(max-width:760px){.mentora-arch-grid{grid-template-columns:1fr}.mentora-arch-choice{min-height:0}.mentora-recurrence,.mentora-router-fields,.foundation-lab-links{grid-template-columns:1fr}}
+@media(max-width:480px){.mentora-lab,.mentora-capstone,.mentora-sources{padding:17px}.mentora-prob-row{grid-template-columns:minmax(96px,1fr) minmax(55px,1fr) 42px;gap:8px;font-size:10px}.mentora-lab-flow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.mentora-lab-choice{padding:9px}}
+@media(prefers-reduced-motion:reduce){.mentora-prob-fill,.mentora-arch-choice,.mentora-lab-choice,.mentora-lab-actions button,.foundation-lab-links>a{transition:none}}
+
+/* Capstone: a course-level challenge block, deliberately not an A-F lesson.
+   There is no model answer to show, so it never becomes section C. */
+.capstone-block{margin:52px 0 0;padding:26px;border:1px solid #2b2b2b;border-radius:8px;background:radial-gradient(circle at 86% 10%,#161616,#0a0a0a 59%)}
+.capstone-body{font-size:13.5px;line-height:1.85;color:#c9c9c9;max-width:74ch}
+.capstone-body p{margin:0 0 15px}
+.capstone-body p:last-child{margin-bottom:0}
+.capstone-body strong,.capstone-body b{color:#f2f2f2;font-weight:570}
+.capstone-rubric{margin:20px 0 0;padding-top:16px;border-top:1px solid #222;color:#7d7d7d;font-size:11.5px;line-height:1.75;letter-spacing:.01em}
+@media(max-width:760px){.capstone-block{padding:20px;margin-top:40px}}

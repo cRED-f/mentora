@@ -1,21 +1,21 @@
 # Mentora — Interactive AI Engineering Academy
 
-An Astro.js learning platform with an animated Mentora homepage, 11 deep-dive AI engineering courses, original interactive laboratories, and a lesson-aware AI interview tutor through 9router.
+An Astro.js learning platform with an animated Mentora homepage, 11 deep-dive AI engineering courses, Mentora-native LLM Foundations labs, and a lesson-aware AI interview tutor through 9router.
 
-**What you get:** An animated Mentora homepage, 11 complete courses, 234 technical lessons (1,404 A–F segments), lesson-title search, saved lesson completion, native lesson routes, original animated course workbooks, and a fixed desktop / slide-out mobile AI tutor backed by a private 9router proxy.
+**What you get:** An animated Mentora homepage, 11 complete courses, 234 technical lessons (1,404 A–F segments), lesson-title search, saved lesson completion, native lesson routes, interactive LLM Foundations exercises and capstone, and a fixed desktop / slide-out mobile AI tutor backed by a private 9router proxy.
 
 ## Screens and features
 
 - `/` — new **Mentora** branded animated homepage: animated learning map, hero, featured learning tracks, learning method, tutor demo, mobile navigation and reduced-motion support.
 - `/academy/` — complete learning dashboard containing all 11 courses and progress tracking.
-- `/course/<slug>/` — a course outline, lesson status, and the original interactive workbook.
+- `/course/<slug>/` — a native Mentora course outline and lesson progress, with lab links where available.
 - `/learn/<slug>/<number>/` — full A–F technical explanation, interview questions, deep explanations, spoken interview answer, follow-up drills, production case, takeaways.
 - `Cmd/Ctrl + K` — search all lesson titles.
 - Right rail — lesson-aware AI interview tutor, SSE streaming, stop generation, and quick study prompts.
 - Browser storage — local completion progress only. Conversations are held in the current page session, not written to disk.
 - `/api/chat/` — server-only OpenAI-compatible 9router proxy with a message limit, bounded chat history, lexical course retrieval, HTTP origin allowlist, request timeout, and a basic in-memory rate limit.
 
-The **original 11 single-file courses** are preserved in `public/modules/`. Their own animations, graphs, and interactive laboratories remain available by clicking **Open original interactive labs** or **Interactive course**.
+The former standalone workbooks in `public/modules/` have been removed. Their 234 A–F lessons are served directly from Mentora routes. For **LLM Foundations**, the source workbook’s six learning exercises (foundation pipeline, sampling, objectives, Transformer architecture, serving lifecycle, and model routing) and its capstone are implemented as native Mentora UI within the corresponding lessons. The RNN comparison appears in lesson 7. Interactive workbooks for other courses are **not** migrated; those courses retain their A–F instructional content. No links point to deleted workbooks.
 
 ## Requirements
 
@@ -25,7 +25,7 @@ The **original 11 single-file courses** are preserved in `public/modules/`. Thei
 
 ## Install and run
 
-**Dependency compatibility:** The project pins Astro `6.4.8` and `@astrojs/node` `10.1.4` to compatible majors. The earlier package paired Astro 6 with the Astro 7 adapter, which caused `ERESOLVE` during `npm install`. Use Node.js 22.12+ and reinstall without `--force` or `--legacy-peer-deps`.
+**Dependency compatibility:** The project specifies Astro `7.4.0` and `@astrojs/node` `11.1.8` in `package.json`. If dependency resolution fails, verify the installed versions and regenerate the lockfile on a connected machine. Use Node.js 22.12+ and reinstall without `--force` or `--legacy-peer-deps`.
 
 On Windows PowerShell, create the `.env` with `Copy-Item .env.example .env` instead of `cp` if preferred.
 
@@ -100,8 +100,9 @@ This is a usable **self-hosted starter application**, not a fully hardened multi
 
 ```text
 src/
-  data/courses.json                # 234 full lessons sourced from 11 HTML workbooks
-  layouts/AppLayout.astro          # Left navigation, main content, right tutor
+  data/courses.json                # 234 full lessons, now served directly in Mentora
+  layouts/AppLayout.astro          # Expandable navigation, main content, right tutor
+  components/LLMFoundationsExercises.astro # Native labs and capstone
   pages/index.astro               # Animated public Mentora homepage
   pages/academy/index.astro       # Complete 11-course curriculum dashboard
   pages/course/[slug].astro       # Course landing page
@@ -114,8 +115,8 @@ src/
   styles/landing.css             # Branded, responsive homepage animations
 public/
   app.js                          # Client-side search, progress, tutor UI
+  llm-foundations-labs.js        # Interactive foundation exercises
   search-index.json               # Lightweight searchable titles
-  modules/*.html                  # Original offline interactive courses
 scripts/check-content.mjs        # Checks course and section integrity
 tests/chat.test.mjs              # Server proxy, provenance, history & failure tests
 ```
@@ -124,15 +125,15 @@ tests/chat.test.mjs              # Server proxy, provenance, history & failure t
 
 The attached Vesper.ai reference established the dark, minimal, liquid-metal visual direction. This is a learning platform rather than a single-screen hero reproduction, so the content area scrolls and the AI sidebar remains visible on desktop. On mobile, the AI tutor and curriculum navigation become separate drawers.
 
-**Content provenance:** lesson copy is extracted from the 11 user-provided HTML courses, not newly generated placeholders. All 234 lessons have the original A–F sections. The original HTML source files are retained unmodified.
+**Content provenance:** lesson copy is extracted from the 11 user-provided HTML courses, not newly generated placeholders. All 234 lessons retain their A–F sections. The standalone HTML source files are no longer shipped.
 
 **Why not a vector DB for tutor context?** The starting corpus is small and already organized by course and lesson. The server includes the active lesson plus a bounded lexical search across nearby material. A vector or hybrid index can be added later for cross-course retrieval quality, but is unnecessary just to ship a functioning website.
 
 ## Validation performed while creating this package
 
-- All 11 source HTML course files were found and copied.
-- All 234 lesson pages contain 6 non-empty A–F lesson segments (1,404 total).
-- The 9router proxy passed 11 unit tests with an injected mock streaming endpoint, including error handling and API-key protection.
+- The 11 standalone HTML files were removed after their A–F lesson content was retained in `courses.json`.
+- All 234 lesson pages contain 6 non-empty A–F lesson segments (1,404 total), including all 60 original LLM Foundations segments.
+- All 26 automated checks pass, covering the 9router proxy, homepage, sidebar and native LLM Foundations migration.
 
 **Environment limitation:** package installation and a full `astro build` could not be run in the authoring environment because the npm registry was not reachable. Run `npm install` and `npm run build` in your connected development environment to complete that verification. A live 9router instance was not provided, so real model responses could not be tested.
 
@@ -144,8 +145,8 @@ Navigation is updated so `/` is the public welcome page and `/academy/` is the l
 
 ## Verification status
 
-- **Passed:** 11 existing backend/API tests, 4 new homepage/source tests, all 234 lesson data checks, JavaScript syntax check.
+- **Passed:** 26 automated tests, all 234 lesson data checks, JavaScript syntax checks, and comparison of all 60 LLM Foundations A–F sections against their source workbook.
 - **Passed:** Chromium DOM/render checks against a static rendering of the homepage at 1440px and 390px, including mobile menu interaction and no horizontal overflow. This is **not** a complete Astro server build.
-- **Not verified here:** `npm install`, `astro build`, and the real 9router endpoint. The npm registry could not be reached from the build environment (`EAI_AGAIN`). Version pins stay at Astro 6.4.8 + `@astrojs/node` 10.1.4, an Astro 6 adapter.
+- **Not verified here:** `astro build` (Astro dependencies are incomplete in this environment) and live 9router responses. See `package.json` for current Astro and adapter versions.
 
 To validate on your machine, install dependencies, then run `npm run build` and `npm run dev` as above.

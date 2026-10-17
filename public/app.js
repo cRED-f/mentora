@@ -34,6 +34,37 @@
     });
   }
   updateProgress();
+
+  // Preserve manually expanded courses between full-page lesson navigations.
+  // The course containing the active lesson always opens on arrival.
+  const courseGroups = $$('.course-group', left);
+  if (courseGroups.length) {
+    const storageKey = 'mentora-sidebar-expanded-v1';
+    try {
+      const expanded = JSON.parse(sessionStorage.getItem(storageKey) || 'null');
+      if (Array.isArray(expanded)) {
+        for (const group of courseGroups) {
+          group.open = group.dataset.courseSlug === currentCourse || expanded.includes(group.dataset.courseSlug);
+        }
+      }
+    } catch { /* Keep the server-rendered default if storage is unavailable. */ }
+    for (const group of courseGroups) {
+      group.addEventListener('toggle', () => {
+        try {
+          sessionStorage.setItem(storageKey, JSON.stringify(courseGroups.filter(item => item.open).map(item => item.dataset.courseSlug)));
+        } catch { /* Navigation remains usable without storage. */ }
+      });
+    }
+    // A long curriculum may place the current lesson below the sidebar viewport.
+    const activeLessonLink = $('.lesson-link.active', left);
+    if (activeLessonLink && left) {
+      const sidebarBounds = left.getBoundingClientRect();
+      const linkBounds = activeLessonLink.getBoundingClientRect();
+      if (linkBounds.bottom > sidebarBounds.bottom - 22) left.scrollTop += linkBounds.bottom - sidebarBounds.bottom + 34;
+      else if (linkBounds.top < sidebarBounds.top + 22) left.scrollTop -= sidebarBounds.top + 34 - linkBounds.top;
+    }
+  }
+
   $$('.mark-complete').forEach(button => button.addEventListener('click', () => {
     const progress = readProgress();
     const key = button.dataset.progressKey;
@@ -62,6 +93,10 @@
   $$('.suggestions [data-suggestion]').forEach(button => button.addEventListener('click', () => askSuggested(button.dataset.suggestion)));
   $('.ask-lesson')?.addEventListener('click', () => askSuggested('Explain this lesson from first principles, derive the most important equations, and give me a production example.'));
   $('.lesson-test')?.addEventListener('click', () => askSuggested('Conduct a difficult senior AI engineering mock interview about this lesson. Start with one question and wait for my answer.'));
+  window.addEventListener('mentora:ask-tutor', (event) => {
+    const prompt = event.detail?.prompt;
+    if (typeof prompt === 'string') askSuggested(prompt.slice(0, 2000));
+  });
 
   function openSearch() { modal.hidden = false; searchInput.value = ''; renderSearch(''); requestAnimationFrame(() => searchInput.focus()); }
   function closeSearch() { modal.hidden = true; }

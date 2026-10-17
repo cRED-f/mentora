@@ -32,14 +32,44 @@ const current = courses.find(c => c.slug === activeCourse);
         <button type="button" class="primary-link search-open" aria-label="Search lessons"><span class="nav-symbol">⌕</span> Search library <kbd>⌘ K</kbd></button>
       </nav>
       <div class="nav-heading"><span>THE CURRICULUM</span><span>{courses.length} COURSES</span></div>
-      <nav class="course-list" aria-label="Course list">
-        {courses.map(course => <a href={`/course/${course.slug}/`} class:list={['course-link',activeCourse === course.slug && 'active']} aria-current={activeCourse === course.slug ? 'page' : undefined}>
-          <span class="course-num">{course.number}</span><span class="course-title">{course.title}</span><span class="course-count">{course.count}</span>
-        </a>)}
+      <nav class="course-list" aria-label="Course and lesson navigation">
+        {courses.map((course, index) => (
+          <details
+            class="course-group"
+            data-course-slug={course.slug}
+            open={activeCourse === course.slug || (!activeCourse && index === 0)}
+          >
+            <summary class:list={['course-link', 'course-toggle', activeCourse === course.slug && 'active']}>
+              <span class="course-num">{course.number}</span>
+              <span class="course-title">{course.title}</span>
+              <span class="course-count">{course.lessons.length}</span>
+              <svg class="course-chevron" aria-hidden="true" viewBox="0 0 16 16" fill="none"><path d="m5 6 3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <div class="course-sublist">
+              <a
+                href={`/course/${course.slug}/`}
+                class:list={['course-overview-link', activeCourse === course.slug && !activeLesson && 'active']}
+                aria-current={activeCourse === course.slug && !activeLesson ? 'page' : undefined}
+              >Course overview <span aria-hidden="true">↗</span></a>
+              {course.lessons.map(lesson => (
+                <a
+                  href={`/learn/${course.slug}/${lesson.id}/`}
+                  class:list={['lesson-link', activeCourse === course.slug && String(activeLesson) === String(lesson.id) && 'active']}
+                  aria-current={activeCourse === course.slug && String(activeLesson) === String(lesson.id) ? 'page' : undefined}
+                  data-progress-key={`${course.slug}:${lesson.id}`}
+                >
+                  <span class="lesson-nav-num">{String(lesson.id).padStart(2, '0')}</span>
+                  <span class="lesson-nav-title">{lesson.title}</span>
+                  <span class="lesson-completion-indicator" aria-label="Not completed">○</span>
+                </a>
+              ))}
+            </div>
+          </details>
+        ))}
       </nav>
       <div class="sidebar-bottom">
         <div class="sidebar-progress"><div class="sidebar-progress-top"><span>YOUR PROGRESS</span><span id="progress-count">0 / {totalLessons}</span></div><div class="track"><div id="global-progress" class="track-fill"></div></div><small>Progress saved locally on this device</small></div>
-        <a class="sidebar-archive" href={current?.original || '/modules/module_1_llm_fundamentals_interactive.html'} target="_blank" rel="noopener">↗ &nbsp; Open original interactive labs</a>
+        <a class="sidebar-archive" href={current ? `/course/${current.slug}/` : "/academy/"}>↗ &nbsp; Explore Mentora lessons</a>
       </div>
     </aside>
     <div class="main-panel">
