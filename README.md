@@ -1,8 +1,7 @@
 <h1 align="center">Mentora</h1>
 
-AI engineering learning platform with various lessons, interactive diagrams, hands-on labs, and AI chatbot.
-
-<img width="800" height="450" alt="mentora" src="https://github.com/user-attachments/assets/20a74553-2901-4a61-8dd1-49ef369c29dc" />
+<p align="center"><img  width="800" height="450" alt="mentora" src="https://github.com/user-attachments/assets/20a74553-2901-4a61-8dd1-49ef369c29dc" /></p>
+<p align="center">AI engineering learning platform with various lessons, interactive diagrams, hands-on labs, and AI chatbot.</p>
 
 ## Features
 
