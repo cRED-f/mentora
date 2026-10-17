@@ -1,8 +1,8 @@
 # Mentora — Interactive AI Engineering Academy
 
-An Astro.js learning platform with an animated Mentora homepage, 11 deep-dive AI engineering courses, Mentora-native LLM Foundations labs, and a lesson-aware AI interview tutor through 9router.
+An Astro.js learning platform with an animated Mentora homepage, 11 deep-dive AI engineering courses, native first-principles learning paths for LLM Foundations, Prompt Engineering, RAG and AI Agents, and a lesson-aware AI interview tutor through 9router.
 
-**What you get:** An animated Mentora homepage, 11 complete courses, 234 technical lessons (1,404 A–F segments), lesson-title search, saved lesson completion, native lesson routes, interactive LLM Foundations exercises and capstone, and a fixed desktop / slide-out mobile AI tutor backed by a private 9router proxy.
+**What you get:** An animated Mentora homepage, 11 complete courses, 234 technical lessons (1,404 A–F segments), lesson-title search, saved lesson completion, native lesson routes, animated topic-specific diagrams, RAG, prompt-engineering and agent labs, LLM Foundations exercises and capstone, and a fixed desktop / slide-out mobile AI tutor backed by a private 9router proxy.
 
 ## Screens and features
 
@@ -15,24 +15,38 @@ An Astro.js learning platform with an animated Mentora homepage, 11 deep-dive AI
 - Browser storage — local completion progress only. Conversations are held in the current page session, not written to disk.
 - `/api/chat/` — server-only OpenAI-compatible 9router proxy with a message limit, bounded chat history, lexical course retrieval, HTTP origin allowlist, request timeout, and a basic in-memory rate limit.
 
-The former standalone workbooks in `public/modules/` have been removed. Their 234 A–F lessons are served directly from Mentora routes. For **LLM Foundations**, the source workbook’s six learning exercises (foundation pipeline, sampling, objectives, Transformer architecture, serving lifecycle, and model routing) and its capstone are implemented as native Mentora UI within the corresponding lessons. The RNN comparison appears in lesson 7. Interactive workbooks for other courses are **not** migrated; those courses retain their A–F instructional content. No links point to deleted workbooks.
+The former standalone workbooks in `public/modules/` have been removed. Their 234 A–F lessons are served directly from Mentora routes. LLM Foundations retains its native exercises and capstone. Prompt Engineering adds 30 beginner guides, two animated mechanism views per lesson, 30 prompt workbenches and specialty labs. **RAG now adds 42 topic-specific beginner guides, 84 selectable animated mechanism views (two per lesson), 30 deterministic hands-on labs, eight mathematical lenses, and deeper A–F interview sections.** The RAG syllabus includes chunking, contextual retrieval, embeddings, hybrid retrieval, rerankers, ColBERT, agentic and graph retrieval, evaluation, freshness, security, PDFs and production incidents. AI Agents adds **54 foundational guides, 108 animated mechanism views, 54 deterministic agent engineering labs (ten experiment types), 11 mathematical lenses, and 5 interview questions per lesson**, while preserving all its original A–F deep technical material. Other courses keep their existing content. No links point to deleted workbooks.
+
+### RAG learning path (`/course/rag/`)
+
+Each lesson follows: **plain-language fundamentals → internal data flow → interactive diagram + common failure view → worked production example → trade-offs and checkpoint → A–F technical interview training**. In 30 lessons, a complementary numeric or scenario lab illustrates chunk overlap, reciprocal-rank fusion, ColBERT MaxSim, retrieval precision/recall, vector memory, tenant ACL decisions, index generation publication, PDF table parsing, multi-hop joins or request latency. Labs use invented data and deterministic browser computations; they do not run retrieval or make measured performance claims. Additional resources supplied for the curriculum are linked to the relevant lessons.
+
+The 42 RAG topics and their original deep mechanisms and production incidents are preserved. The A section has five questions, C supplies a topic-specific spoken response, and D includes explicit technical pressure-test criteria. The sidebar and lesson progress continue using the existing Mentora routes. The chat tutor can ground both Teach and Mock Interview modes on RAG foundations.
+
+### AI Agents learning path (`/course/agents/`)
+
+All 54 existing topics are now taught in the sequence **plain-language foundations → three core primitives → two animated mechanism views (working operation and failure/recovery) → worked engineering incident → deterministic hands-on lab → topic-specific checkpoint → A–F technical interviews**. The original mechanism explanations, spoken interview answers, production cases and takeaways remain intact. Section A now has five applied questions and Section D adds explicit expectations for a strong pressure-test answer.
+
+Every lesson has an interactive deterministic lab. The ten exercise types model loop stopping, memory compaction, privilege gates, conditional workflows, tool argument validation, multi-agent critical paths, MCP/function-call/skills/OKF distinctions, ambiguous outcome recovery, verified-task evaluation and token cost. Eleven lessons include qualified formulas with native MathML and LaTeX source. Examples are invented teaching scenarios **not measurements or actual model/tool executions**. The learner can play/pause or step through animated diagrams, select the failure path and examine production trade-offs. Supplied reading links are attached to relevant lessons. Mentora Tutor can retrieve these foundations in Teach and Mock Interview modes.
+
+**Technical caveat:** MCP documentation was checked against its July 2026 stateless specification. Tool descriptions, untrusted knowledge sources and generated code never authorize side effects; only the running host application can do that.
 
 ## Requirements
 
-- Node.js **22.12+**
+- Node.js **22.22.0+**
 - npm (comes with Node)
 - A running **9router** instance and a configured OpenAI-compatible model
 
 ## Install and run
 
-**Dependency compatibility:** The project specifies Astro `7.4.0` and `@astrojs/node` `11.1.8` in `package.json`. If dependency resolution fails, verify the installed versions and regenerate the lockfile on a connected machine. Use Node.js 22.12+ and reinstall without `--force` or `--legacy-peer-deps`.
+**Dependency compatibility:** The project specifies Astro `7.4.0` and `@astrojs/node` `11.1.8` in `package.json`. If dependency resolution fails, verify the installed versions and regenerate the lockfile on a connected machine. Use Node.js 22.22.0+ and reinstall without `--force` or `--legacy-peer-deps`.
 
 On Windows PowerShell, create the `.env` with `Copy-Item .env.example .env` instead of `cp` if preferred.
 
-If you previously attempted an install, delete `node_modules` and `package-lock.json` before rerunning `npm install`.
+For a reproducible install, keep the included `package-lock.json` and run `npm ci`. If an earlier install is incomplete, remove `node_modules` and run `npm ci` again (do not delete the lockfile).
 
 ```bash
-npm install
+npm ci
 cp .env.example .env
 # Edit .env and set NINEROUTER_API_KEY and NINEROUTER_MODEL.
 npm run dev
@@ -103,6 +117,13 @@ src/
   data/courses.json                # 234 full lessons, now served directly in Mentora
   layouts/AppLayout.astro          # Expandable navigation, main content, right tutor
   components/LLMFoundationsExercises.astro # Native labs and capstone
+  components/FoundationLearningPath.astro   # Shared beginner guides and animated mechanism views
+  components/RagExercises.astro             # Ten families of RAG teaching labs
+  components/RagMath.astro                  # MathML / LaTeX RAG lenses
+  data/rag-path.js                         # All 42 RAG first-principles lessons
+  data/rag-interviews.js                   # A–F question and spoken-answer enrichment
+  data/rag-labs.js                         # Lab-to-lesson mappings
+  data/rag-math.js                         # Retrieval/ANN/ColBERT equations
   pages/index.astro               # Animated public Mentora homepage
   pages/academy/index.astro       # Complete 11-course curriculum dashboard
   pages/course/[slug].astro       # Course landing page
@@ -116,6 +137,7 @@ src/
 public/
   app.js                          # Client-side search, progress, tutor UI
   llm-foundations-labs.js        # Interactive foundation exercises
+  rag-exercises.js               # Deterministic RAG labs (no network calls)
   search-index.json               # Lightweight searchable titles
 scripts/check-content.mjs        # Checks course and section integrity
 tests/chat.test.mjs              # Server proxy, provenance, history & failure tests
@@ -133,9 +155,9 @@ The attached Vesper.ai reference established the dark, minimal, liquid-metal vis
 
 - The 11 standalone HTML files were removed after their A–F lesson content was retained in `courses.json`.
 - All 234 lesson pages contain 6 non-empty A–F lesson segments (1,404 total), including all 60 original LLM Foundations segments.
-- All 26 automated checks pass, covering the 9router proxy, homepage, sidebar and native LLM Foundations migration.
+- All **44 automated checks** pass (33 site + 11 API), including six dedicated RAG checks for content, lessons, labs, equations, provided resources and tutor prompts.
 
-**Environment limitation:** package installation and a full `astro build` could not be run in the authoring environment because the npm registry was not reachable. Run `npm install` and `npm run build` in your connected development environment to complete that verification. A live 9router instance was not provided, so real model responses could not be tested.
+**Environment limitation:** this authoring environment uses Node.js 22.16.0, while Astro 7.4.0 requires Node.js 22.22.0+. `npm ci` did not complete (npm reported an internal exit-handler error after engine warnings), so `astro build` could not be verified. Run `npm ci` and `npm run build` on Node.js 22.22.0+ in your development environment. No live 9router response was tested.
 
 ## Mentora design and motion
 
@@ -145,8 +167,8 @@ Navigation is updated so `/` is the public welcome page and `/academy/` is the l
 
 ## Verification status
 
-- **Passed:** 26 automated tests, all 234 lesson data checks, JavaScript syntax checks, and comparison of all 60 LLM Foundations A–F sections against their source workbook.
+- **Passed:** 44 automated tests, all 234 lesson data checks, JavaScript syntax checks, and comparison of all 60 LLM Foundations A–F sections against their source workbook.
 - **Passed:** Chromium DOM/render checks against a static rendering of the homepage at 1440px and 390px, including mobile menu interaction and no horizontal overflow. This is **not** a complete Astro server build.
 - **Not verified here:** `astro build` (Astro dependencies are incomplete in this environment) and live 9router responses. See `package.json` for current Astro and adapter versions.
 
-To validate on your machine, install dependencies, then run `npm run build` and `npm run dev` as above.
+To validate on your machine, use Node.js 22.22.0+, run `npm ci`, `npm run check:content`, `npm run test:api`, `npm run test:site`, and `npm run build`.

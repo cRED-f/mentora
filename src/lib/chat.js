@@ -1,5 +1,5 @@
 import { getCourse, getLesson, retrieveLessons } from './courses.js';
-import { getFoundationGuide } from '../data/llm-foundations-path.js';
+import { foundationsGuideFor } from './foundations.js';
 
 const WINDOW_MS = 60_000;
 const hits = new Map();
@@ -26,13 +26,13 @@ export function composeMessages(input) {
   const excerpts = retrieved.slice(0, 4).map(({course:c, lesson:l}) => {
     const deep = l.sections.find((s) => s.letter === 'B')?.text || '';
     const spoken = l.sections.find((s) => s.letter === 'C')?.text || '';
-    const beginner = c.slug === 'llm-foundations' ? getFoundationGuide(l.id) : null;
+    const beginner = foundationsGuideFor(c.slug, l.id);
     const firstPrinciples = beginner ? `BEGINNER EXPLANATION: ${beginner.plain}\nKEY TERMS: ${beginner.concepts.map(([term, simple]) => `${term}: ${simple}`).join('; ')}\nEXAMPLE: ${beginner.example.steps.join(' ')}\n` : '';
     return `SOURCE: ${c.title} / Lesson ${l.id}: ${l.title}\nURL: /learn/${c.slug}/${l.id}/\n${firstPrinciples}DETAIL: ${deep.slice(0, 5000)}\nINTERVIEW ANSWER: ${spoken.slice(0, 1000)}`;
   });
   const mode = input.mode === 'mock' ? 'mock' : 'teach';
-  const interviewProtocol = input.course === 'llm-foundations' ? [
-    'The user is studying LLM Foundations. Follow this senior AI engineering interview-coach contract strictly.',
+  const interviewProtocol = ['llm-foundations', 'prompt-engineering', 'rag', 'agents'].includes(input.course) ? [
+    'The user is studying a foundations-first Mentora course. Follow this senior AI engineering interview-coach contract strictly.',
     'TEACH MODE: Teach the selected topic using A through F IN ORDER: A five applied interviewer questions, B mechanisms/data flow/math with defined symbols/assumptions/architecture/pseudocode/performance/failures, C concise spoken answer, D probing follow-ups and expected strong reasoning, E a realistic incident with hypotheses/traces/diagnosis/options/validation gates, F key equations and pitfalls.',
     'Use plain English first, then rigorous engineering detail. State what/ how/ why/ when/ alternatives/ what breaks/ how to measure. Do not invent measured gains or proprietary internals. If more detail is needed, stay on topic.',
     'INTERACTIVE LOOP: After teaching, ask EXACTLY ONE hard technical interview question, stop, and wait for the learner. Do not give that question’s solution early. On subsequent turns assess correctness, depth, completeness, clarity and engineering judgment; identify errors and missing mechanisms, supply a stronger spoken answer, and ask at most one harder follow-up. Do not automatically advance topics.',
@@ -94,7 +94,7 @@ export async function chatHandler(request, clientAddress = 'unknown') {
     const upstream = await fetch(url, {
       method: 'POST', signal: controller.signal,
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
-      body: JSON.stringify({ model, stream: true, temperature: 0.35, max_tokens: data.course === 'llm-foundations' && data.mode !== 'mock' ? 4000 : 1400,
+      body: JSON.stringify({ model, stream: true, temperature: 0.35, max_tokens: ['llm-foundations','prompt-engineering','rag'].includes(data.course) && data.mode !== 'mock' ? 4000 : 1400,
         messages: composeMessages({ ...data, message: data.message.trim() }) })
     });
     if (!upstream.ok) {

@@ -1,0 +1,8 @@
+---
+import { ragMath } from '../data/rag-math.js';
+const equation = ragMath[Number(Astro.props.lessonId)];
+---
+{equation && <section class="foundation-math" aria-label="Mathematical lens for this RAG lesson">
+  <div class="foundation-section-top"><span class="foundation-index">FORMAL LENS / RAG MATHEMATICS</span><h3>Express the mechanism <em>precisely.</em></h3></div>
+  <div class="foundation-math-formula"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML" set:html={equation.mathml}/><p>{equation.explanation}</p><p class="foundation-math-assumption"><strong>Assumption:</strong> {equation.assumption}</p><details><summary>LaTeX source</summary><code>{equation.latex}</code></details></div>
+</section>}

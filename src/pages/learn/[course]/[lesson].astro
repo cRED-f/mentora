@@ -2,7 +2,15 @@
 import Layout from '../../../layouts/AppLayout.astro';
 import LLMFoundationsExercises from '../../../components/LLMFoundationsExercises.astro';
 import FoundationLearningPath from '../../../components/FoundationLearningPath.astro';
+import PromptEngineeringExercises from '../../../components/PromptEngineeringExercises.astro';
+import PromptEngineeringMath from '../../../components/PromptEngineeringMath.astro';
+import RagExercises from '../../../components/RagExercises.astro';
+import RagMath from '../../../components/RagMath.astro';
+import AgentsExercises from '../../../components/AgentsExercises.astro';
+import AgentsMath from '../../../components/AgentsMath.astro';
 import { foundationsGuideFor } from '../../../lib/foundations.js';
+import { ragLessonHasLab } from '../../../data/rag-labs.js';
+import { agentLessonHasLab } from '../../../data/agents-labs.js';
 import { courses } from '../../../lib/courses.js';
 export function getStaticPaths() {
   return courses.flatMap(course => course.lessons.map(lesson => ({params: { course: course.slug, lesson: String(lesson.id) }, props: { course, lesson }})));
@@ -17,8 +25,14 @@ const next = course.lessons[index + 1];
   <div class="lesson-page content-container">
     <nav class="breadcrumbs"><a href="/academy/">Academy</a><span>/</span><a href={`/course/${course.slug}/`}>{course.title}</a><span>/</span><strong>Lesson {String(lesson.id).padStart(2,'0')}</strong></nav>
     <div class="lesson-intro"><div class="lesson-overline"><span class="metal-badge">{course.number} / {String(lesson.id).padStart(2,'0')}</span><span>{course.category.toUpperCase()} · {course.lessons.length} LESSONS</span></div><h1>{lesson.title}</h1><p>{lesson.subtitle}</p><div class="lesson-toolbar"><button class="mark-complete" type="button" data-progress-key={`${course.slug}:${lesson.id}`}><span class="complete-icon">○</span> Mark as complete</button><button type="button" class="ask-lesson">✧ &nbsp; Ask AI about this</button></div></div>
-    <div class="section-navigation"><span>IN THIS LESSON</span><div>{guide && <><a href="#foundations-start"><b>★</b><span>Start with the basics</span></a><a href="#foundations-diagram"><b>◇</b><span>Interactive diagram</span></a><a href="#foundations-check"><b>✓</b><span>Check your understanding</span></a>{course.slug === 'llm-foundations' && <a href="#foundations-syllabus"><b>↗</b><span>Study question roadmap</span></a>}</>}{lesson.sections.map(sec => <a href={`#section-${sec.letter}`}><b>{sec.letter}</b><span>{sec.heading}</span></a>)}</div></div>
+    <div class="section-navigation"><span>IN THIS LESSON</span><div>{guide && <><a href="#foundations-start"><b>★</b><span>Start with the basics</span></a><a href="#foundations-diagram"><b>◇</b><span>Interactive diagram</span></a>{course.slug === 'prompt-engineering' && <a href="#foundations-workbench"><b>↗</b><span>Prompt workbench</span></a>}{course.slug === 'rag' && ragLessonHasLab(lesson.id) && <a href="#rag-workbench"><b>↗</b><span>RAG experiment</span></a>}{course.slug === 'agents' && agentLessonHasLab(lesson.id) && <a href="#agents-workbench"><b>↗</b><span>Agent engineering lab</span></a>}<a href="#foundations-check"><b>✓</b><span>Check your understanding</span></a>{guide?.resources?.length > 0 && <a href="#foundations-sources"><b>↗</b><span>Further reading</span></a>}{course.slug === 'llm-foundations' && <a href="#foundations-syllabus"><b>↗</b><span>Study question roadmap</span></a>}</>}{lesson.sections.map(sec => <a href={`#section-${sec.letter}`}><b>{sec.letter}</b><span>{sec.heading}</span></a>)}</div></div>
     {guide && <FoundationLearningPath lessonId={lesson.id} courseSlug={course.slug} guide={guide} />}
+    {course.slug === 'prompt-engineering' && <PromptEngineeringMath lessonId={lesson.id} />}
+    {course.slug === 'prompt-engineering' && <PromptEngineeringExercises lessonId={lesson.id} />}
+    {course.slug === 'rag' && <RagMath lessonId={lesson.id} />}
+    {course.slug === 'rag' && <RagExercises lessonId={lesson.id} />}
+    {course.slug === 'agents' && <AgentsMath lessonId={lesson.id} />}
+    {course.slug === 'agents' && <AgentsExercises lessonId={lesson.id} />}
     {course.slug === 'llm-foundations' && <LLMFoundationsExercises lessonId={lesson.id} />}
     <div class="lesson-sections">
       {lesson.sections.map(sec => <section id={`section-${sec.letter}`} class={`lesson-section segment-${sec.letter}`}><div class="segment-heading"><span class="segment-letter">{sec.letter}</span><div><span class="section-kicker">INTERVIEW FRAMEWORK · {sec.letter} / F</span><h2>{sec.heading}</h2></div></div><div class="lesson-prose" set:html={sec.html} /></section>)}
@@ -29,4 +43,7 @@ const next = course.lessons[index + 1];
   </div>
   {guide && <script src="/foundations-path.js" is:inline defer></script>}
   {course.slug === 'llm-foundations' && <script src="/llm-foundations-labs.js" is:inline defer></script>}
+  {course.slug === 'prompt-engineering' && <script src="/prompt-engineering-exercises.js" is:inline defer></script>}
+  {course.slug === 'rag' && <script src="/rag-exercises.js" is:inline defer></script>}
+  {course.slug === 'agents' && <script src="/agents-exercises.js" is:inline defer></script>}
 </Layout>

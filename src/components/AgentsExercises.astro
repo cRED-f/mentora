@@ -1,0 +1,61 @@
+---
+import { agentLabType } from '../data/agents-labs.js';
+const lab=agentLabType(Astro.props.lessonId);
+const lessonId=Number(Astro.props.lessonId);
+---
+{lab && <section id="agents-workbench" class="foundation-mechanism-lab rag-lab agents-lab" data-agent-lab={lab} aria-label="Interactive agent engineering exercise">
+  <div class="foundation-section-top"><span class="foundation-index">INTERACTIVE / AGENT ENGINEERING LAB · LESSON {String(lessonId).padStart(2,'0')}</span><h3>Run a controlled <em>thought experiment.</em></h3><p>Move controls to recompute deterministic outcomes in a small, invented agent system. No model or real tool runs. Interpret the constraints before comparing against the interview questions.</p></div>
+  {lab === 'loop' && <div data-agent-loop>
+    <h4>When should the agent loop stop?</h4><p>Illustrative repeated action on unchanged state. A circuit breaker stops earlier than the global step cap when a repeated-action threshold is reached.</p>
+    <div class="rag-lab-controls"><label>Maximum steps <output data-max-step-value>8</output><input type="range" data-max-steps min="2" max="20" value="8"/></label><label>Repeated action limit <output data-repeat-limit-value>3</output><input type="range" data-repeat-limit min="1" max="8" value="3"/></label></div>
+    <div class="agent-flow-trace" data-loop-trace aria-label="Illustrative action attempts"></div>
+    <div class="rag-lab-summary"><div><span>EXECUTED STEPS</span><strong data-loop-steps>3</strong></div><div><span>STOP REASON</span><strong data-loop-stop>Cycle breaker</strong></div></div><p class="rag-lab-caption" data-loop-explanation role="status"></p>
+  </div>}
+  {lab === 'memory' && <div data-agent-memory>
+    <h4>Compact the transcript without losing state.</h4><p>Assume 1,000 original tokens, of which a fixed 180 are critical identifiers, approvals and goals. Summaries are illustrative rather than generated.</p>
+    <div class="rag-lab-controls"><label>Optional history retained <output data-memory-value>35%</output><input type="range" data-memory-range min="0" max="100" step="5" value="35"/></label><label class="agent-check"><input type="checkbox" data-memory-pin checked/> Preserve all 180 invariant tokens</label></div>
+    <div class="rag-lab-summary"><div><span>CONTEXT SIZE</span><strong data-memory-tokens>467 tokens</strong></div><div><span>INVARIANT STATUS</span><strong data-memory-integrity>Preserved</strong></div></div><p class="rag-lab-caption" data-memory-note role="status"></p>
+  </div>}
+  {lab === 'permissions' && <div data-agent-permissions>
+    <h4>Enforce a tool boundary outside the prompt.</h4><p>A hypothetical agent is asked to run an operation. The backend checks role, approval and the untrusted source, even when the model proposes the call.</p>
+    <div class="rag-lab-controls"><label>Operation<select data-permission-action><option value="read">Read own document</option><option value="write">Modify shared file</option><option value="delete">Delete production record</option><option value="egress">Send content to outside domain</option></select></label><label>Identity<select data-permission-role><option value="viewer">Viewer</option><option value="editor">Editor</option><option value="admin">Admin</option></select></label><label class="agent-check"><input type="checkbox" data-permission-approve/> Authenticated action approval</label></div>
+    <div class="rag-lab-summary"><div><span>TOOL DISPATCH</span><strong data-permission-result>Allowed</strong></div></div><p class="rag-lab-caption" data-permission-reason role="status"></p>
+  </div>}
+  {lab === 'graph' && <div data-agent-graph>
+    <h4>Follow the dependency gate.</h4><p>Review must pass before release; the transition is enforced by the workflow runtime rather than a model's promise.</p>
+    <div class="rag-lab-controls"><label>Upstream test outcome<select data-graph-check><option value="passed">Passed</option><option value="failed">Failed</option><option value="unknown">Not run</option></select></label><label class="agent-check"><input type="checkbox" data-graph-approved/> Human approval recorded</label></div>
+    <div class="agent-flow-trace"><span>Plan</span><span>Test</span><span>Approval</span><span>Release</span></div>
+    <div class="rag-lab-summary"><div><span>RELEASE NODE</span><strong data-graph-result>Blocked</strong></div></div><p class="rag-lab-caption" data-graph-note role="status"></p>
+  </div>}
+  {lab === 'tools' && <div data-agent-tools>
+    <h4>Validate the call before executing.</h4><p>Invented tool: refund_order(order_id: string, amount_usd: positive number). Server state binds order A-14 to the signed-in customer; the LLM cannot grant itself additional scope.</p>
+    <div class="rag-lab-controls"><label>Proposed call<select data-tool-case><option value="valid">Valid: A-14, $30</option><option value="negative">Invalid: A-14, −$30</option><option value="wrong">Unauthorized: B-99, $30</option><option value="missing">Missing required order ID</option><option value="unknown">Unknown function name</option></select></label></div>
+    <div class="rag-lab-summary"><div><span>DISPATCH</span><strong data-tool-result>Allowed (illustration)</strong></div></div><p class="rag-lab-caption" data-tool-reason role="status"></p>
+  </div>}
+  {lab === 'parallel' && <div data-agent-parallel>
+    <h4>Do multiple workers actually help?</h4><p>Two independent workers, A = 400 ms and B = 650 ms, plus adjustable coordination overhead. This is a critical-path model, not an inference benchmark.</p>
+    <div class="rag-lab-controls"><label>Handoff &amp; merge overhead <output data-parallel-overhead-value>150 ms</output><input type="range" data-parallel-overhead min="0" max="1000" step="50" value="150"/></label><label>Workers independent?<select data-parallel-independent><option value="yes">Yes</option><option value="no">No (B needs A)</option></select></label></div>
+    <div class="rag-lab-summary"><div><span>SINGLE WORKFLOW</span><strong>1,050 ms</strong></div><div><span>DELEGATED WORKFLOW</span><strong data-parallel-total>800 ms</strong></div><div><span>TIME SAVED</span><strong data-parallel-gain>250 ms</strong></div></div><p class="rag-lab-caption" data-parallel-note role="status"></p>
+  </div>}
+  {lab === 'protocol' && <div data-agent-protocol>
+    <h4>Separate knowledge, instructions and capabilities.</h4><p>Choose an artifact: the resulting panel shows what it enables and whether it directly grants any tool authority.</p>
+    <div class="rag-lab-controls"><label>Artifact<select data-protocol-type><option value="function">Function calling</option><option value="mcp">MCP server</option><option value="skill">Agent skill</option><option value="okf">OKF knowledge bundle</option></select></label></div>
+    <pre class="agent-lab-code" data-protocol-preview aria-label="Conceptual interface example"></pre><p class="rag-lab-caption" data-protocol-note role="status"></p>
+  </div>}
+  {lab === 'recovery' && <div data-agent-recovery>
+    <h4>What happens after a timed-out write?</h4><p>An example payment call times out. A timeout means the commit status is unknown; blindly retrying may duplicate a payment.</p>
+    <div class="rag-lab-controls"><label>Authoritative transaction state<select data-recovery-state><option value="unknown">Unknown</option><option value="committed">Committed</option><option value="rejected">Rejected</option></select></label><label class="agent-check"><input type="checkbox" data-recovery-key checked/> Idempotency key on retries</label></div>
+    <div class="rag-lab-summary"><div><span>RECOMMENDED NEXT STEP</span><strong data-recovery-action>Reconcile</strong></div></div><p class="rag-lab-caption" data-recovery-note role="status"></p>
+  </div>}
+  {lab === 'evaluation' && <div data-agent-evaluation>
+    <h4>Evaluate actual execution, not fluency.</h4><p>A proposed response sounds successful in every case. Task success still requires a verified final artifact and no forbidden side effect.</p>
+    <div class="rag-lab-controls"><label class="agent-check"><input type="checkbox" data-eval-artifact checked/> Expected artifact exists and passes tests</label><label class="agent-check"><input type="checkbox" data-eval-violation/> Agent committed a forbidden side effect</label></div>
+    <div class="rag-lab-summary"><div><span>VERIFIED RESULT</span><strong data-eval-result>Pass</strong></div></div><p class="rag-lab-caption" data-eval-note role="status"></p>
+  </div>}
+  {lab === 'cost' && <div data-agent-cost>
+    <h4>Count prompt growth across an agent loop.</h4><p>Illustrative pricing: $2 per million input tokens, $8 per million output tokens. Each turn has 500 new context tokens and 200 output tokens. Pricing is invented for the exercise.</p>
+    <div class="rag-lab-controls"><label>Calls <output data-cost-calls-value>6</output><input data-cost-calls type="range" min="1" max="30" value="6"/></label><label>Fixed repeated prefix <output data-cost-prefix-value>1,000 tokens</output><input data-cost-prefix type="range" min="0" max="5000" step="250" value="1000"/></label></div>
+    <div class="rag-lab-summary"><div><span>INPUT TOKENS</span><strong data-cost-input>16,500</strong></div><div><span>OUTPUT TOKENS</span><strong data-cost-output>1,200</strong></div><div><span>ESTIMATED COST</span><strong data-cost-total>$0.0426</strong></div></div><p class="rag-lab-caption" data-cost-note role="status"></p>
+  </div>}
+  <p class="rag-lab-disclaimer">All values and artifacts are invented teaching fixtures. No LLM, MCP server, filesystem, payment processor, or browser is connected to this exercise.</p>
+</section>}

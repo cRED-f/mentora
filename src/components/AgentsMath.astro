@@ -1,0 +1,8 @@
+---
+import { agentsMath } from '../data/agents-math.js';
+const equation=agentsMath[Number(Astro.props.lessonId)];
+---
+{equation && <section class="foundation-math" aria-label="Mathematical lens for this Agents lesson">
+  <div class="foundation-section-top"><span class="foundation-index">FORMAL LENS / AGENT ENGINEERING</span><h3>Model the trade-off <em>precisely.</em></h3></div>
+  <div class="foundation-math-formula"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML" set:html={equation.mathml}/><p>{equation.explanation}</p><p class="foundation-math-assumption"><strong>Assumption:</strong> {equation.assumption}</p><details><summary>LaTeX source</summary><code>{equation.latex}</code></details></div>
+</section>}

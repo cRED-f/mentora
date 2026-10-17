@@ -5,7 +5,22 @@
   document.querySelectorAll('[data-foundation-path]').forEach(root => {
     const views = [...root.querySelectorAll('[data-foundation-view]')];
     const viewButtons = [...root.querySelectorAll('[data-foundation-view-button]')];
+    const playButton = root.querySelector('[data-foundation-play]');
+    const prevButton = root.querySelector('[data-foundation-prev]');
+    const nextButton = root.querySelector('[data-foundation-next]');
+    const status = root.querySelector('[data-foundation-animation-status]');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let activeView = 0;
+    let timer = null;
 
+    const currentView = () => views[activeView];
+    const getSelected = view => Math.max(0, [...view.querySelectorAll('[data-foundation-step]')].findIndex(step => step.classList.contains('is-active')));
+    function stopPlayback() {
+      if (timer !== null) { window.clearInterval(timer); timer = null; }
+      playButton?.setAttribute('aria-pressed','false');
+      if (playButton) playButton.textContent = '▷ Play flow';
+      if (status) status.textContent = `Step ${getSelected(currentView()) + 1} selected · Manual mode`;
+    }
     function selectStep(view, selectedIndex) {
       const steps = [...view.querySelectorAll('[data-foundation-step]')];
       const selected = steps[selectedIndex];
@@ -15,22 +30,65 @@
         step.classList.toggle('is-active', active);
         step.setAttribute('aria-pressed', String(active));
       });
-      view.querySelector('[data-foundation-stage-counter]').textContent = `STAGE ${String(selectedIndex + 1).padStart(2, '0')} / ${String(steps.length).padStart(2, '0')}`;
+      const counter = view.querySelector('[data-foundation-stage-counter]');
+      if (counter) counter.textContent = `STAGE ${String(selectedIndex + 1).padStart(2, '0')} / ${String(steps.length).padStart(2, '0')}`;
       view.querySelector('[data-foundation-stage-title]').textContent = selected.querySelector('.foundation-node-title').textContent;
       view.querySelector('[data-foundation-stage-explanation]').textContent = selected.dataset.explanation;
+      const progress = view.querySelector('[data-foundation-step-progress]');
+      if (progress) {
+        progress.setAttribute('aria-valuenow',String(selectedIndex + 1));
+        progress.querySelector('span').style.width = `${(selectedIndex + 1) / steps.length * 100}%`;
+      }
+      if (status) status.textContent = `Stage ${selectedIndex + 1} of ${steps.length}${timer === null ? ' · Manual mode' : ' · Playing'}`;
     }
-
-    viewButtons.forEach((button, index) => button.addEventListener('click', () => {
+    function changeView(index) {
+      stopPlayback();
+      activeView = index;
       views.forEach((view, i) => { view.hidden = i !== index; });
       viewButtons.forEach((other, i) => {
         const active = i === index;
         other.classList.toggle('is-active', active);
         other.setAttribute('aria-pressed', String(active));
       });
-    }));
+      selectStep(currentView(), getSelected(currentView()));
+    }
+    viewButtons.forEach((button, index) => button.addEventListener('click', () => changeView(index)));
     views.forEach(view => view.querySelectorAll('[data-foundation-step]').forEach((button, index) => {
-      button.addEventListener('click', () => selectStep(view, index));
+      button.addEventListener('click', () => { stopPlayback(); selectStep(view, index); });
     }));
+    function advance(direction) {
+      const view = currentView();
+      const count = view.querySelectorAll('[data-foundation-step]').length;
+      selectStep(view, (getSelected(view) + direction + count) % count);
+    }
+    nextButton?.addEventListener('click', () => { stopPlayback(); advance(1); });
+    prevButton?.addEventListener('click', () => { stopPlayback(); advance(-1); });
+    playButton?.addEventListener('click', () => {
+      if (timer !== null) { stopPlayback(); return; }
+      if (reducedMotion.matches) { advance(1); return; }
+      playButton.setAttribute('aria-pressed','true');
+      playButton.textContent = 'Ⅱ Pause flow';
+      timer = window.setInterval(() => advance(1), 1750);
+      selectStep(currentView(),getSelected(currentView()));
+    });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) stopPlayback(); });
+    reducedMotion.addEventListener?.('change', () => { if (reducedMotion.matches) stopPlayback(); });
+
+    const workbench = root.querySelector('[data-prompt-workbench]');
+    if (workbench) {
+      const source = workbench.querySelector('.foundation-workbench-source');
+      const visible = workbench.querySelector('[data-prompt-visible]');
+      const insight = workbench.querySelector('[data-prompt-insight]');
+      workbench.querySelectorAll('[data-prompt-variant]').forEach(button => {
+        button.addEventListener('click', () => {
+          const strong = button.dataset.promptVariant === 'strong';
+          visible.textContent = strong ? source.dataset.strong : source.dataset.weak;
+          insight.textContent = strong ? source.dataset.observation : 'The baseline leaves important requirements implicit. Compare it with the stronger, more testable version.';
+          workbench.querySelectorAll('[data-prompt-variant]').forEach(other => other.setAttribute('aria-pressed', String(other === button)));
+          workbench.classList.toggle('is-revised',strong);
+        });
+      });
+    }
 
     const check = root.querySelector('[data-foundation-check]');
     if (!check) return;

@@ -1,0 +1,76 @@
+---
+import { RAG_LAB_GROUPS, ragLessonHasLab } from '../data/rag-labs.js';
+const lessonId = Number(Astro.props.lessonId);
+const chunking = RAG_LAB_GROUPS.chunking.includes(lessonId);
+const fusion = RAG_LAB_GROUPS.fusion.includes(lessonId);
+const colbert = RAG_LAB_GROUPS.colbert.includes(lessonId);
+const evaluation = RAG_LAB_GROUPS.evaluation.includes(lessonId);
+const vectors = RAG_LAB_GROUPS.vectors.includes(lessonId);
+const acl = RAG_LAB_GROUPS.acl.includes(lessonId);
+const freshness = RAG_LAB_GROUPS.freshness.includes(lessonId);
+const pdf = RAG_LAB_GROUPS.pdf.includes(lessonId);
+const hops = RAG_LAB_GROUPS.hops.includes(lessonId);
+const latency = RAG_LAB_GROUPS.latency.includes(lessonId);
+const active = ragLessonHasLab(lessonId);
+---
+{active && <section class="foundation-mechanism-lab rag-lab" id="rag-workbench" data-rag-lab aria-label="Interactive RAG engineering lab">
+  {chunking && <div data-rag-chunk>
+    <div class="foundation-section-top"><span class="foundation-index">LIVE LAB / CHUNK COUNT &amp; OVERLAP</span><h3>See the index <em>grow.</em></h3><p>Change chunk size and overlap for a hypothetical 2,048-token document. The blocks show actual fixed-window ranges; they do not predict answer accuracy.</p></div>
+    <div class="rag-lab-controls"><label>Chunk size <output data-chunk-size-label>512 tokens</output><input data-chunk-size type="range" min="128" max="1024" step="128" value="512"/></label><label>Overlap <output data-chunk-overlap-label>64 tokens</output><input data-chunk-overlap type="range" min="0" max="384" step="32" value="64" /></label></div>
+    <div class="rag-lab-summary"><div><span>CHUNKS</span><strong data-chunk-count>5</strong></div><div><span>EMBEDDED TOKENS</span><strong data-chunk-embedded>2,304</strong></div><div><span>REPEATED / DOCUMENT</span><strong data-chunk-repeat>12.5%</strong></div></div>
+    <div class="rag-lab-bars" data-chunk-bars role="img" aria-label="Chunk ranges across an illustrative document"></div>
+    <p class="rag-lab-caption" data-chunk-note role="status" aria-live="polite"></p>
+  </div>}
+  {fusion && <div data-rag-fusion>
+    <div class="foundation-section-top"><span class="foundation-index">LIVE LAB / HYBRID RETRIEVAL</span><h3>Fuse ranked <em>evidence.</em></h3><p>Invented candidate rankings for the same query. Turn lexical and dense search on or off. Rank fusion recalculates; these are not real BM25 or embedding scores.</p></div>
+    <div class="rag-lab-toggles" role="group" aria-label="Retrieval branches"><label><input type="checkbox" data-rrf-lex checked/> BM25 / exact terms</label><label><input type="checkbox" data-rrf-dense checked/> Dense / paraphrases</label></div>
+    <div class="rag-lab-columns"><div><span class="rag-col-caption">BM25 · SYNTHETIC RANK</span><ol><li>Doc A · ZX-41 manual</li><li>Doc B · general guide</li><li>Doc C · fault record</li><li>Doc D · service note</li></ol></div><div><span class="rag-col-caption">DENSE · SYNTHETIC RANK</span><ol><li>Doc C · fault record</li><li>Doc A · ZX-41 manual</li><li>Doc E · troubleshooting</li><li>Doc B · general guide</li></ol></div></div>
+    <div class="rag-lab-results"><strong>RRF OUTPUT (k = 60)</strong><div data-rrf-results></div></div>
+    <p class="rag-lab-caption" data-rrf-explanation role="status" aria-live="polite"></p>
+  </div>}
+  {colbert && <div data-rag-colbert>
+    <div class="foundation-section-top"><span class="foundation-index">LIVE LAB / COLBERT MAXSIM</span><h3>Inspect token <em>late interaction.</em></h3><p>Synthetic dot-product scores for two query tokens against four document tokens. Select a query-token row to see its maximum; ColBERT adds both row maxima.</p></div>
+    <div class="rag-lab-toggles" role="group" aria-label="Inspect query token"><button data-colbert-row="0" aria-pressed="true">Query: refund</button><button data-colbert-row="1" aria-pressed="false">Query: deadline</button></div>
+    <div class="rag-colbert-grid"><div class="rag-colbert-heading">QUERY ↓ / DOC →</div>{['refund','policy','30','days'].map(t => <div class="rag-colbert-heading">{t}</div>)}
+    {['refund','deadline'].map((term,row) => <Fragment><div class="rag-colbert-heading">{term}</div>{[0,1,2,3].map(col => <div class="rag-colbert-cell" data-colbert-cell={`${row}-${col}`}></div>)}</Fragment>)}
+    </div>
+    <div class="rag-lab-summary"><div><span>SELECTED ROW MAX</span><strong data-colbert-max>0.90</strong></div><div><span>SUM OF ROW MAXIMA</span><strong data-colbert-sum>1.75</strong></div></div><p class="rag-lab-caption" data-colbert-summary role="status" aria-live="polite"></p>
+  </div>}
+  {evaluation && <div data-rag-metrics>
+    <div class="foundation-section-top"><span class="foundation-index">LIVE LAB / RETRIEVAL EVALUATION</span><h3>Separate recall <em>from precision.</em></h3><p>Change hypothetical relevance judgments. This computes set-based Precision@k and Recall@k, not framework-specific context precision or generative faithfulness.</p></div>
+    <div class="rag-lab-controls"><label>All gold-relevant passages <output data-gold-label>8</output><input data-gold type="range" min="1" max="15" value="8"/></label><label>Relevant retrieved <output data-hit-label>5</output><input data-hit type="range" min="0" max="15" value="5"/></label><label>Irrelevant retrieved <output data-fp-label>3</output><input data-fp type="range" min="0" max="15" value="3"/></label></div>
+    <div class="rag-lab-summary"><div><span>PRECISION@k</span><strong data-precision>62.5%</strong></div><div><span>RECALL@k</span><strong data-recall>62.5%</strong></div><div><span>RETRIEVED k</span><strong data-k>8</strong></div></div><p class="rag-lab-caption" data-metrics-note role="status" aria-live="polite"></p>
+  </div>}
+  {vectors && <div data-rag-vectors>
+    <div class="foundation-section-top"><span class="foundation-index">LIVE LAB / VECTOR STORAGE ESTIMATOR</span><h3>Estimate raw <em>vector memory.</em></h3><p>Compute only N × dimension × bytes. This excludes HNSW graphs, metadata, replicas, temporary rebuild copies and the text store.</p></div>
+    <div class="rag-lab-controls"><label>Vectors <output data-vector-n-label>1 million</output><input data-vector-n type="range" min="1" max="50" step="1" value="1" /></label><label>Dimensions <select data-vector-d><option value="384">384</option><option value="768" selected>768</option><option value="1024">1,024</option><option value="1536">1,536</option></select></label><label>Bytes per component <select data-vector-b><option value="1">1 · int8</option><option value="2" selected>2 · fp16</option><option value="4">4 · fp32</option></select></label></div>
+    <div class="rag-lab-summary"><div><span>RAW VECTOR MEMORY</span><strong data-vector-result>1.43 GiB</strong></div><div><span>ASSUMED CORPUS VECTORS</span><strong data-vector-total>1,000,000</strong></div></div><p class="rag-lab-caption" data-vector-note role="status" aria-live="polite"></p>
+  </div>}
+  {acl && <div data-rag-acl>
+    <div class="foundation-section-top"><span class="foundation-index">LIVE LAB / AUTHORIZED CANDIDATES</span><h3>Filter before <em>model context.</em></h3><p>Switch the simulated authenticated principal. Only permitted records should be supplied to reranking or generation. This is a teaching demo, not an access-control implementation.</p></div>
+    <div class="rag-lab-toggles" role="group" aria-label="Simulated authenticated identity"><button data-acl-user="a" aria-pressed="true">Tenant A · employee</button><button data-acl-user="b" aria-pressed="false">Tenant B · employee</button><button data-acl-user="admin" aria-pressed="false">Tenant A · HR</button></div>
+    <div data-acl-records class="rag-record-list"></div><p class="rag-lab-caption" data-acl-note role="status" aria-live="polite"></p>
+  </div>}
+  {freshness && <div data-rag-freshness>
+    <div class="foundation-section-top"><span class="foundation-index">LIVE LAB / INDEX GENERATIONS</span><h3>Update then <em>publish.</em></h3><p>Model a changed source document and an index publication boundary. A staged revision must not be silently served before it is validated and committed.</p></div>
+    <div class="rag-lab-summary"><div><span>SOURCE VERSION</span><strong data-source-version>v1</strong></div><div><span>ACTIVE INDEX</span><strong data-index-version>v1</strong></div><div><span>STAGED INDEX</span><strong data-stage-version>None</strong></div></div>
+    <div class="rag-lab-toggles"><button data-version-action="update">1 · Edit source</button><button data-version-action="stage">2 · Build staged index</button><button data-version-action="publish">3 · Publish validated index</button><button data-version-action="reset">Reset</button></div>
+    <div class="rag-version-timeline" aria-hidden="true"><span data-fresh-source>Source</span><span data-fresh-stage>Staging</span><span data-fresh-live>Live</span></div><p class="rag-lab-caption" data-fresh-note role="status" aria-live="polite">The live index and source are both at v1.</p>
+  </div>}
+  {pdf && <div data-rag-pdf>
+    <div class="foundation-section-top"><span class="foundation-index">LIVE LAB / DOCUMENT STRUCTURE</span><h3>Restore table <em>relationships.</em></h3><p>Toggle between a deliberately faulty flat extraction and a structured table. Notice how headers are necessary to interpret numeric values. Illustrative invoice only.</p></div>
+    <div class="rag-lab-toggles"><button data-pdf-mode="flat" aria-pressed="true">Flat text extraction</button><button data-pdf-mode="structured" aria-pressed="false">Layout-aware cells</button></div>
+    <div data-pdf-view class="rag-pdf-panel"></div><p class="rag-lab-caption" data-pdf-note role="status" aria-live="polite"></p>
+  </div>}
+  {hops && <div data-rag-hops>
+    <div class="foundation-section-top"><span class="foundation-index">LIVE LAB / MULTI-HOP SOURCE CHAIN</span><h3>Prove each <em>relationship.</em></h3><p>Select the incident, then its deployment and approval. A matching name without a matching ID is not a verified join. This uses invented training records.</p></div>
+    <div class="rag-lab-toggles"><button data-hop-id="D-72" aria-pressed="true">Deployment D-72</button><button data-hop-id="D-28" aria-pressed="false">Deployment D-28</button></div>
+    <div class="rag-hop-chain"><div>Incident I-9 <span>fixed by →</span> <strong>D-72</strong></div><div>Deployment <strong data-hop-selected>D-72</strong> <span>approved by →</span> <strong data-hop-person>Rina</strong></div></div><p class="rag-lab-caption" data-hop-result role="status" aria-live="polite"></p>
+  </div>}
+  {latency && <div data-rag-latency>
+    <div class="foundation-section-top"><span class="foundation-index">LIVE LAB / CRITICAL PATH</span><h3>Budget query <em>latency.</em></h3><p>Hypothetical timings in milliseconds. Sparse and dense search run in parallel; the critical path uses the slower branch. Not an observed provider benchmark.</p></div>
+    <div class="rag-lab-controls"><label>Dense search <output data-lat-dense-label>120 ms</output><input data-lat-dense type="range" min="20" max="600" step="20" value="120"/></label><label>Lexical search <output data-lat-sparse-label>80 ms</output><input data-lat-sparse type="range" min="20" max="600" step="20" value="80"/></label><label>Rerank <output data-lat-rerank-label>200 ms</output><input data-lat-rerank type="range" min="0" max="1000" step="20" value="200"/></label></div>
+    <div class="rag-lab-summary"><div><span>RETRIEVAL BRANCH</span><strong data-lat-branch>120 ms</strong></div><div><span>BEFORE GENERATION</span><strong data-lat-total>360 ms</strong></div></div><p class="rag-lab-caption" data-lat-note role="status" aria-live="polite">Illustrative: +40 ms embed/fusion overhead; generation time is not included.</p>
+  </div>}
+  <p class="rag-lab-disclaimer">Interactive teaching model · deterministic calculations and invented examples · no live document store, embedding model, LLM or external request.</p>
+</section>}

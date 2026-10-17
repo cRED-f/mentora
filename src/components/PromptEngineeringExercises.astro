@@ -1,0 +1,38 @@
+---
+/** Small deterministic concept simulators. None calls an LLM or reports measured accuracy. */
+const { lessonId } = Astro.props;
+const id = Number(lessonId);
+---
+{[2,4,5,11,21].includes(id) && <section class="foundation-mechanism-lab prompt-exercise" data-prompt-exercise={id} aria-label="Prompt engineering interactive exercise">
+  {id === 2 && <>
+    <div class="foundation-section-top"><span class="foundation-index">INTERACTIVE LAB / EXAMPLE COUNT</span><h3>Build the <em>in-context request.</em></h3><p>Choose how many demonstrations to add. The model is not running; the request assembly is shown exactly.</p></div>
+    <div class="prompt-lab-switch" role="group" aria-label="Choose number of demonstrations"><button type="button" data-shot="0" aria-pressed="true">Zero-shot</button><button type="button" data-shot="1" aria-pressed="false">One-shot</button><button type="button" data-shot="3" aria-pressed="false">Few-shot (3)</button></div>
+    <pre class="prompt-lab-output"><code data-shots-render></code></pre>
+    <p class="prompt-lab-note" data-shots-summary role="status" aria-live="polite"></p>
+  </>}
+  {id === 4 && <>
+    <div class="foundation-section-top"><span class="foundation-index">INTERACTIVE LAB / AGGREGATION</span><h3>Count votes. <em>Then question them.</em></h3><p>Fixed illustrative normalized results, not generated model samples. Change the number aggregated and inspect the tie/majority behavior.</p></div>
+    <label class="prompt-lab-slider">Number of samples <output data-vote-count>5</output><input data-vote-slider type="range" min="1" max="7" step="1" value="5" /></label>
+    <div class="prompt-lab-votes" data-vote-chips aria-label="Toy candidate answers"></div>
+    <p class="prompt-lab-note" data-vote-result role="status" aria-live="polite"></p>
+    <p class="prompt-lab-disclaimer">A majority does not prove correctness. The samples share a model and input and may have correlated errors.</p>
+  </>}
+  {id === 5 && <>
+    <div class="foundation-section-top"><span class="foundation-index">INTERACTIVE LAB / SEARCH BUDGET</span><h3>Watch the tree <em>expand.</em></h3><p>An unpruned full tree grows quickly. Adjust branching and depth; this calculates node count, not model runtime or accuracy.</p></div>
+    <div class="prompt-lab-inputs"><label class="prompt-lab-slider">Branching factor <output data-tree-width-label>3</output><input data-tree-width type="range" min="2" max="5" value="3" /></label><label class="prompt-lab-slider">Search depth <output data-tree-depth-label>3</output><input data-tree-depth type="range" min="1" max="6" value="3" /></label></div>
+    <div class="prompt-lab-stat"><strong data-tree-nodes>40</strong><span>possible states, including the root · no pruning</span></div>
+    <div class="prompt-lab-tree-bars" data-tree-bars aria-label="Nodes by search depth"></div>
+  </>}
+  {id === 11 && <>
+    <div class="foundation-section-top"><span class="foundation-index">INTERACTIVE LAB / TOKEN COST</span><h3>Estimate the <em>request bill.</em></h3><p>Hypothetical illustrative prices only: $2 per million input tokens, $8 per million output tokens. Not a quote from any model provider.</p></div>
+    <div class="prompt-lab-inputs"><label class="prompt-lab-slider">Input tokens <output data-input-label>2,000</output><input data-input-tokens type="range" min="500" max="8000" step="500" value="2000" /></label><label class="prompt-lab-slider">Output tokens <output data-output-label>500</output><input data-output-tokens type="range" min="100" max="2000" step="100" value="500" /></label></div>
+    <div class="prompt-lab-stat"><strong data-total-cost>$0.0080</strong><span>estimated one-request token cost</span></div>
+    <p class="prompt-lab-note" data-cost-breakdown role="status" aria-live="polite"></p>
+  </>}
+  {id === 21 && <>
+    <div class="foundation-section-top"><span class="foundation-index">INTERACTIVE LAB / CONTEXT POSITION</span><h3>Move the <em>decisive clause.</em></h3><p>Choose where the exact same evidence appears in a long request. This illustrates the position-controlled evaluation design; no recall score is simulated.</p></div>
+    <div class="prompt-lab-switch" role="group" aria-label="Evidence position"><button type="button" data-position="0" aria-pressed="true">Beginning</button><button type="button" data-position="1" aria-pressed="false">Middle</button><button type="button" data-position="2" aria-pressed="false">End</button></div>
+    <div class="prompt-lab-context" role="img" aria-label="Context divided into three sections; one contains relevant evidence"><div data-context-position="0" class="is-evidence"><span>01 · INTRO</span><strong data-clause>DECISIVE CLAUSE</strong></div><div data-context-position="1"><span>02 · MIDDLE</span><strong data-clause hidden>DECISIVE CLAUSE</strong></div><div data-context-position="2"><span>03 · END</span><strong data-clause hidden>DECISIVE CLAUSE</strong></div></div>
+    <p class="prompt-lab-note" data-position-summary role="status" aria-live="polite">Beginning selected. For a fair test, hold question, total context length, and evidence wording constant.</p>
+  </>}
+</section>}

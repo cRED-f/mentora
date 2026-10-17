@@ -15,6 +15,9 @@ import { getTrainingGuide } from '../data/training-path.js';
 import { getAdvancedGuide } from '../data/advanced-path.js';
 import { getInferenceGuide } from '../data/inference-path.js';
 import { getReliabilityGuide } from '../data/reliability-path.js';
+import { getPromptEngineeringGuide } from '../data/prompt-engineering-path.js';
+import { getRagGuide } from '../data/rag-path.js';
+import { getAgentsGuide } from '../data/agents-path.js';
 
 const GUIDES = {
   'llm-foundations': getFoundationGuide,
@@ -25,6 +28,9 @@ const GUIDES = {
   'advanced-transformers': getAdvancedGuide,
   'inference-infrastructure': getInferenceGuide,
   'production-reliability': getReliabilityGuide,
+  'prompt-engineering': getPromptEngineeringGuide,
+  'rag': getRagGuide,
+  'agents': getAgentsGuide,
 };
 
 /** Returns the foundations guide for a lesson, or undefined if the course has none. */
