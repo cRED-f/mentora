@@ -9,10 +9,12 @@
  */
 import { getFoundationGuide } from '../data/llm-foundations-path.js';
 import { getTokenizationGuide } from '../data/tokenization-path.js';
+import { getTransformerGuide } from '../data/transformer-path.js';
 
 const GUIDES = {
   'llm-foundations': getFoundationGuide,
   'tokenization-embeddings': getTokenizationGuide,
+  'transformer-architecture': getTransformerGuide,
 };
 
 /** Returns the foundations guide for a lesson, or undefined if the course has none. */

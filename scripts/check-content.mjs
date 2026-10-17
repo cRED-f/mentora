@@ -1,4 +1,5 @@
 import { courses, totalLessons } from '../src/lib/courses.js';
+import { foundationsGuideFor, courseHasFoundations } from '../src/lib/foundations.js';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 const base = new URL('../public/', import.meta.url);
@@ -16,6 +17,28 @@ for (const course of courses) {
   assert.ok(course.capstone.text.length>80,`${course.slug} capstone text is empty`);
   assert.ok(course.capstone.title||course.capstone.label,`${course.slug} capstone has no title`);
   assert.ok(!/<button|<textarea/i.test(course.capstone.html),`${course.slug} capstone kept interactive chrome`);
+  // A course either has no foundations layer or a complete one. A partial
+  // guide would render some lessons with basics and some without, which is
+  // worse than not having the layer at all.
+  if (courseHasFoundations(course.slug)) {
+    for (const lesson of course.lessons) {
+      const guide = foundationsGuideFor(course.slug, lesson.id);
+      assert.ok(guide, `${course.slug}/${lesson.id} has no foundations guide`);
+      assert.ok(guide.question.length > 20, `${course.slug}/${lesson.id} guide question is empty`);
+      assert.ok(guide.plain.length > 60, `${course.slug}/${lesson.id} guide plain text is empty`);
+      assert.ok(guide.concepts.length >= 3, `${course.slug}/${lesson.id} has fewer than 3 concepts`);
+      for (const [name, simple, advanced] of guide.concepts) {
+        assert.ok(name && simple && advanced, `${course.slug}/${lesson.id} has an incomplete concept`);
+      }
+      assert.ok(guide.views.length >= 1, `${course.slug}/${lesson.id} has no diagram view`);
+      for (const view of guide.views) {
+        assert.ok(view.steps.length >= 3, `${course.slug}/${lesson.id} view "${view.name}" has too few steps`);
+        for (const [label, explanation] of view.steps) assert.ok(label && explanation, `${course.slug}/${lesson.id} has an incomplete stage`);
+      }
+      assert.ok(guide.checkpoint.options.length >= 3, `${course.slug}/${lesson.id} checkpoint needs options`);
+      assert.ok(guide.checkpoint.correct >= 0 && guide.checkpoint.correct < guide.checkpoint.options.length, `${course.slug}/${lesson.id} checkpoint index out of range`);
+    }
+  }
   for (const lesson of course.lessons) {
     assert.equal(lesson.sections.length,6,`${course.slug}/${lesson.id} should contain sections A–F`);
     assert.deepEqual(lesson.sections.map(s=>s.letter),['A','B','C','D','E','F']);
