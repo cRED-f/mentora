@@ -176,3 +176,8 @@ html,body{background:var(--bg,#000);color:var(--white,#fff);height:100%}html{scr
 .tutor-selection blockquote{margin:0;max-height:92px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;color:#dedede;font-size:11px;line-height:1.6}
 .chat-selection-quote{margin:3px 0 10px;border-left:2px solid #777;padding:7px 10px;color:#b0b0b0;background:#171717;font-size:11px;line-height:1.6;max-height:132px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}
 @media(prefers-reduced-motion:reduce){.selection-ask{transition:none}}
+
+/* Browser persistence controls */
+.settings-remember{display:flex;align-items:center;gap:9px;color:#ccc;font-size:11px;cursor:pointer;margin:3px 0}
+.tutor-settings .settings-remember input{width:14px;height:14px;min-width:14px;padding:0;margin:0;flex:none;appearance:auto;accent-color:#aaa;cursor:pointer}
+#progress-feedback:not(:empty){display:block;color:#e0b6a5;margin-top:7px;line-height:1.5}

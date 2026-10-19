@@ -68,7 +68,7 @@ const current = courses.find(c => c.slug === activeCourse);
         ))}
       </nav>
       <div class="sidebar-bottom">
-        <div class="sidebar-progress"><div class="sidebar-progress-top"><span>YOUR PROGRESS</span><span id="progress-count">0 / {totalLessons}</span></div><div class="track"><div id="global-progress" class="track-fill"></div></div><small>Progress saved locally on this device</small></div>
+        <div class="sidebar-progress"><div class="sidebar-progress-top"><span>YOUR PROGRESS</span><span id="progress-count">0 / {totalLessons}</span></div><div class="track"><div id="global-progress" class="track-fill"></div></div><small>Progress saved locally on this device</small><small id="progress-feedback" role="status" aria-live="polite"></small></div>
         <a class="sidebar-archive" href={current ? `/course/${current.slug}/` : "/academy/"}>↗ &nbsp; Explore Mentora lessons</a>
       </div>
     </aside>
@@ -89,12 +89,14 @@ const current = courses.find(c => c.slug === activeCourse);
         <form id="tutor-settings-form" autocomplete="off">
           <label for="settings-api-key">API key</label>
           <div class="settings-secret"><input id="settings-api-key" type="password" autocomplete="off" placeholder="Paste your 9Router key" spellcheck="false"/><button type="button" id="settings-reveal" aria-label="Show API key" aria-pressed="false">Show</button></div>
-          <span class="settings-help">Kept in this tab only. Sent to the Mentora server for 9Router requests. A server key, if configured, is used when blank.</span>
+          <span class="settings-help">Sent to the Mentora server for 9Router requests. A server key, if configured, is used when blank.</span>
+          <label class="settings-remember"><input id="settings-remember-key" type="checkbox" checked />Remember API key on this device</label>
+          <span class="settings-help">Stored in this browser until cleared. Avoid this option on shared devices; site scripts can access stored keys.</span>
           <div class="settings-model-label"><label for="settings-model">Model</label><button id="settings-refresh-models" type="button">↻ Load models</button></div>
           <select id="settings-model" aria-label="9Router model"><option value="">Choose a model</option><option value="__custom__">Enter a model ID…</option></select>
           <input id="settings-custom-model" type="text" maxlength="160" spellcheck="false" placeholder="e.g. provider/model-name" aria-label="Custom 9Router model ID" hidden />
           <p class="settings-feedback" id="settings-feedback" role="status" aria-live="polite"></p>
-          <div class="settings-actions"><button type="button" id="settings-clear">Clear tab key</button><button class="settings-save" type="submit">Save settings</button></div>
+          <div class="settings-actions"><button type="button" id="settings-clear">Clear saved key</button><button class="settings-save" type="submit">Save settings</button></div>
         </form>
       </section>
       <div class="tutor-thread" id="tutor-thread" role="log" aria-live="polite">

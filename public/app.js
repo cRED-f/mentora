@@ -15,13 +15,31 @@
   let history = [];
   let activeResultIndex = 0;
   let inFlight = false;
-  // Secrets are scoped to this browser tab. Never put them in URLs, logs or localStorage.
+  // Browser storage belongs to the current origin (scheme, hostname AND port).
+  // Saving a key on this device is convenient but exposes it to page scripts;
+  // server-side environment variables remain the safer option for public sites.
   const KEY_STORAGE = 'mentora-9router-key-v1';
   const MODEL_STORAGE = 'mentora-9router-model-v1';
-  function readTab(key) { try { return sessionStorage.getItem(key) || ''; } catch { return ''; } }
-  function writeTab(key, value) { try { if (value) sessionStorage.setItem(key, value); else sessionStorage.removeItem(key); } catch { /* Storage may be disabled. */ } }
-  let activeApiKey = readTab(KEY_STORAGE);
-  let activeModel = readTab(MODEL_STORAGE);
+  const REMEMBER_STORAGE = 'mentora-9router-remember-v1';
+  const PROGRESS_STORAGE = 'mentora-progress-v1';
+  const LEGACY_PROGRESS_STORAGE = 'modelcraft-progress-v1';
+  let localStore = null;
+  let tabStore = null;
+  try { localStore = localStorage; } catch { /* Storage API may be blocked. */ }
+  try { tabStore = sessionStorage; } catch { /* Storage API may be blocked. */ }
+  function readStorage(store, key) {
+    try { return store.getItem(key) || ''; } catch { return ''; }
+  }
+  function writeStorage(store, key, value) {
+    try {
+      if (value) store.setItem(key, value);
+      else store.removeItem(key);
+      return true;
+    } catch { return false; }
+  }
+  let activeApiKey = readStorage(localStore, KEY_STORAGE) || readStorage(tabStore, KEY_STORAGE);
+  let activeModel = readStorage(localStore, MODEL_STORAGE) || readStorage(tabStore, MODEL_STORAGE);
+  let rememberKeyPreference = readStorage(localStore, REMEMBER_STORAGE) !== 'false';
   let serverConfigured = false;
   let serverModel = '';
   const modelIdPattern = /^[\w][\w./:@+-]{0,159}$/;
@@ -31,6 +49,7 @@
   const modelSelect = $('#settings-model');
   const customModel = $('#settings-custom-model');
   const feedback = $('#settings-feedback');
+  const rememberKey = $('#settings-remember-key');
 
   function modelOption(id, description = id) {
     const option = document.createElement('option');
@@ -61,6 +80,7 @@
     settingsToggle.classList.toggle('active', open);
     if (open) {
       keyInput.value = activeApiKey;
+      rememberKey.checked = rememberKeyPreference;
       showModelSelection();
       feedback.textContent = '';
       keyInput.focus();
@@ -96,11 +116,16 @@
   }
   $('#settings-refresh-models')?.addEventListener('click', loadModels);
   $('#settings-clear')?.addEventListener('click', () => {
+    const clearedLocal = writeStorage(localStore, KEY_STORAGE, '');
+    const clearedTab = writeStorage(tabStore, KEY_STORAGE, '');
+    if (!clearedLocal || !clearedTab) {
+      feedback.textContent = 'Could not clear the stored key. Check your browser storage settings.';
+      return;
+    }
     keyInput.value = '';
     activeApiKey = '';
-    writeTab(KEY_STORAGE, '');
     updateAiStatus();
-    feedback.textContent = 'Tab API key cleared. Server defaults, if configured, remain available.';
+    feedback.textContent = 'Saved API key cleared from this browser. Server defaults, if configured, remain available.';
   });
   $('#tutor-settings-form')?.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -108,16 +133,36 @@
     const model = modelSelect.value === '__custom__' ? customModel.value.trim() : modelSelect.value;
     if (key.length > 4096 || /[\r\n]/.test(key)) { feedback.textContent = 'Invalid API key.'; return; }
     if (!model || !modelIdPattern.test(model)) { feedback.textContent = 'Choose a model or enter a valid 9Router model ID.'; return; }
+    const remember = rememberKey.checked;
+    // Persist the model for every session; the key is persistent only when
+    // requested, otherwise it is kept in sessionStorage for this tab alone.
+    const modelSaved = writeStorage(localStore, MODEL_STORAGE, model);
+    const keySaved = writeStorage(localStore, KEY_STORAGE, remember ? key : '');
+    const tabSaved = writeStorage(tabStore, KEY_STORAGE, remember ? '' : key);
+    const preferenceSaved = writeStorage(localStore, REMEMBER_STORAGE, String(remember));
+    // Retain the current tab's model as a fallback if durable storage is disabled.
+    writeStorage(tabStore, MODEL_STORAGE, model);
     activeApiKey = key;
     activeModel = model;
-    writeTab(KEY_STORAGE, key);
-    writeTab(MODEL_STORAGE, model);
+    rememberKeyPreference = remember;
     updateAiStatus();
+    if (!modelSaved || !keySaved || !tabSaved || !preferenceSaved) {
+      feedback.textContent = 'Settings work in this tab, but could not be fully saved. Allow browser site storage to keep them after restarting.';
+      return;
+    }
     toggleSettings(false);
   });
 
-  function readProgress() { try { return JSON.parse(localStorage.getItem('mentora-progress-v1') || localStorage.getItem('modelcraft-progress-v1') || '{}'); } catch { return {}; } }
-  function writeProgress(progress) { try { localStorage.setItem('mentora-progress-v1', JSON.stringify(progress)); } catch {} }
+  function readProgress() {
+    try {
+      const saved = readStorage(localStore, PROGRESS_STORAGE) || readStorage(localStore, LEGACY_PROGRESS_STORAGE);
+      const data = JSON.parse(saved || '{}');
+      return data && typeof data === 'object' && !Array.isArray(data) ? data : {};
+    } catch { return {}; }
+  }
+  function writeProgress(progress) {
+    return writeStorage(localStore, PROGRESS_STORAGE, JSON.stringify(progress));
+  }
   function updateProgress() {
     const progress = readProgress();
     const count = Object.values(progress).filter(Boolean).length;
@@ -169,9 +214,22 @@
     const progress = readProgress();
     const key = button.dataset.progressKey;
     progress[key] = !progress[key];
-    writeProgress(progress);
+    const saved = writeProgress(progress);
+    const progressFeedback = $('#progress-feedback');
+    if (progressFeedback) progressFeedback.textContent = saved ? '' : 'Progress could not be saved. Enable browser site storage.';
+    // Always render the actual stored state, never a completion that failed to save.
     updateProgress();
   }));
+  window.addEventListener('storage', event => {
+    if (event.key === PROGRESS_STORAGE || event.key === LEGACY_PROGRESS_STORAGE) updateProgress();
+    if ([KEY_STORAGE, MODEL_STORAGE, REMEMBER_STORAGE].includes(event.key)) {
+      activeApiKey = readStorage(localStore, KEY_STORAGE) || readStorage(tabStore, KEY_STORAGE);
+      activeModel = readStorage(localStore, MODEL_STORAGE) || readStorage(tabStore, MODEL_STORAGE);
+      rememberKeyPreference = readStorage(localStore, REMEMBER_STORAGE) !== 'false';
+      if (settingsPanel.hidden) showModelSelection();
+      updateAiStatus();
+    }
+  });
 
   function closeNavigation() {
     left?.classList.remove('mobile-open'); scrim?.classList.remove('visible');
