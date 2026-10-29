@@ -10,13 +10,12 @@
     "start": "node ./dist/server/entry.mjs",
     "check:content": "node scripts/check-content.mjs",
     "test:api": "node --test tests/chat.test.mjs",
-    "test:site": "node --test tests/landing.test.mjs tests/sidebar.test.mjs tests/foundations.test.mjs tests/prompt-engineering.test.mjs tests/rag.test.mjs tests/agents.test.mjs tests/selection.test.mjs tests/persistence.test.mjs"
+    "test:site": "node --test tests/routes.test.mjs tests/sidebar.test.mjs tests/foundations.test.mjs tests/prompt-engineering.test.mjs tests/rag.test.mjs tests/agents.test.mjs tests/selection.test.mjs tests/persistence.test.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.8",
     "@astrojs/vercel": "^11.0.15",
-    "astro": "7.4.0",
-    "locomotive-scroll": "^5.0.1"
+    "astro": "7.4.0"
   },
   "engines": {
     "node": ">=22.22.0"

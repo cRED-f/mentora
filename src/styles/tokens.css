@@ -1,8 +1,8 @@
 /*
  * Mentora design tokens — the single source of truth.
  *
- * Both stylesheets consume this file. Do NOT add a :root block to
- * global.css or landing.css; add tokens here instead.
+ * The application stylesheet consumes this file. Do NOT add a :root block to
+ * global.css; add tokens here instead.
  *
  * Palette is monochrome by decision: pure black, white ink, grey support
  * tones. Accent is carried by Instrument Serif italic in grey, not by hue.
@@ -54,17 +54,4 @@
   --copy-max: 860px;
   --lede-max: 470px;
 
-  /* ---- Landing aliases ---------------------------------------------
-   * The landing stylesheet was written against a --land-* namespace with
-   * its own lilac palette. Rather than rewrite ~24KB of rules at once,
-   * those names are aliased here to the shared monochrome tokens. Delete
-   * an alias only once no rule references it.
-   */
-  --land-bg: var(--bg);
-  --land-ink: var(--text);
-  --land-muted: var(--muted);
-  --land-line: var(--border-soft);
-  --land-lilac: var(--muted);
-  --land-serif: var(--serif);
-  --land-sans: var(--sans);
 }

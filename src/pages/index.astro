@@ -1,106 +1,27 @@
 ---
+import Layout from '../layouts/AppLayout.astro';
 import { courses, totalLessons } from '../lib/courses.js';
-import TransformerDiagram from '../components/TransformerDiagram.astro';
-import '../styles/landing.css';
-const featured = [courses[0], courses.find(c=>c.slug==='rag'), courses.find(c=>c.slug==='agents')];
-const symbols = ['⌘', '◎', '✳'];
-const tracks = ['Foundations', 'Retrieval systems', 'Agentic systems'];
+const groups = ['Foundations','Architecture','Training','Applications','Production'];
 ---
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="description" content={`Mentora: ${totalLessons} in-depth AI engineering lessons, interactive visualizations, and a course-aware AI tutor. Learn LLMs, RAG, and agents from fundamentals to production.`} />
-    <meta property="og:title" content="Mentora — Learn AI from the inside out" />
-    <meta property="og:description" content="A deeper way to learn AI engineering. Guided courses, interactive labs, and a built-in AI tutor." />
-    <link rel="icon" type="image/svg+xml" href="/mentora-icon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet" />
-    <title>Mentora — Learn AI from the inside out</title>
-  </head>
-  <body class="landing" style="background:#000000;color:#ffffff">
-    <a class="skip-to-content" href="#main">Skip to content</a>
-
-    <header class="landing-header" id="top">
-      <div class="header-inner">
-        <a href="/" class="brand" aria-label="Mentora home">
-          <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none"><path d="M7 25.5V10l11 12 11-12v15.5" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="29" cy="8" r="2" fill="#b7b7b7"/></svg></span>
-          <span>mentora<span class="brand-period">.</span></span>
-        </a>
-        <nav class="desktop-nav" aria-label="Main navigation">
-          <a href="#curriculum" data-scroll-to>Explore courses</a>
-          <a href="#method" data-scroll-to>How it works</a>
-          <a href="#ai-tutor" data-scroll-to>AI tutor</a>
-        </nav>
-        <div class="header-actions"><a class="header-signin" href="/academy/">View academy <span aria-hidden="true">↗</span></a><button class="mobile-menu-button" id="landing-menu-button" type="button" aria-expanded="false" aria-controls="mobile-landing-nav" aria-label="Open navigation"><span></span><span></span><span></span></button></div>
-      </div>
-      <nav id="mobile-landing-nav" class="mobile-landing-nav" aria-label="Mobile navigation" hidden>
-        <a href="#curriculum" data-scroll-to>Explore courses</a><a href="#method" data-scroll-to>How it works</a><a href="#ai-tutor" data-scroll-to>AI tutor</a><a href="/academy/">Open academy ↗</a>
-      </nav>
-    </header>
-    <div class="landing-scroll-progress" aria-hidden="true"></div>
-
-    <main id="main">
-      <section class="landing-hero" aria-labelledby="hero-heading">
-        <div class="landing-container hero-grid">
-          <div class="hero-copy">
-            <div class="hero-intro">
-              <div class="hero-eyebrow"><span class="live-spark">✳</span> THE AI ENGINEERING LEARNING SPACE <span class="eyebrow-rule"></span> EST. 2026</div>
-              <h1 id="hero-heading">Curiosity meets <span class="headline-em">understanding.</span></h1>
-            </div>
-            <div class="hero-outro">
-              <p class="hero-lede">Don't just learn what AI can do. Understand <strong>how it works.</strong> Go from your first Transformer to building production-grade AI systems—with a mentor beside you.</p>
-              <div class="hero-ctas"><a class="action-primary" href="/academy/">Start learning <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="action-text" href="#curriculum" data-scroll-to>Explore the curriculum <span aria-hidden="true">↗</span></a></div>
-              <div class="hero-social-proof"><div class="proof-icon" aria-hidden="true"><span>✧</span></div><span>One place for the <b>theory, the code, and the why.</b></span></div>
-            </div>
-          </div>
-          <div class="hero-visual" data-scroll data-scroll-speed="-0.07">
-            <TransformerDiagram />
-          </div>
-        </div>
-      </section>
-
-      <section class="learning-metrics" aria-label="Learning library at a glance"><div class="landing-container metrics-inner"><div class="metric scroll-reveal" data-scroll style="--reveal-delay:0ms"><b>11<span class="metric-glint">+</span></b><span>STRUCTURED COURSES</span></div><div class="metric scroll-reveal" data-scroll style="--reveal-delay:100ms"><b>{totalLessons}</b><span>DETAILED LESSONS</span></div><div class="metric scroll-reveal" data-scroll style="--reveal-delay:200ms"><b>1,404</b><span>INTERVIEW FRAMEWORK SECTIONS</span></div><div class="metric metric-last scroll-reveal" data-scroll style="--reveal-delay:300ms"><b>24<span class="metric-glint">/7</span></b><span>AI STUDY COMPANION*</span></div></div></section>
-
-      <section id="curriculum" class="curriculum-section section-pad"><div class="landing-container">
-        <div class="section-topline scroll-reveal" data-scroll><span class="section-label"><span class="purple-marker"></span> 01 / YOUR LEARNING PATH</span><span class="section-aside">A CURATED CURRICULUM, NOT ANOTHER TAB TO CLOSE</span></div>
-        <div class="section-heading"><div class="scroll-reveal" data-scroll><h2>Complex ideas.<br/><em>Clearly connected.</em></h2></div><p class="scroll-reveal" data-scroll style="--reveal-delay:120ms">Follow a course from the fundamentals to real production decisions. Every lesson is built for technical depth, not just quick definitions.</p></div>
-        <div class="featured-grid">
-          {featured.map((course,i) => <a href={`/course/${course.slug}/`} class={`featured-card featured-card--${i+1} scroll-reveal`} data-scroll style={`--reveal-delay:${i*110}ms`}>
-            <div class="featured-card-header"><span>{String(i+1).padStart(2,'0')} / {tracks[i]}</span><span aria-hidden="true" class="featured-arrow">↗</span></div>
-            <div class="featured-icon" aria-hidden="true">{symbols[i]}</div>
-            <div class="featured-card-content"><span class="featured-mini">{course.count} IN-DEPTH LESSONS</span><h3>{i===0?'Understand language models.':i===1?'Build retrieval that works.':'Engineer intelligent agents.'}</h3><p>{course.description}</p></div>
-            <div class="featured-bottom"><span>EXPLORE COURSE</span><span>↗</span></div>
-          </a>)}
-        </div>
-        <a href="/academy/" class="all-courses-link scroll-reveal" data-scroll><span>View all {courses.length} courses in the academy</span><span aria-hidden="true">↗</span></a>
-      </div></section>
-
-      <section id="method" class="method-section section-pad"><div class="landing-container">
-        <div class="section-topline scroll-reveal" data-scroll><span class="section-label"><span class="purple-marker"></span> 02 / LEARN WITH DEPTH</span><span class="section-aside">BUILT FOR THE WAY ENGINEERS THINK</span></div>
-        <div class="method-grid"><div class="method-heading scroll-reveal" data-scroll><h2>Knowledge should<br/><em>feel alive.</em></h2><p>Go beyond memorization. Visualize a mechanism, test an idea, and explain why an architecture works—or doesn't.</p><a class="inline-link" href="/academy/">Experience the learning studio <span aria-hidden="true">↗</span></a></div><div class="steps-list">
-          <div class="method-step scroll-reveal" data-scroll style="--reveal-delay:0ms"><span class="step-index">01</span><div><span class="method-icon">◎</span><h3>Understand the why.</h3><p>Derivations, architecture internals, edge cases, and trade-offs written for real AI engineers.</p></div><span class="step-arrow">↗</span></div>
-          <div class="method-step scroll-reveal" data-scroll style="--reveal-delay:90ms"><span class="step-index">02</span><div><span class="method-icon">⌘</span><h3>Experiment, don't guess.</h3><p>Animated diagrams and interactive labs turn abstract systems into something you can actually explore.</p></div><span class="step-arrow">↗</span></div>
-          <div class="method-step scroll-reveal" data-scroll style="--reveal-delay:180ms"><span class="step-index">03</span><div><span class="method-icon">✧</span><h3>Think like an interviewer.</h3><p>Practice spoken answers, challenge assumptions, and debug realistic production failures.</p></div><span class="step-arrow">↗</span></div>
-        </div></div>
-      </div></section>
-
-      <section id="ai-tutor" class="ai-section section-pad"><div class="landing-container"><div class="ai-showcase">
-        <div class="ai-copy scroll-reveal" data-scroll><div class="section-label"><span class="purple-marker"></span> 03 / A MENTOR IN YOUR CORNER</div><h2>Questions welcome.<br/><em>Always.</em></h2><p>Every lesson comes with a context-aware AI tutor. Ask it to unpack the math, pressure-test your understanding, or run a senior engineering mock interview.</p><div class="ai-points"><span><i>✓</i> Lesson-aware explanations</span><span><i>✓</i> Technical interview practice</span><span><i>✓</i> Production scenario walkthroughs</span></div><a class="action-primary" href="/academy/">Meet your AI tutor <span aria-hidden="true">↗</span></a><small>*Connect your own 9router endpoint to enable live AI responses.</small></div>
-        <div class="tutor-demo scroll-reveal" data-scroll style="--reveal-delay:150ms" aria-label="Preview of the Mentora AI tutor conversation"><div class="demo-top"><span class="demo-avatar">✳</span><div><strong>Mentora AI tutor</strong><span><i class="art-status-dot"></i> YOUR STUDY PARTNER</span></div><span class="demo-top-right" data-scroll data-scroll-speed="0.04">✧</span></div><div class="demo-thread"><div class="demo-user"><span>YOU</span><p>Why does KV caching speed up token generation?</p></div><div class="demo-assistant"><span>✧ MENTORA</span><p>Without a cache, every decoding step recomputes the keys and values for all previous tokens.</p><p><strong>KV caching</strong> stores those past representations, so the model only computes K and V for each new token. It trades memory for much less redundant computation.</p><div class="demo-source">↗ &nbsp; MODULE 6 · ATTENTION OPTIMIZATION</div></div></div><div class="demo-composer"><span>Ask a follow-up question…</span><span>↑</span></div></div>
-      </div></div></section>
-
-      <section class="bottom-cta section-pad"><div class="landing-container"><div class="cta-inner scroll-reveal" data-scroll><div class="cta-orbit" aria-hidden="true">✳</div><p class="section-label">YOUR NEXT CHAPTER STARTS HERE</p><h2>Don't just keep up.<br/><em>Understand what's next.</em></h2><p>Explore all 234 lessons. Learn the foundations, build the intuition, and make the engineering decisions that matter.</p><a href="/academy/" class="action-primary">Enter the academy <span aria-hidden="true">↗</span></a></div></div></section>
-    </main>
-
-    <footer class="landing-footer"><div class="landing-container footer-inner"><a href="/" class="brand footer-brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none"><path d="M7 25.5V10l11 12 11-12v15.5" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="29" cy="8" r="2" fill="#b7b7b7"/></svg></span><span>mentora<span class="brand-period">.</span></span></a><span>LEARN DEEPLY. BUILD CONFIDENTLY.</span><div><a href="/academy/">ACADEMY ↗</a><a href="#top" data-scroll-to>BACK TO TOP ↑</a></div><small>© 2026 MENTORA</small></div></footer>
-    <script src="/landing.js" is:inline defer></script>
-    <script>
-      import { setupLandingScroll } from '../scripts/landing-scroll.js';
-      setupLandingScroll();
-    </script>
-  </body>
-</html>
+<Layout title="The AI Engineering Field Guide" description="234 technical AI engineering interview lessons across LLMs, prompt engineering, RAG, and agentic systems.">
+  <div class="home-page content-container">
+    <div class="welcome-meta"><span class="metal-badge"><span>✧</span> COMPLETE AI ENGINEERING CURRICULUM</span><span class="edition">EDITION 2026 / v1.0</span></div>
+    <section class="hero-intro">
+      <p class="section-kicker">FROM FIRST PRINCIPLES TO PRODUCTION</p>
+      <h1>Master the systems<br/>behind <em>intelligent software.</em></h1>
+      <p class="hero-description">An in-depth, interview-focused field guide to the ideas, mathematics, architectures, and engineering decisions that actually power modern AI.</p>
+      <div class="hero-actions"><a class="solid-button" href="/course/llm-foundations/">Start learning <span>↗</span></a><button class="ghost-button search-open" type="button">Explore curriculum <span>⌕</span></button></div>
+    </section>
+    <div class="stats-strip"><div><span>01 / COURSES</span><strong>11</strong><small>complete learning paths</small></div><div><span>02 / LESSONS</span><strong>{totalLessons}</strong><small>deep-dive technical lessons</small></div><div><span>03 / FORMAT</span><strong>A–F</strong><small>technical interview method</small></div><div><span>04 / ASSISTANT</span><strong>24/7</strong><small>your own connected AI tutor*</small></div></div>
+    <div class="section-divider"><div><span class="section-kicker">THE CURRICULUM</span><h2>Built to connect <em>the dots.</em></h2></div><p>Each course progresses from intuition to mathematical mechanisms, systems trade-offs, and the questions asked in real engineering interviews.</p></div>
+    <div class="course-grid">
+      {courses.map((course, index) => <a href={`/course/${course.slug}/`} class="overview-card" style={`--card-index:${index}`}>
+        <div class="course-card-top"><span class="card-number">{course.number} / 11</span><span class="card-category">{course.category}</span></div>
+        <div class="course-card-symbol">{['◈','⌁','⟐','⌘','◉','◇','∿','⊞','¶','◎','✳'][index]}</div>
+        <h3>{course.title}</h3><p>{course.description}</p><div class="course-card-bottom"><span>{course.count} DETAILED LESSONS</span><span class="card-arrow">↗</span></div>
+      </a>)}
+    </div>
+    <section class="feature-banner"><div><span class="section-kicker">YOUR SECOND BRAIN, RIGHT HERE</span><h2>Learn it. Challenge it.<br/><em>Make it yours.</em></h2><p>Your AI tutor has access to the lesson you're reading. Ask for a rigorous explanation, a harder interview question, or a production post-mortem.</p><button type="button" class="ghost-button tutor-toggle">Meet your AI tutor <span>↗</span></button></div><div class="feature-diagram"><span class="diagram-token">YOUR QUESTION</span><span class="connector-line"></span><span class="diagram-core">✧</span><span class="connector-line"></span><span class="diagram-token">GROUNDED ANSWER</span><small>COURSE CONTEXT + 9ROUTER</small></div></section>
+    <footer class="main-footer"><span>MENTORA © 2026 · THE LEARNING STUDIO</span><span>*AI tutor requires your own 9router configuration.</span></footer>
+  </div>
+</Layout>

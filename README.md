@@ -21,15 +21,17 @@ cp .env.example .env
 npm run dev
 ```
 
-Open <http://localhost:4321/academy/>. Lessons and interactive labs work without AI configuration.
+Open <http://localhost:4321/>. Lessons and interactive labs work without AI configuration.
 
 ## AI setup (9Router)
 
 1. Start **9Router** and configure a working model/provider there. Create a 9Router API key.
 2. In `.env`, check that `NINEROUTER_BASE_URL` points to your 9Router **OpenAI-compatible `/v1`** endpoint (default: `http://127.0.0.1:20128/v1`). This URL is reached **from the Astro server**.
 3. Run Mentora and open any course or lesson. Click **✧** in the top bar to open **Mentora AI**.
-4. Click the **settings gear**, paste your **API key**, then click **Load models**.
+4. Click the **settings gear**, paste your **API key**, click **Load models**, select a model, then click **Save settings**.
 5. Ask a question, or **highlight text on the lesson page → Ask Mentora**. The selected passage appears above the chat input. Type a question, or send it as-is for a simple explanation.
+
+Settings and progress are saved in browser local storage. If you turn off **Remember API key on this device**, the key is kept only in `sessionStorage` for the current tab, while the model remains saved across restarts.
 
 Optional: Set `NINEROUTER_API_KEY` and `NINEROUTER_MODEL` in `.env` as server defaults instead of entering them in the UI. Restart the server after changing `.env`.
 

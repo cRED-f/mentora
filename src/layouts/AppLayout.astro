@@ -21,14 +21,13 @@ const current = courses.find(c => c.slug === activeCourse);
   <div class="mobile-scrim" id="mobile-scrim"></div>
   <div class="app-shell">
     <aside class="left-sidebar" aria-label="Course navigation">
-      <a href="/" class="wordmark" aria-label="Mentora homepage">
+      <a href="/" class="wordmark" aria-label="Mentora academy">
         <svg class="wordmark-icon" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M7 25.5V10l11 12 11-12v15.5" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="29" cy="8" r="2" fill="currentColor"/></svg>
         <span>mentora<span class="wordmark-suffix">.</span></span>
       </a>
       <div class="sidebar-overline">THE ENGINEERING LIBRARY</div>
       <nav class="primary-links" aria-label="Main">
-        <a href="/academy/" class={activeCourse ? 'primary-link' : 'primary-link selected'}><span class="nav-symbol">⌑</span> Academy <span class="primary-tail">↗</span></a>
-        <a href="/" class="primary-link"><span class="nav-symbol">⌂</span> Mentora homepage <span class="primary-tail">↗</span></a>
+        <a href="/" class={activeCourse ? 'primary-link' : 'primary-link selected'}><span class="nav-symbol">⌑</span> Academy <span class="primary-tail">↗</span></a>
         <button type="button" class="primary-link search-open" aria-label="Search lessons"><span class="nav-symbol">⌕</span> Search library <kbd>⌘ K</kbd></button>
       </nav>
       <div class="nav-heading"><span>THE CURRICULUM</span><span>{courses.length} COURSES</span></div>
@@ -69,7 +68,7 @@ const current = courses.find(c => c.slug === activeCourse);
       </nav>
       <div class="sidebar-bottom">
         <div class="sidebar-progress"><div class="sidebar-progress-top"><span>YOUR PROGRESS</span><span id="progress-count">0 / {totalLessons}</span></div><div class="track"><div id="global-progress" class="track-fill"></div></div><small>Progress saved locally on this device</small><small id="progress-feedback" role="status" aria-live="polite"></small></div>
-        <a class="sidebar-archive" href={current ? `/course/${current.slug}/` : "/academy/"}>↗ &nbsp; Explore Mentora lessons</a>
+        <a class="sidebar-archive" href={current ? `/course/${current.slug}/` : "/"}>↗ &nbsp; Explore Mentora lessons</a>
       </div>
     </aside>
     <div class="main-panel">
